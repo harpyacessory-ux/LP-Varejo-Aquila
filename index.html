@@ -99,6 +99,19 @@ section.light .ilustra{filter:drop-shadow(0 26px 40px rgba(14,26,69,.18))}
   #sistema .ilustra{align-self:start;margin-top:calc(-1 * clamp(5rem,12vw,11rem))}
 }
 
+/* Print de painel. O arquivo e muito largo para a coluna, entao entra ampliado
+   e ancorado no canto superior esquerdo, onde ficam os numeros que importam.
+   O card inteiro e um link que abre o print completo. */
+.print{position:relative;display:block;min-height:320px;overflow:hidden;
+  border:1px solid var(--line-2);border-radius:20px;background:#fff;text-decoration:none}
+.print img{position:absolute;top:0;left:0;width:215%;max-width:none;height:auto;
+  transition:transform .4s ease}
+.print:hover img,.print:focus-visible img{transform:scale(1.03)}
+.print .mkt{position:absolute;top:.8rem;left:.8rem;z-index:2}
+.print-zoom{position:absolute;right:.7rem;bottom:.7rem;z-index:2;font-size:.68rem;
+  letter-spacing:.04em;padding:.3rem .6rem;border-radius:999px;
+  background:rgba(5,8,26,.72);color:#fff;backdrop-filter:blur(6px)}
+
 .media{border:1px solid var(--line-2);border-radius:20px;min-height:320px;
   background:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 14px,transparent 14px 28px),
   linear-gradient(160deg,rgba(16,28,78,.9),rgba(5,8,26,.9));
@@ -679,7 +692,12 @@ section.light h2 b{
     <div class="grid g3 reveal">
       <div class="media sp"><span class="mkt sp">Shopee</span>Print do painel<br><small>substituir por imagem real</small></div>
       <div class="media ml"><span class="mkt ml">Mercado Livre</span>Print do painel<br><small>substituir por imagem real</small></div>
-      <div class="media az"><span class="mkt az">Amazon</span>Print do painel<br><small>substituir por imagem real</small></div>
+      <a class="print az reveal" href="assets/painel-amazon.png" target="_blank" rel="noopener">
+        <img src="assets/painel-amazon.png" width="3520" height="1672" loading="lazy" decoding="async"
+             alt="Painel do canal no mês: R$ 642.774,48 em vendas e 737 pedidos, alta de 172,55% sobre o mês anterior">
+        <span class="mkt az">Amazon</span>
+        <span class="print-zoom">ver em tamanho real</span>
+      </a>
     </div>
   </div>
 
