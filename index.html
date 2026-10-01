@@ -89,6 +89,10 @@ section{position:relative;padding:clamp(4rem,8vw,7.5rem) 0}
 .card{background:var(--glass);border:1px solid var(--line);border-radius:18px;
   padding:clamp(1.3rem,2.2vw,1.8rem);backdrop-filter:blur(10px)}
 .card p{font-size:.95rem;color:var(--muted);margin:0}
+/* ilustracao solta na coluna, sem moldura: a arte ja tem brilho proprio */
+.ilustra{display:block;width:100%;max-width:640px;height:auto;margin-inline:auto;
+  filter:drop-shadow(0 28px 44px rgba(2,5,20,.45))}
+
 .media{border:1px solid var(--line-2);border-radius:20px;min-height:320px;
   background:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 14px,transparent 14px 28px),
   linear-gradient(160deg,rgba(16,28,78,.9),rgba(5,8,26,.9));
@@ -593,7 +597,8 @@ section.light h2 b{
       <button class="btn" data-form data-cta="problema">Quero minha análise gratuita</button>
     </div>
 
-    <div class="media reveal">Foto da loja ou do estoque / print do painel de vendas<br><small>substituir por imagem real</small></div>
+    <img class="ilustra reveal" src="assets/ilustracao-marketplace.png" alt=""
+         width="1448" height="1086" loading="lazy" decoding="async">
   </div>
 </section>
 
