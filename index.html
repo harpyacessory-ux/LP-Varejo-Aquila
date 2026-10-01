@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#0A1440">
 <meta property="og:title" content="Aquila Marketing Digital — Escale no marketplace sem perder margem">
 <meta property="og:description" content="Especialista dedicado, acompanhamento 24h e estratégia construída a partir da análise da sua concorrência.">
+<link rel="preload" as="image" href="assets/mascote-aquila.png" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -127,15 +128,43 @@ section{position:relative;padding:clamp(4rem,8vw,7.5rem) 0}
 .stat b{display:block;font-family:var(--f-display);font-weight:800;color:#fff;
   font-size:clamp(1.8rem,3.6vw,2.6rem);line-height:1;letter-spacing:-.03em}
 .stat span{font-size:.86rem;color:var(--muted);display:block;margin-top:.35rem;max-width:20ch}
-.hero-art{position:relative;display:grid;place-items:center}
-.hero-art svg.peng{width:min(100%,360px)}
-.hero-chip{position:absolute;display:flex;align-items:center;gap:.5rem;font-size:.78rem;
+.hero-art{position:relative;display:grid;place-items:center;isolation:isolate}
+/* mascote 3D: a foto manda no tamanho do bloco, o resto flutua em volta */
+.hero-art .peng-photo{position:relative;z-index:2;display:block;width:min(100%,430px);height:auto;
+  filter:drop-shadow(0 34px 44px rgba(2,5,20,.55))}
+/* marca d'água do símbolo Aquila, atrás do mascote */
+.hero-art .art-mark{position:absolute;z-index:1;width:min(78%,340px);top:4%;right:-2%;
+  opacity:.07;transform:rotate(-6deg);pointer-events:none}
+.hero-chip{position:absolute;z-index:3;display:flex;align-items:center;gap:.5rem;font-size:.78rem;
   background:rgba(5,8,26,.86);border:1px solid var(--line-2);border-radius:12px;padding:.55rem .8rem;
   backdrop-filter:blur(8px);white-space:nowrap}
 .hero-chip b{font-family:var(--f-display);color:#7CF0B6}
-.chip-a{top:8%;left:0}
-.chip-b{bottom:14%;right:0}
-@media(max-width:700px){.hero-art{order:-1;margin-bottom:1rem}.hero-art svg.peng{width:min(72%,260px)}.chip-a{left:-4px}.chip-b{right:-4px}}
+.chip-a{top:6%;left:0}
+.chip-b{bottom:22%;right:-2%}
+
+/* selos dos marketplaces flutuando ao redor do mascote */
+.mk{position:absolute;z-index:3;display:flex;align-items:center;gap:.5rem;white-space:nowrap;
+  border-radius:999px;padding:.5rem .95rem;box-shadow:0 14px 30px rgba(2,5,20,.45);
+  font-family:var(--f-body);line-height:1;animation:mkFloat 6s ease-in-out infinite}
+.mk svg{display:block;flex:none}
+.mk-amz{background:#fff;color:#111;top:20%;left:-4%;padding:.55rem 1rem;animation-delay:-.6s}
+.mk-amz .w{font-weight:700;font-size:1.05rem;letter-spacing:-.02em}
+.mk-sp{background:var(--shopee);color:#fff;top:50%;right:-6%;animation-delay:-2.4s}
+.mk-sp .w{font-weight:700;font-size:1rem;letter-spacing:-.01em}
+.mk-ml{background:var(--ml-yellow);color:var(--ml-blue);bottom:6%;left:-6%;animation-delay:-4.1s}
+.mk-ml .w{font-weight:700;font-size:.82rem;line-height:1.05;letter-spacing:-.01em;text-align:left}
+@keyframes mkFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@media(prefers-reduced-motion:reduce){.mk{animation:none}}
+
+@media(max-width:700px){
+  .hero-art{order:-1;margin-bottom:1rem}
+  .hero-art .peng-photo{width:min(78%,300px)}
+  .hero-art .art-mark{width:62%;right:2%}
+  .chip-a{left:-4px}.chip-b{right:-4px}
+  .mk{padding:.4rem .7rem;gap:.38rem}
+  .mk-amz .w{font-size:.9rem}.mk-sp .w{font-size:.86rem}.mk-ml .w{font-size:.72rem}
+  .mk-amz{left:-2%;top:16%}.mk-sp{right:-2%}.mk-ml{left:-2%;bottom:2%}
+}
 
 /* ===== 7. MARQUEE ================================================ */
 .marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
@@ -471,9 +500,42 @@ section.light h2 b{
     </div>
 
     <div class="hero-art reveal" aria-hidden="true">
+      <svg class="art-mark" viewBox="0 0 120 104"><use href="#ico-aquila"/></svg>
+
+      <img class="peng-photo" src="assets/mascote-aquila.png" alt=""
+           width="1101" height="1428" fetchpriority="high" decoding="async">
+
       <div class="hero-chip chip-a"><b>▲ 49,3%</b> Mercado Livre</div>
-      <svg class="peng" viewBox="0 0 400 480"><use href="#peng"/></svg>
       <div class="hero-chip chip-b"><b>ACOS</b> sob controle</div>
+
+      <!-- selos dos canais atendidos -->
+      <div class="mk mk-amz">
+        <span class="w">amazon</span>
+        <svg width="34" height="11" viewBox="0 0 34 11">
+          <path d="M1.6 4.2c5.6 4.6 14.9 6 23.1 3.4" stroke="#FF9900" stroke-width="2.4"
+                fill="none" stroke-linecap="round"/>
+          <path d="M22.6 4.4l6.2 2.4-5.1 3.4z" fill="#FF9900"/>
+        </svg>
+      </div>
+
+      <div class="mk mk-sp">
+        <svg width="17" height="18" viewBox="0 0 24 25">
+          <path d="M3.6 8.4h16.8l-1.2 12.4a2.4 2.4 0 0 1-2.4 2.2H7.2a2.4 2.4 0 0 1-2.4-2.2L3.6 8.4Z" fill="#fff"/>
+          <path d="M8.3 8.6V6.4a3.7 3.7 0 0 1 7.4 0v2.2" stroke="#fff" stroke-width="1.9"
+                fill="none" stroke-linecap="round"/>
+          <path d="M14 13.1a3.4 3.4 0 0 0-2.3-.8c-1.3 0-2.2.6-2.2 1.6 0 2.2 4.8 1.3 4.8 3.8 0 1.2-1.1 2-2.7 2a4 4 0 0 1-2.6-.9"
+                stroke="#EE4D2D" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span class="w">Shopee</span>
+      </div>
+
+      <div class="mk mk-ml">
+        <svg width="27" height="18" viewBox="0 0 30 20">
+          <path d="M1.4 7.6c2.7-3.3 6.4-5.1 9.8-4.4l3.8.8 3.8-.8c3.4-.7 7.1 1.1 9.8 4.4-2.4 4.7-6.5 7.7-10.1 7.7-1.2 0-2.4-.4-3.5-1.2-1.1.8-2.3 1.2-3.5 1.2-3.6 0-7.7-3-10.1-7.7Z" fill="#2D3277"/>
+          <path d="M15 4.2v10.9" stroke="#FFE600" stroke-width="1.5"/>
+        </svg>
+        <span class="w">mercado<br>livre</span>
+      </div>
     </div>
   </div>
 </section>
