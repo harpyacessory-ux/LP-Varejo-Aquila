@@ -8,6 +8,9 @@
 <meta name="theme-color" content="#0A1440">
 <meta property="og:title" content="Aquila Marketing Digital — Escale no marketplace sem perder margem">
 <meta property="og:description" content="Especialista dedicado, acompanhamento 24h e estratégia construída a partir da análise da sua concorrência.">
+<link rel="icon" href="assets/logo-aquila.jpg">
+<link rel="apple-touch-icon" href="assets/logo-aquila.jpg">
+<meta property="og:image" content="assets/logo-aquila.jpg">
 <link rel="preload" as="image" href="assets/mascote-aquila.png" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -110,9 +113,13 @@ section{position:relative;padding:clamp(4rem,8vw,7.5rem) 0}
   padding-top:env(safe-area-inset-top,0px);
   background:rgba(7,13,42,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 .nav .wrap{height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.logo{display:flex;align-items:center;gap:.65rem;text-decoration:none}
-.logo span{font-family:var(--f-display);font-weight:800;font-size:1rem;letter-spacing:.13em;color:#fff}
-.logo small{display:block;font-size:.54rem;letter-spacing:.3em;color:var(--muted);font-weight:500}
+/* Lockup fiel a logo oficial: "Aquila" em peso leve, nao caixa-alta */
+.logo{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:#fff}
+.logo svg{flex:none}
+.logo span{font-family:var(--f-display);font-weight:400;font-size:1.3rem;letter-spacing:.005em;
+  color:#fff;line-height:1}
+.logo small{display:block;font-size:.5rem;letter-spacing:.33em;color:rgba(255,255,255,.72);
+  font-weight:500;margin-top:.3rem}
 .nav-links{display:none;gap:1.6rem;font-size:.9rem;color:var(--muted)}
 .nav-links a{text-decoration:none}
 .nav-links a:hover{color:#fff}
@@ -133,8 +140,8 @@ section{position:relative;padding:clamp(4rem,8vw,7.5rem) 0}
 .hero-art .peng-photo{position:relative;z-index:2;display:block;width:min(100%,430px);height:auto;
   filter:drop-shadow(0 34px 44px rgba(2,5,20,.55))}
 /* marca d'água do símbolo Aquila, atrás do mascote */
-.hero-art .art-mark{position:absolute;z-index:1;width:min(78%,340px);top:4%;right:-2%;
-  opacity:.07;transform:rotate(-6deg);pointer-events:none}
+.hero-art .art-mark{position:absolute;z-index:1;width:min(52%,230px);top:2%;right:2%;
+  color:#fff;opacity:.07;transform:rotate(-6deg);pointer-events:none}
 .hero-chip{position:absolute;z-index:3;display:flex;align-items:center;gap:.5rem;font-size:.78rem;
   background:rgba(5,8,26,.86);border:1px solid var(--line-2);border-radius:12px;padding:.55rem .8rem;
   backdrop-filter:blur(8px);white-space:nowrap}
@@ -424,11 +431,15 @@ section.light h2 b{
 
 <!-- SVGs reutilizáveis: logo, mascote e ícones -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-  <symbol id="ico-aquila" viewBox="0 0 120 104">
-    <path d="M58 4 L70 24 L60 30 L50 24 Z" fill="#fff"/>
-    <path d="M4 98 C28 66 44 38 54 12 L64 30 L26 98 Z" fill="#fff"/>
-    <path d="M116 98 C92 66 76 38 66 12 L56 30 L94 98 Z" fill="#fff" opacity=".8"/>
-    <path d="M40 66 L80 66 L73 80 L33 80 Z" fill="#fff"/>
+  <!-- Simbolo da marca: cabeca de aguia que forma a perna esquerda do "A",
+       com a perna direita solta. Vetorizado a partir da logo oficial. -->
+  <symbol id="ico-aquila" viewBox="0 0 116 130">
+    <path fill="currentColor" fill-rule="evenodd" d="
+      M34.6 14.6C36.2 5.4 44.3 0 54.2.8c6.6.5 13.1 1.6 18.7 3.4
+      12.8 4 26 8.7 37.1 13.3 1.9 1 2.5 3.4 1.3 5.1-2.6 3.8-6.6 6.6-10.6 8.3
+      -7.3 3.1-15.5 5.6-23.7 6.4L30 130H1.3L34.6 14.6Z
+      M81.9 10.8a5.2 5.2 0 1 0 0 10.4 5.2 5.2 0 0 0 0-10.4Z"/>
+    <path fill="currentColor" d="M63 51.6 108.3 130H81.2L55.4 73.9Z"/>
   </symbol>
 
   <symbol id="peng" viewBox="0 0 400 480">
@@ -467,8 +478,8 @@ section.light h2 b{
 <header class="nav">
   <div class="wrap">
     <a class="logo" href="#topo" aria-label="Aquila Marketing Digital">
-      <svg width="32" height="28" aria-hidden="true"><use href="#ico-aquila"/></svg>
-      <span>AQUILA<small>MARKETING DIGITAL</small></span>
+      <svg width="27" height="30" aria-hidden="true"><use href="#ico-aquila"/></svg>
+      <span>Aquila<small>MARKETING DIGITAL</small></span>
     </a>
     <nav class="nav-links">
       <a href="#problema">O problema</a>
@@ -502,7 +513,7 @@ section.light h2 b{
     </div>
 
     <div class="hero-art reveal" aria-hidden="true">
-      <svg class="art-mark" viewBox="0 0 120 104"><use href="#ico-aquila"/></svg>
+      <svg class="art-mark" viewBox="0 0 116 130"><use href="#ico-aquila"/></svg>
 
       <img class="peng-photo" src="assets/mascote-aquila.png" alt=""
            width="1101" height="1428" fetchpriority="high" decoding="async">
@@ -877,7 +888,7 @@ section.light h2 b{
 <footer>
   <div class="wrap foot">
     <div style="display:flex;align-items:center;gap:.6rem">
-      <svg width="26" height="23" aria-hidden="true"><use href="#ico-aquila"/></svg>
+      <svg width="21" height="24" aria-hidden="true" style="color:#fff"><use href="#ico-aquila"/></svg>
       <span>Aquila Marketing Digital · 2026 · São Vicente — SP</span>
     </div>
     <div style="display:flex;gap:1.2rem;flex-wrap:wrap">
