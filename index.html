@@ -379,6 +379,20 @@ section.light{background-image:
 /* traço de cor no topo dos cards claros */
 section.light .card{position:relative;overflow:hidden}
 section.light .card::after{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--mk,#1B3FA8)}
+/* "Para quem e": retrato do lojista ao lado do cabecalho.
+   No mobile ele entra no fluxo, alinhado a direita; a partir de 960px passa a
+   flutuar no canto, subindo um pouco dentro do padding da secao. */
+.pq-top{position:relative}
+.pq-foto{display:block;height:clamp(200px,44vw,270px);width:auto;
+  margin:.4rem -1rem -.6rem auto;pointer-events:none}
+@media(min-width:960px){
+  .pq-top{min-height:clamp(380px,38vw,520px)}
+  .pq-top .head{max-width:min(52%,56ch)}
+  .pq-foto{position:absolute;right:0;bottom:0;margin:0;
+    height:calc(100% + clamp(1.5rem,3vw,3rem));max-width:46%;object-fit:contain;
+    object-position:bottom right}
+}
+
 #paraquem .card:nth-child(1){--mk:var(--ml-yellow)}
 #paraquem .card:nth-child(2){--mk:var(--shopee)}
 #paraquem .card:nth-child(3){--mk:var(--amz-orange)}
@@ -525,11 +539,15 @@ section.light h2 b{
 <!-- ============ 2. PARA QUEM É ============ -->
 <section id="paraquem" class="light">
   <div class="wrap">
-    <div class="head reveal">
-      <span class="eyebrow">Para quem é</span>
-      <h2>Feito para <b>dono de loja do varejo que vende dentro do marketplace.</b></h2>
-      <p class="lead">Se a sua loja já tem produto, estoque e fornecedor, o trabalho começa no primeiro dia.
-      Atendemos de quem está começando do zero a quem já passa de R$ 100 mil por mês no canal.</p>
+    <div class="pq-top">
+      <div class="head reveal">
+        <span class="eyebrow">Para quem é</span>
+        <h2>Feito para <b>dono de loja do varejo que vende dentro do marketplace.</b></h2>
+        <p class="lead">Se a sua loja já tem produto, estoque e fornecedor, o trabalho começa no primeiro dia.
+        Atendemos de quem está começando do zero a quem já passa de R$ 100 mil por mês no canal.</p>
+      </div>
+      <img class="pq-foto" src="assets/lojista-apontando.png" alt=""
+           width="1166" height="1349" loading="lazy" decoding="async">
     </div>
 
     <div class="grid g4 reveal">
