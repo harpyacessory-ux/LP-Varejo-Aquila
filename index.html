@@ -113,9 +113,12 @@ section{position:relative;padding:clamp(4rem,8vw,7.5rem) 0}
   padding-top:env(safe-area-inset-top,0px);
   background:rgba(7,13,42,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 .nav .wrap{height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;gap:1rem}
-/* Lockup fiel a logo oficial: "Aquila" em peso leve, nao caixa-alta */
-.logo{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:#fff}
-.logo svg{flex:none}
+/* Lockup fiel a logo oficial: simbolo em PNG transparente + "Aquila" em peso leve.
+   O arquivo tem folga em volta do desenho, por isso a altura e maior que o
+   simbolo aparente. */
+.mark{display:block;flex:none;height:38px;width:auto}
+.mark-sm{height:30px}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:#fff}
 .logo span{font-family:var(--f-display);font-weight:400;font-size:1.3rem;letter-spacing:.005em;
   color:#fff;line-height:1}
 .logo small{display:block;font-size:.5rem;letter-spacing:.33em;color:rgba(255,255,255,.72);
@@ -140,8 +143,8 @@ section{position:relative;padding:clamp(4rem,8vw,7.5rem) 0}
 .hero-art .peng-photo{position:relative;z-index:2;display:block;width:min(100%,430px);height:auto;
   filter:drop-shadow(0 34px 44px rgba(2,5,20,.55))}
 /* marca d'água do símbolo Aquila, atrás do mascote */
-.hero-art .art-mark{position:absolute;z-index:1;width:min(52%,230px);top:2%;right:2%;
-  color:#fff;opacity:.07;transform:rotate(-6deg);pointer-events:none}
+.hero-art .art-mark{position:absolute;z-index:1;width:min(42%,190px);height:auto;top:0;right:0;
+  opacity:.07;transform:rotate(-6deg);pointer-events:none}
 .hero-chip{position:absolute;z-index:3;display:flex;align-items:center;gap:.5rem;font-size:.78rem;
   background:rgba(5,8,26,.86);border:1px solid var(--line-2);border-radius:12px;padding:.55rem .8rem;
   backdrop-filter:blur(8px);white-space:nowrap}
@@ -431,16 +434,9 @@ section.light h2 b{
 
 <!-- SVGs reutilizáveis: logo, mascote e ícones -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-  <!-- Simbolo da marca: cabeca de aguia que forma a perna esquerda do "A",
-       com a perna direita solta. Vetorizado a partir da logo oficial. -->
-  <symbol id="ico-aquila" viewBox="0 0 116 130">
-    <path fill="currentColor" fill-rule="evenodd" d="
-      M34.6 14.6C36.2 5.4 44.3 0 54.2.8c6.6.5 13.1 1.6 18.7 3.4
-      12.8 4 26 8.7 37.1 13.3 1.9 1 2.5 3.4 1.3 5.1-2.6 3.8-6.6 6.6-10.6 8.3
-      -7.3 3.1-15.5 5.6-23.7 6.4L30 130H1.3L34.6 14.6Z
-      M81.9 10.8a5.2 5.2 0 1 0 0 10.4 5.2 5.2 0 0 0 0-10.4Z"/>
-    <path fill="currentColor" d="M63 51.6 108.3 130H81.2L55.4 73.9Z"/>
-  </symbol>
+  <!-- O simbolo da marca nao fica aqui: e o arquivo oficial
+       assets/simbolo-aquila.png, usado via <img class="mark"> -->
+
 
   <symbol id="peng" viewBox="0 0 400 480">
     <defs>
@@ -478,7 +474,7 @@ section.light h2 b{
 <header class="nav">
   <div class="wrap">
     <a class="logo" href="#topo" aria-label="Aquila Marketing Digital">
-      <svg width="27" height="30" aria-hidden="true"><use href="#ico-aquila"/></svg>
+      <img class="mark" src="assets/simbolo-aquila.png" alt="" width="1097" height="1434">
       <span>Aquila<small>MARKETING DIGITAL</small></span>
     </a>
     <nav class="nav-links">
@@ -513,7 +509,7 @@ section.light h2 b{
     </div>
 
     <div class="hero-art reveal" aria-hidden="true">
-      <svg class="art-mark" viewBox="0 0 116 130"><use href="#ico-aquila"/></svg>
+      <img class="art-mark" src="assets/simbolo-aquila.png" alt="" width="1097" height="1434">
 
       <img class="peng-photo" src="assets/mascote-aquila.png" alt=""
            width="1101" height="1428" fetchpriority="high" decoding="async">
@@ -888,7 +884,7 @@ section.light h2 b{
 <footer>
   <div class="wrap foot">
     <div style="display:flex;align-items:center;gap:.6rem">
-      <svg width="21" height="24" aria-hidden="true" style="color:#fff"><use href="#ico-aquila"/></svg>
+      <img class="mark mark-sm" src="assets/simbolo-aquila.png" alt="" width="1097" height="1434">
       <span>Aquila Marketing Digital · 2026 · São Vicente — SP</span>
     </div>
     <div style="display:flex;gap:1.2rem;flex-wrap:wrap">
