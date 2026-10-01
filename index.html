@@ -92,6 +92,12 @@ section{position:relative;padding:clamp(4rem,8vw,7.5rem) 0}
 /* ilustracao solta na coluna, sem moldura: a arte ja tem brilho proprio */
 .ilustra{display:block;width:100%;max-width:640px;height:auto;margin-inline:auto;
   filter:drop-shadow(0 28px 44px rgba(2,5,20,.45))}
+section.light .ilustra{filter:drop-shadow(0 26px 40px rgba(14,26,69,.18))}
+/* no bloco de camadas a arte e vertical e sobe ate a altura do cabecalho */
+#sistema .ilustra{max-width:470px}
+@media(min-width:960px){
+  #sistema .ilustra{align-self:start;margin-top:calc(-1 * clamp(5rem,12vw,11rem))}
+}
 
 .media{border:1px solid var(--line-2);border-radius:20px;min-height:320px;
   background:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 14px,transparent 14px 28px),
@@ -627,7 +633,8 @@ section.light h2 b{
       acompanhados de perto, com painel de vendas e margem atualizado. A loja escala sem consumir o seu dia.</p></div></li>
     </ol>
 
-    <div class="media reveal" style="min-height:380px">Diagrama do sistema em camadas<br><small>opcional: substituir por imagem</small></div>
+    <img class="ilustra reveal" src="assets/ilustracao-camadas.png" alt=""
+         width="1086" height="1448" loading="lazy" decoding="async">
   </div>
 </section>
 
