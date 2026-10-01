@@ -142,17 +142,21 @@ section{position:relative;padding:clamp(4rem,8vw,7.5rem) 0}
 .chip-a{top:6%;left:0}
 .chip-b{bottom:22%;right:-2%}
 
-/* selos dos marketplaces flutuando ao redor do mascote */
-.mk{position:absolute;z-index:3;display:flex;align-items:center;gap:.5rem;white-space:nowrap;
-  border-radius:999px;padding:.5rem .95rem;box-shadow:0 14px 30px rgba(2,5,20,.45);
-  font-family:var(--f-body);line-height:1;animation:mkFloat 6s ease-in-out infinite}
-.mk svg{display:block;flex:none}
-.mk-amz{background:#fff;color:#111;top:20%;left:-4%;padding:.55rem 1rem;animation-delay:-.6s}
-.mk-amz .w{font-weight:700;font-size:1.05rem;letter-spacing:-.02em}
-.mk-sp{background:var(--shopee);color:#fff;top:50%;right:-6%;animation-delay:-2.4s}
-.mk-sp .w{font-weight:700;font-size:1rem;letter-spacing:-.01em}
-.mk-ml{background:var(--ml-yellow);color:var(--ml-blue);bottom:6%;left:-6%;animation-delay:-4.1s}
-.mk-ml .w{font-weight:700;font-size:.82rem;line-height:1.05;letter-spacing:-.01em;text-align:left}
+/* Selos dos marketplaces flutuando ao redor do mascote.
+   Os arquivos de logo vêm com fundo sólido e muita margem em volta, então o
+   enquadramento é feito aqui: background-size amplia a arte até o logo ocupar
+   ~55% da altura da pílula, e background-color repete o fundo do arquivo para
+   cobrir as sobras laterais. --mkh controla a escala dos três de uma vez. */
+.mk{--mkh:46px;position:absolute;z-index:3;height:var(--mkh);border-radius:999px;
+  background-repeat:no-repeat;background-position:center;
+  box-shadow:0 14px 30px rgba(2,5,20,.45);animation:mkFloat 6s ease-in-out infinite}
+.mk-amz{width:calc(var(--mkh)*2.37);top:20%;left:-4%;animation-delay:-.6s;
+  background-color:#fff;background-image:url("assets/logo-amazon.png");background-size:auto 100%}
+.mk-sp{width:calc(var(--mkh)*2.17);top:50%;right:-6%;animation-delay:-2.4s;
+  background-image:url("assets/logo-shopee.png");background-size:auto 114%}
+.mk-ml{width:calc(var(--mkh)*2.61);bottom:6%;left:-6%;animation-delay:-4.1s;
+  background-color:var(--ml-yellow);background-image:url("assets/logo-mercado-livre.webp");
+  background-size:auto 275%}
 @keyframes mkFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
 @media(prefers-reduced-motion:reduce){.mk{animation:none}}
 
@@ -161,8 +165,7 @@ section{position:relative;padding:clamp(4rem,8vw,7.5rem) 0}
   .hero-art .peng-photo{width:min(78%,300px)}
   .hero-art .art-mark{width:62%;right:2%}
   .chip-a{left:-4px}.chip-b{right:-4px}
-  .mk{padding:.4rem .7rem;gap:.38rem}
-  .mk-amz .w{font-size:.9rem}.mk-sp .w{font-size:.86rem}.mk-ml .w{font-size:.72rem}
+  .mk{--mkh:34px;box-shadow:0 10px 20px rgba(2,5,20,.4)}
   .mk-amz{left:-2%;top:16%}.mk-sp{right:-2%}.mk-ml{left:-2%;bottom:2%}
 }
 
@@ -507,34 +510,10 @@ section.light h2 b{
       <div class="hero-chip chip-a"><b>▲ 49,3%</b> Mercado Livre</div>
       <div class="hero-chip chip-b"><b>ACOS</b> sob controle</div>
 
-      <!-- selos dos canais atendidos -->
-      <div class="mk mk-amz">
-        <span class="w">amazon</span>
-        <svg width="34" height="11" viewBox="0 0 34 11">
-          <path d="M1.6 4.2c5.6 4.6 14.9 6 23.1 3.4" stroke="#FF9900" stroke-width="2.4"
-                fill="none" stroke-linecap="round"/>
-          <path d="M22.6 4.4l6.2 2.4-5.1 3.4z" fill="#FF9900"/>
-        </svg>
-      </div>
-
-      <div class="mk mk-sp">
-        <svg width="17" height="18" viewBox="0 0 24 25">
-          <path d="M3.6 8.4h16.8l-1.2 12.4a2.4 2.4 0 0 1-2.4 2.2H7.2a2.4 2.4 0 0 1-2.4-2.2L3.6 8.4Z" fill="#fff"/>
-          <path d="M8.3 8.6V6.4a3.7 3.7 0 0 1 7.4 0v2.2" stroke="#fff" stroke-width="1.9"
-                fill="none" stroke-linecap="round"/>
-          <path d="M14 13.1a3.4 3.4 0 0 0-2.3-.8c-1.3 0-2.2.6-2.2 1.6 0 2.2 4.8 1.3 4.8 3.8 0 1.2-1.1 2-2.7 2a4 4 0 0 1-2.6-.9"
-                stroke="#EE4D2D" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-        </svg>
-        <span class="w">Shopee</span>
-      </div>
-
-      <div class="mk mk-ml">
-        <svg width="27" height="18" viewBox="0 0 30 20">
-          <path d="M1.4 7.6c2.7-3.3 6.4-5.1 9.8-4.4l3.8.8 3.8-.8c3.4-.7 7.1 1.1 9.8 4.4-2.4 4.7-6.5 7.7-10.1 7.7-1.2 0-2.4-.4-3.5-1.2-1.1.8-2.3 1.2-3.5 1.2-3.6 0-7.7-3-10.1-7.7Z" fill="#2D3277"/>
-          <path d="M15 4.2v10.9" stroke="#FFE600" stroke-width="1.5"/>
-        </svg>
-        <span class="w">mercado<br>livre</span>
-      </div>
+      <!-- selos dos canais atendidos (logos oficiais, enquadrados via CSS) -->
+      <div class="mk mk-amz" role="img" aria-label="Amazon"></div>
+      <div class="mk mk-sp" role="img" aria-label="Shopee"></div>
+      <div class="mk mk-ml" role="img" aria-label="Mercado Livre"></div>
     </div>
   </div>
 </section>
