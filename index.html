@@ -103,7 +103,7 @@ section.light .ilustra{filter:drop-shadow(0 26px 40px rgba(14,26,69,.18))}
    e ancorado no canto superior esquerdo, onde ficam os numeros que importam.
    O card inteiro e um link que abre o print completo. */
 .print{position:relative;display:block;min-height:320px;overflow:hidden;
-  border:1px solid var(--line-2);border-radius:20px;background:#fff;text-decoration:none}
+  border:1px solid var(--line-2);border-radius:20px;background:#fff;text-decoration:none;cursor:zoom-in}
 /* Cada print tem o painel numa posicao diferente, entao o enquadramento e por
    canal. As margens sao em %, que o CSS calcula sempre sobre a largura do card:
    assim o recorte acompanha o card em qualquer tela. */
@@ -317,6 +317,36 @@ section.light .ilustra{filter:drop-shadow(0 26px 40px rgba(14,26,69,.18))}
 .check{display:flex;gap:.7rem;align-items:flex-start;font-size:.88rem;margin:1rem 0 .3rem}
 .check input{width:20px;height:20px;flex:0 0 auto;margin-top:.15rem;accent-color:var(--electric)}
 .hp{position:absolute;left:-9999px;width:0;height:0;opacity:0}
+
+/* ===== LIGHTBOX DOS PRINTS ====================================== */
+.lb{position:fixed;inset:0;z-index:95;display:none;align-items:center;justify-content:center;
+  gap:clamp(.4rem,2vw,1.4rem);width:100%;max-width:100%;height:100%;max-height:100%;
+  padding:clamp(.8rem,3vw,2rem);border:0;background:transparent;overflow:hidden}
+.lb[open]{display:flex}
+.lb::backdrop{background:rgba(3,6,20,.92);backdrop-filter:blur(6px)}
+.lb-fig{margin:0;flex:1 1 auto;min-width:0;display:flex;flex-direction:column;
+  align-items:center;gap:.9rem;animation:lbIn .28s cubic-bezier(.2,.8,.3,1)}
+.lb-fig img{display:block;max-width:100%;max-height:78vh;width:auto;height:auto;
+  border-radius:14px;background:#fff;box-shadow:0 30px 70px rgba(0,0,0,.55)}
+.lb-fig figcaption{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;justify-content:center;
+  color:rgba(255,255,255,.76);font-size:.86rem;text-align:center;max-width:70ch}
+.lb-canal{font-family:var(--f-display);font-weight:700;font-size:.66rem;letter-spacing:.14em;
+  text-transform:uppercase;color:#fff;border:1px solid rgba(255,255,255,.28);
+  border-radius:999px;padding:.26rem .7rem}
+.lb-btn{flex:none;display:grid;place-items:center;border-radius:50%;cursor:pointer;color:#fff;
+  border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);
+  width:46px;height:46px;font-size:1.5rem;line-height:1;transition:background .2s,transform .2s}
+.lb-btn:hover{background:rgba(255,255,255,.2);transform:scale(1.06)}
+.lb-x{position:absolute;top:clamp(.8rem,2vw,1.4rem);right:clamp(.8rem,2vw,1.4rem);
+  width:40px;height:40px;font-size:1rem;z-index:2}
+@keyframes lbIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.lb-fig{animation:none}.lb-btn{transition:none}}
+@media(max-width:640px){
+  .lb{flex-wrap:wrap}
+  .lb-fig{order:-1;flex-basis:100%}
+  .lb-fig img{max-height:64vh}
+  .lb-btn{width:42px;height:42px}
+}
 
 .modal{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;
   padding:1rem;width:100%;max-width:100%;height:100%;max-height:100%;border:0;background:transparent;color:var(--ink)}
@@ -700,19 +730,19 @@ section.light h2 b{
         <img src="assets/painel-shopee.png" width="3520" height="1612" loading="lazy" decoding="async"
              alt="Painel da Shopee no mês: R$ 117.812,98 em vendas e 1.495 pedidos, alta de 413,04% sobre o mês anterior">
         <span class="mkt sp">Shopee</span>
-        <span class="print-zoom">ver em tamanho real</span>
+        <span class="print-zoom">ampliar</span>
       </a>
       <a class="print ml reveal" href="assets/painel-mercado-livre.png" target="_blank" rel="noopener">
         <img src="assets/painel-mercado-livre.png" width="3520" height="2268" loading="lazy" decoding="async"
              alt="Painel do Mercado Livre: R$ 68.719 em vendas brutas, 1.125 vendas e conversão de 7,7%, com alta de 2.336% sobre o período anterior">
         <span class="mkt ml">Mercado Livre</span>
-        <span class="print-zoom">ver em tamanho real</span>
+        <span class="print-zoom">ampliar</span>
       </a>
       <a class="print az reveal" href="assets/painel-amazon.png" target="_blank" rel="noopener">
         <img src="assets/painel-amazon.png" width="3520" height="1672" loading="lazy" decoding="async"
              alt="Painel do canal no mês: R$ 642.774,48 em vendas e 737 pedidos, alta de 172,55% sobre o mês anterior">
         <span class="mkt az">Amazon</span>
-        <span class="print-zoom">ver em tamanho real</span>
+        <span class="print-zoom">ampliar</span>
       </a>
     </div>
   </div>
@@ -927,6 +957,18 @@ section.light h2 b{
 <a class="wa" id="waFloat" href="#" aria-label="Falar no WhatsApp"><svg width="28" height="28" aria-hidden="true"><use href="#wa"/></svg></a>
 <div class="sticky"><button class="btn" data-form data-cta="sticky">Quero minha análise gratuita</button></div>
 
+<!-- lightbox dos prints de painel -->
+<dialog class="lb" id="lightbox" aria-label="Print do painel ampliado">
+  <button class="lb-btn lb-x" type="button" data-lb="fechar" aria-label="Fechar">&#10005;</button>
+  <button class="lb-btn lb-nav lb-prev" type="button" data-lb="anterior" aria-label="Case anterior">&#8249;</button>
+  <figure class="lb-fig">
+    <img id="lbImg" src="" alt="">
+    <!-- a legenda repete o alt da imagem, entao fica fora da arvore de acessibilidade -->
+    <figcaption aria-hidden="true"><span class="lb-canal" id="lbCanal"></span><span id="lbCap"></span></figcaption>
+  </figure>
+  <button class="lb-btn lb-nav lb-next" type="button" data-lb="proximo" aria-label="Próximo case">&#8250;</button>
+</dialog>
+
 <!-- modal do formulário -->
 <dialog class="modal" id="modal" aria-label="Solicitar análise gratuita">
   <div class="modal-box">
@@ -1052,6 +1094,50 @@ form.addEventListener('submit',function(e){
   btn.textContent = 'Dados enviados — continue no WhatsApp';
   setTimeout(()=>{ btn.textContent = txt; form.reset(); UTM.forEach(k=>{const c=document.getElementById(k); if(c) c.value=utms[k];}); },5000);
 });
+
+/* ===== Lightbox dos prints de painel ===========================
+   Os cards continuam sendo links para o arquivo: se o JS não rodar,
+   o print abre em nova aba como antes. */
+(() => {
+  const lb = document.getElementById('lightbox');
+  const cards = [...document.querySelectorAll('.print')];
+  if(!lb || !cards.length || typeof lb.showModal !== 'function') return;
+
+  const img   = document.getElementById('lbImg');
+  const canal = document.getElementById('lbCanal');
+  const cap   = document.getElementById('lbCap');
+  const prev  = lb.querySelector('[data-lb="anterior"]');
+  const next  = lb.querySelector('[data-lb="proximo"]');
+  let i = 0;
+
+  const mostrar = (n) => {
+    i = (n + cards.length) % cards.length;
+    const card = cards[i], foto = card.querySelector('img');
+    img.src = card.getAttribute('href');
+    img.alt = foto ? foto.alt : '';
+    canal.textContent = (card.querySelector('.mkt') || {}).textContent || '';
+    cap.textContent = foto ? foto.alt : '';
+  };
+
+  if(cards.length < 2){ prev.hidden = next.hidden = true; }
+
+  cards.forEach((card, n) => card.addEventListener('click', (e) => {
+    e.preventDefault();
+    mostrar(n);
+    lb.showModal();
+    document.body.style.overflow = 'hidden';
+  }));
+
+  prev.addEventListener('click', () => mostrar(i - 1));
+  next.addEventListener('click', () => mostrar(i + 1));
+  lb.querySelector('[data-lb="fechar"]').addEventListener('click', () => lb.close());
+  lb.addEventListener('click', (e) => { if(e.target === lb) lb.close(); });
+  lb.addEventListener('close', () => { document.body.style.overflow = ''; });
+  lb.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowLeft'){  e.preventDefault(); mostrar(i - 1); }
+    if(e.key === 'ArrowRight'){ e.preventDefault(); mostrar(i + 1); }
+  });
+})();
 
 /* ===== Animação de entrada ===================================== */
 const reduz = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
