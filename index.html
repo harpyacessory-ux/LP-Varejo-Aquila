@@ -8,10 +8,10 @@
 <meta name="theme-color" content="#0A1440">
 <meta property="og:title" content="Aquila Marketing Digital — Escale no marketplace sem perder margem">
 <meta property="og:description" content="Especialista dedicado, acompanhamento próximo e estratégia construída a partir da análise da sua concorrência.">
-<link rel="icon" href="assets/logo-aquila.jpg">
-<link rel="apple-touch-icon" href="assets/logo-aquila.jpg">
-<meta property="og:image" content="assets/logo-aquila.jpg">
-<link rel="preload" as="image" href="assets/mascote-aquila.png" fetchpriority="high">
+<link rel="icon" href="assets/logo-aquila.webp">
+<link rel="apple-touch-icon" href="assets/logo-aquila.webp">
+<meta property="og:image" content="assets/logo-aquila.webp">
+<link rel="preload" as="image" href="assets/mascote-aquila.webp" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -102,6 +102,22 @@ section{position:relative;padding:clamp(4rem,8vw,7.5rem) 0}
 .vframe figcaption{display:flex;flex-direction:column;gap:.2rem;text-align:center}
 .vframe figcaption strong{font-family:var(--f-display);font-size:1rem;color:var(--ink)}
 .vframe figcaption span{font-size:.86rem;color:var(--muted)}
+
+/* O player ganha camada propria: o que muda dentro dele nao obriga o
+   resto da pagina a repintar. */
+.vframe .vplayer{contain:paint;transform:translateZ(0)}
+
+/* Enquanto o video toca, desliga o que seria recalculado a cada quadro:
+   os blur de fundo do header e da barra fixa e as animacoes continuas.
+   Sao os tres custos que faziam a reproducao engasgar. */
+body.tocando .nav,
+body.tocando .sticky,
+body.tocando .hero-chip,
+body.tocando .print-zoom{backdrop-filter:none}
+body.tocando .nav{background:#070D2A}
+body.tocando .sticky{background:#05060F}
+body.tocando .mk,
+body.tocando .mq-track{animation-play-state:paused}
 
 /* botao de play sobre o poster; some assim que o video comeca */
 .vplay{position:absolute;inset:7px;display:grid;place-items:center;cursor:pointer;
@@ -221,9 +237,9 @@ section.light .ilustra{filter:drop-shadow(0 26px 40px rgba(14,26,69,.18))}
   background-repeat:no-repeat;background-position:center;
   box-shadow:0 14px 30px rgba(2,5,20,.45);animation:mkFloat 6s ease-in-out infinite}
 .mk-amz{width:calc(var(--mkh)*2.37);top:20%;left:-4%;animation-delay:-.6s;
-  background-color:#fff;background-image:url("assets/logo-amazon.png");background-size:auto 100%}
+  background-color:#fff;background-image:url("assets/logo-amazon.webp");background-size:auto 100%}
 .mk-sp{width:calc(var(--mkh)*2.17);top:50%;right:-6%;animation-delay:-2.4s;
-  background-image:url("assets/logo-shopee.png");background-size:auto 114%}
+  background-image:url("assets/logo-shopee.webp");background-size:auto 114%}
 .mk-ml{width:calc(var(--mkh)*2.61);bottom:6%;left:-6%;animation-delay:-4.1s;
   background-color:var(--ml-yellow);background-image:url("assets/logo-mercado-livre.webp");
   background-size:auto 275%}
@@ -543,7 +559,7 @@ section.light h2 b{
 <!-- SVGs reutilizáveis: logo, mascote e ícones -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <!-- O simbolo da marca nao fica aqui: e o arquivo oficial
-       assets/simbolo-aquila.png, usado via <img class="mark"> -->
+       assets/simbolo-aquila.webp, usado via <img class="mark"> -->
 
 
 
@@ -556,7 +572,7 @@ section.light h2 b{
 <header class="nav">
   <div class="wrap">
     <a class="logo" href="#topo" aria-label="Aquila Marketing Digital">
-      <img class="mark" src="assets/simbolo-aquila.png" alt="" width="1097" height="1434">
+      <img class="mark" src="assets/simbolo-aquila.webp" alt="" width="1097" height="1434">
       <span>Aquila<small>MARKETING DIGITAL</small></span>
     </a>
     <nav class="nav-links">
@@ -591,9 +607,9 @@ section.light h2 b{
     </div>
 
     <div class="hero-art reveal" aria-hidden="true">
-      <img class="art-mark" src="assets/simbolo-aquila.png" alt="" width="1097" height="1434">
+      <img class="art-mark" src="assets/simbolo-aquila.webp" alt="" width="1097" height="1434">
 
-      <img class="peng-photo" src="assets/mascote-aquila.png" alt=""
+      <img class="peng-photo" src="assets/mascote-aquila.webp" alt=""
            width="1101" height="1428" fetchpriority="high" decoding="async">
 
       <div class="hero-chip chip-a"><b>▲ 49,3%</b> Mercado Livre</div>
@@ -636,7 +652,7 @@ section.light h2 b{
         <p class="lead">Se a sua loja já tem produto, estoque e fornecedor, o trabalho começa no primeiro dia.
         Atendemos de quem está começando do zero a quem já passa de R$ 100 mil por mês no canal.</p>
       </div>
-      <img class="pq-foto" src="assets/lojista-apontando.png" alt=""
+      <img class="pq-foto" src="assets/lojista-apontando.webp" alt=""
            width="1166" height="1349" loading="lazy" decoding="async">
     </div>
 
@@ -734,7 +750,7 @@ section.light h2 b{
       acompanhados de perto, com painel de vendas e margem atualizado. A loja escala sem consumir o seu dia.</p></div></li>
     </ol>
 
-    <img class="ilustra reveal" src="assets/ilustracao-camadas.png" alt=""
+    <img class="ilustra reveal" src="assets/ilustracao-camadas.webp" alt=""
          width="1086" height="1448" loading="lazy" decoding="async">
   </div>
 </section>
@@ -778,20 +794,20 @@ section.light h2 b{
     <!-- GALERIA DE PRINTS — trocar cada .media pela imagem real do painel.
          Um print de cada canal: Shopee · Mercado Livre · Amazon -->
     <div class="grid g3 reveal">
-      <a class="print sp reveal" href="assets/painel-shopee.png" target="_blank" rel="noopener">
-        <img src="assets/painel-shopee.png" width="3520" height="1612" loading="lazy" decoding="async"
+      <a class="print sp reveal" href="assets/painel-shopee.webp" target="_blank" rel="noopener">
+        <img src="assets/painel-shopee.webp" width="3520" height="1612" loading="lazy" decoding="async"
              alt="Painel da Shopee no mês: R$ 117.812,98 em vendas e 1.495 pedidos, alta de 413,04% sobre o mês anterior">
         <span class="mkt sp">Shopee</span>
         <span class="print-zoom">ampliar</span>
       </a>
-      <a class="print ml reveal" href="assets/painel-mercado-livre.png" target="_blank" rel="noopener">
-        <img src="assets/painel-mercado-livre.png" width="3520" height="2268" loading="lazy" decoding="async"
+      <a class="print ml reveal" href="assets/painel-mercado-livre.webp" target="_blank" rel="noopener">
+        <img src="assets/painel-mercado-livre.webp" width="3520" height="2268" loading="lazy" decoding="async"
              alt="Painel do Mercado Livre: R$ 68.719 em vendas brutas, 1.125 vendas e conversão de 7,7%, com alta de 2.336% sobre o período anterior">
         <span class="mkt ml">Mercado Livre</span>
         <span class="print-zoom">ampliar</span>
       </a>
-      <a class="print az reveal" href="assets/painel-amazon.png" target="_blank" rel="noopener">
-        <img src="assets/painel-amazon.png" width="3520" height="1672" loading="lazy" decoding="async"
+      <a class="print az reveal" href="assets/painel-amazon.webp" target="_blank" rel="noopener">
+        <img src="assets/painel-amazon.webp" width="3520" height="1672" loading="lazy" decoding="async"
              alt="Painel do canal no mês: R$ 642.774,48 em vendas e 737 pedidos, alta de 172,55% sobre o mês anterior">
         <span class="mkt az">Amazon</span>
         <span class="print-zoom">ampliar</span>
@@ -870,7 +886,7 @@ section.light h2 b{
           Posicionar o produto certo antes do pico é o que evita ruptura no melhor dia do ano.</p></div></li>
         </ol>
         <div style="display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap">
-          <img class="mascote-inline" src="assets/mascote-aquila-apontando.png" alt="" width="1164" height="1351" loading="lazy" decoding="async">
+          <img class="mascote-inline" src="assets/mascote-aquila-apontando.webp" alt="" width="1164" height="1351" loading="lazy" decoding="async">
           <p style="margin:0;max-width:32ch;color:var(--muted)">A análise é gratuita e não obriga você a nada.
           Se fizer sentido, a condição de Black Friday é aplicada na hora.</p>
         </div>
@@ -919,7 +935,7 @@ section.light h2 b{
       <p class="lead">Preencha os dados e um especialista responde em até 2h úteis com o diagnóstico do potencial
       de vendas da sua loja e da sua concorrência. Sem compromisso e sem discurso de venda.</p>
       <div style="display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap;margin-top:1rem">
-        <img class="mascote-inline" src="assets/mascote-aquila-bracos-cruzados.png" alt="" width="1164" height="1351" loading="lazy" decoding="async">
+        <img class="mascote-inline" src="assets/mascote-aquila-bracos-cruzados.webp" alt="" width="1164" height="1351" loading="lazy" decoding="async">
         <p style="margin:0;max-width:30ch;color:var(--muted)">Condição de Black Friday garantida para quem fechar
         até 30/11/2026, enquanto houver vaga.</p>
       </div>
@@ -989,7 +1005,7 @@ section.light h2 b{
 <footer>
   <div class="wrap foot">
     <div style="display:flex;align-items:center;gap:.6rem">
-      <img class="mark mark-sm" src="assets/simbolo-aquila.png" alt="" width="1097" height="1434">
+      <img class="mark mark-sm" src="assets/simbolo-aquila.webp" alt="" width="1097" height="1434">
       <span>Aquila Marketing Digital · 2026 · São Vicente — SP</span>
     </div>
     <div style="display:flex;gap:1.2rem;flex-wrap:wrap">
@@ -1181,6 +1197,11 @@ form.addEventListener('submit',function(e){
     v.addEventListener('play',  () => { play.hidden = true; v.controls = true; });
     v.addEventListener('ended', () => { play.hidden = false; });
   }
+
+  // alivia a página enquanto o vídeo roda (ver body.tocando no CSS)
+  const leve = (sim) => document.body.classList.toggle('tocando', sim);
+  v.addEventListener('playing', () => leve(true));
+  ['pause','ended','emptied'].forEach(e => v.addEventListener(e, () => leve(false)));
 })();
 
 /* ===== Lightbox dos prints de painel ===========================
