@@ -16,3 +16,6 @@ node_modules/
 # Vídeos originais em 4K (160 MB cada) — acima do limite do GitHub.
 # No site vão as versões comprimidas em assets/video-*.mp4
 /Visibilidade*.mp4
+
+.vercel
+.env*
