@@ -1164,6 +1164,28 @@ form.addEventListener('submit',function(e){
   linhas.push('Campanha: Black Friday Aquila');
 
   rastreia('Lead',{faturamento:fat.value,canal:onde.value,origem:document.getElementById('origem_cta').value});
+
+  // Envia o lead para o CRM sem esperar a resposta; keepalive garante o envio
+  // mesmo com o WhatsApp abrindo logo em seguida
+  const extras = ['Faturamento: '+fat.value, 'Canal: '+onde.value];
+  if(desafio.value.trim()) extras.push('Maior desafio: '+desafio.value.trim());
+  extras.push('Botão: '+(document.getElementById('origem_cta').value || '-'));
+  if(utms.utm_content) extras.push('utm_content: '+utms.utm_content);
+  if(utms.utm_term) extras.push('utm_term: '+utms.utm_term);
+  extras.push('Campanha: Black Friday Aquila');
+  fetch('https://spyeugqfbfxhpmqmwxjv.supabase.co/functions/v1/site-lead',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    keepalive:true,
+    body:JSON.stringify({
+      name:nome.value.trim(), phone:dig, email:'',
+      company:negocio.value.trim(), message:extras.join('\n'),
+      page:location.href,
+      utm_source:utms.utm_source||'', utm_medium:utms.utm_medium||'', utm_campaign:utms.utm_campaign||'',
+      website:''                       // isca anti-robô do CRM: sempre vazio
+    })
+  }).catch(()=>{});
+
   window.open(linkWhats(linhas.join('\n')),'_blank','noopener');
 
   const btn = form.querySelector('button[type="submit"]'), txt = btn.textContent;
