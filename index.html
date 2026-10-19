@@ -386,6 +386,63 @@ section.light .ilustra{filter:drop-shadow(0 26px 40px rgba(14,26,69,.18))}
 .check input{width:20px;height:20px;flex:0 0 auto;margin-top:.15rem;accent-color:var(--electric)}
 .hp{position:absolute;left:-9999px;width:0;height:0;opacity:0}
 
+/* formulário v2: cabeçalho, opções em botões, confirmação e faixa de confiança */
+.form-head{margin-bottom:1.3rem}
+.form-tag{display:inline-flex;align-items:center;gap:.4rem;font-size:.74rem;font-weight:600;letter-spacing:.02em;
+  color:#BFD6FF;background:rgba(46,123,232,.16);border:1px solid rgba(46,123,232,.38);
+  padding:.3rem .75rem;border-radius:999px;margin-bottom:.85rem}
+.form-tag i{width:7px;height:7px;border-radius:50%;background:#3DDC97;box-shadow:0 0 0 3px rgba(61,220,151,.18)}
+.form-head h3{font-size:clamp(1.25rem,2.4vw,1.5rem);margin:0 0 .4rem;line-height:1.25}
+.form-head p{color:var(--muted);font-size:.92rem;margin:0;line-height:1.5}
+.modal-box .form-card{border:0;padding:0;background:none}
+.modal-box .form-head{padding-right:2.6rem}
+.form-card .field{margin-bottom:1.05rem}
+.form-card .field label,.form-card .field .lbl{display:block;font-size:.8rem;font-weight:600;letter-spacing:.01em;
+  color:#C9D5F5;margin-bottom:.45rem}
+.form-card .field .opt{color:var(--muted);font-weight:400}
+.form-card .field input,.form-card .field textarea{background:rgba(255,255,255,.04);border-color:rgba(125,163,255,.22);
+  transition:border-color .18s,box-shadow .18s,background .18s}
+.form-card .field input::placeholder,.form-card .field textarea::placeholder{color:rgba(159,173,212,.55)}
+.form-card .field input:hover,.form-card .field textarea:hover{border-color:rgba(125,163,255,.42)}
+.form-card .field input:focus,.form-card .field textarea:focus{background:rgba(46,123,232,.08)}
+.form-card .field textarea{min-height:64px}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{position:relative;cursor:pointer;margin:0}
+.chip input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.chip span{display:inline-flex;align-items:center;gap:.45rem;padding:.6rem .95rem;border-radius:999px;
+  border:1px solid rgba(125,163,255,.24);background:rgba(255,255,255,.03);font-size:.88rem;color:var(--ink);
+  transition:border-color .16s,background .16s,box-shadow .16s,color .16s;user-select:none}
+.chip:hover span{border-color:rgba(125,163,255,.5);background:rgba(255,255,255,.06)}
+.chip input:checked+span{background:rgba(46,123,232,.22);border-color:var(--electric);color:#fff;
+  box-shadow:0 0 0 3px rgba(46,123,232,.18)}
+.chip input:focus-visible+span{outline:2px solid var(--electric-soft);outline-offset:2px}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+.field.invalid .chip span{border-color:rgba(255,155,155,.55)}
+.aceite{display:flex;gap:.7rem;align-items:flex-start;font-size:.86rem;line-height:1.45;color:var(--ink);
+  margin:.4rem 0 .2rem;cursor:pointer}
+.aceite input{position:absolute;opacity:0;width:1px;height:1px}
+.aceite .box{flex:none;width:20px;height:20px;margin-top:.05rem;border-radius:6px;border:1.5px solid rgba(125,163,255,.5);
+  background:rgba(255,255,255,.04);display:grid;place-items:center;transition:background .16s,border-color .16s}
+.aceite .box svg{opacity:0;color:#fff;transition:opacity .16s}
+.aceite input:checked+.box{background:var(--electric);border-color:var(--electric)}
+.aceite input:checked+.box svg{opacity:1}
+.aceite input:focus-visible+.box{outline:2px solid var(--electric-soft);outline-offset:2px}
+.ts-box{margin-top:.7rem}
+.ts-aviso{display:none;margin:.5rem 0 0;font-size:.8rem;color:#BFD6FF}
+.btn-enviar{margin-top:1.1rem;padding:1.1rem 1.4rem;font-size:1.02rem}
+.btn-enviar svg{transition:transform .18s}
+.btn-enviar:hover svg{transform:translateX(3px)}
+.btn-enviar.carregando{pointer-events:none;filter:saturate(.8)}
+.btn-enviar .spin{width:17px;height:17px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;
+  animation:gira .7s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+.wa-alt{display:none;text-align:center;margin-top:.75rem;font-size:.88rem;color:var(--electric-soft);font-weight:600}
+.trust{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem 1.1rem;margin:1rem 0 0;padding:0;
+  font-size:.78rem;color:var(--muted)}
+.trust li{display:inline-flex;align-items:center;gap:.35rem}
+.trust svg{color:var(--electric-soft);flex:none}
+@media(prefers-reduced-motion:reduce){.btn-enviar .spin{animation-duration:2s}}
+
 /* ===== LIGHTBOX DOS PRINTS ====================================== */
 .lb{position:fixed;inset:0;z-index:95;display:none;align-items:center;justify-content:center;
   gap:clamp(.4rem,2vw,1.4rem);width:100%;max-width:100%;height:100%;max-height:100%;
@@ -559,7 +616,8 @@ section.light h2 b{
   html{scroll-behavior:auto}
 }
 </style>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>window.tsCarregou=function(){document.dispatchEvent(new Event('ts-ok'))}</script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=tsCarregou" async defer></script>
 </head>
 <body>
 
@@ -900,7 +958,11 @@ section.light h2 b{
       <!-- o formulário vive aqui e é movido para o modal quando um CTA é clicado -->
       <div id="formHost" class="reveal">
         <form class="form-card" id="leadForm" novalidate>
-          <h3 id="formTitulo" style="font-size:1.25rem;margin-bottom:1.2rem">Solicitar análise gratuita</h3>
+          <div class="form-head">
+            <span class="form-tag"><i aria-hidden="true"></i>Leva menos de 1 minuto</span>
+            <h3 id="formTitulo">Solicitar análise gratuita</h3>
+            <p>Um especialista analisa sua operação e te chama no WhatsApp com os próximos passos.</p>
+          </div>
           <div class="two-col">
             <div class="field"><label for="nome">Seu nome</label>
               <input id="nome" name="nome" type="text" autocomplete="name" placeholder="Nome e sobrenome" required>
@@ -909,40 +971,53 @@ section.light h2 b{
               <input id="zap" name="zap" type="tel" inputmode="numeric" autocomplete="tel" placeholder="(13) 90000-0000" required>
               <span class="err">Informe um WhatsApp com DDD.</span></div>
           </div>
-          <div class="field"><label for="negocio">Seu negócio ou produto</label>
-            <input id="negocio" name="negocio" type="text" placeholder="Ex.: auto peças, moda fitness, utilidades" required>
+          <div class="field"><label for="negocio">O que você vende</label>
+            <input id="negocio" name="negocio" type="text" placeholder="Ex.: autopeças, moda, utilidades" required>
             <span class="err">Conte o que você vende.</span></div>
-          <div class="two-col">
-            <div class="field"><label for="onde">Onde você vende</label>
-              <select id="onde" name="onde" required>
-                <option value="">Selecione</option><option>Mercado Livre</option><option>Shopee</option>
-                <option>Amazon</option><option>Mais de um marketplace</option><option>Ainda não vendo</option>
-              </select><span class="err">Selecione uma opção.</span></div>
-            <div class="field"><label for="fat">Faturamento mensal</label>
-              <select id="fat" name="fat" required>
-                <option value="">Selecione</option><option>Começando do zero</option><option>Até R$ 10 mil</option>
-                <option>R$ 10 mil a R$ 50 mil</option><option>R$ 50 mil a R$ 100 mil</option><option>Acima de R$ 100 mil</option>
-              </select><span class="err">Selecione uma faixa.</span></div>
-          </div>
-          <div class="field"><label for="desafio">Maior desafio hoje <span style="color:var(--muted);font-weight:400">(opcional)</span></label>
-            <textarea id="desafio" name="desafio" placeholder="Ex.: ACOS alto, anúncio sem ranquear, margem apertada"></textarea></div>
-    
+          <div class="field" id="ondeBox"><span class="lbl" id="ondeLbl">Onde você vende</span>
+            <div class="chips" role="radiogroup" aria-labelledby="ondeLbl">
+              <label class="chip"><input type="radio" name="onde" value="Mercado Livre"><span><i class="dot" style="--c:#FFE600"></i>Mercado Livre</span></label>
+              <label class="chip"><input type="radio" name="onde" value="Shopee"><span><i class="dot" style="--c:#EE4D2D"></i>Shopee</span></label>
+              <label class="chip"><input type="radio" name="onde" value="Amazon"><span><i class="dot" style="--c:#FF9900"></i>Amazon</span></label>
+              <label class="chip"><input type="radio" name="onde" value="Mais de um marketplace"><span>Mais de um</span></label>
+              <label class="chip"><input type="radio" name="onde" value="Ainda não vendo"><span>Ainda não vendo</span></label>
+            </div>
+            <span class="err">Escolha onde você vende.</span></div>
+          <div class="field" id="fatBox"><span class="lbl" id="fatLbl">Faturamento mensal</span>
+            <div class="chips" role="radiogroup" aria-labelledby="fatLbl">
+              <label class="chip"><input type="radio" name="fat" value="Começando do zero"><span>Começando do zero</span></label>
+              <label class="chip"><input type="radio" name="fat" value="Até R$ 10 mil"><span>Até R$ 10 mil</span></label>
+              <label class="chip"><input type="radio" name="fat" value="R$ 10 mil a R$ 50 mil"><span>R$ 10 a 50 mil</span></label>
+              <label class="chip"><input type="radio" name="fat" value="R$ 50 mil a R$ 100 mil"><span>R$ 50 a 100 mil</span></label>
+              <label class="chip"><input type="radio" name="fat" value="Acima de R$ 100 mil"><span>Acima de R$ 100 mil</span></label>
+            </div>
+            <span class="err">Escolha uma faixa.</span></div>
+          <div class="field"><label for="desafio">Maior desafio hoje <span class="opt">(opcional)</span></label>
+            <textarea id="desafio" name="desafio" rows="2" placeholder="Ex.: ACOS alto, anúncio sem ranquear, margem apertada"></textarea></div>
+
           <div class="hp" aria-hidden="true"><label for="site_empresa">Não preencha</label>
             <input id="site_empresa" name="site_empresa" type="text" tabindex="-1" autocomplete="off"></div>
-    
-          <div class="check"><input id="humano" type="checkbox" required>
-            <label for="humano" style="margin:0;font-weight:400">Confirmo que sou uma pessoa real e autorizo o contato pelo WhatsApp.</label></div>
+
+          <label class="aceite" for="humano"><input id="humano" type="checkbox" required>
+            <span class="box" aria-hidden="true"><svg width="13" height="13"><use href="#ck"/></svg></span>
+            <span>Confirmo que sou uma pessoa real e autorizo o contato pelo WhatsApp.</span></label>
           <span class="err" id="humanoErr" style="display:none;color:#FF9B9B;font-size:.79rem">Marque a confirmação para continuar.</span>
-          <!-- verificação anti-robô da Cloudflare (o CRM confere o resultado) -->
-          <div class="cf-turnstile" data-sitekey="0x4AAAAAAFb1BPLP56497eyv" data-language="pt-br" data-theme="dark" data-size="flexible" style="margin-top:.75rem"></div>
-          <span class="err" id="captchaErr" style="display:none;color:#FF9B9B;font-size:.79rem">Aguarde a verificação de segurança terminar e clique de novo.</span>
-    
+          <!-- verificação anti-robô da Cloudflare: invisível, só aparece se ela desconfiar (o CRM confere o resultado) -->
+          <div class="ts-box" id="tsBox"></div>
+          <p class="ts-aviso" id="tsAviso">Toque na verificação acima para continuar.</p>
+
           <input type="hidden" name="utm_source" id="utm_source"><input type="hidden" name="utm_medium" id="utm_medium">
           <input type="hidden" name="utm_campaign" id="utm_campaign"><input type="hidden" name="utm_content" id="utm_content">
           <input type="hidden" name="utm_term" id="utm_term"><input type="hidden" name="origem_cta" id="origem_cta">
-    
-          <button type="submit" class="btn btn-block" style="margin-top:1rem">Quero minha análise gratuita</button>
-          <p class="micro">Sem compromisso · Resposta em até 2h úteis · Dados protegidos (LGPD)</p>
+
+          <button type="submit" class="btn btn-block btn-enviar"><span class="txt">Quero minha análise gratuita</span>
+            <svg class="seta" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <a class="wa-alt" id="waAlt" target="_blank" rel="noopener">O WhatsApp não abriu? Toque aqui</a>
+          <ul class="trust">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>Dados protegidos (LGPD)</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Resposta em até 2h úteis</li>
+            <li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Sem compromisso</li>
+          </ul>
         </form>
       </div>
     </div>
@@ -1121,7 +1196,7 @@ const form = document.getElementById('leadForm');
 function abreForm(origem){
   document.getElementById('origem_cta').value = origem || '';
   rastreia('ClickCTA',{origem:origem});
-  slot.appendChild(form);
+  moverForm(slot);
   if(typeof modal.showModal === 'function'){ modal.showModal(); }
   else { modal.setAttribute('open',''); }
   const primeiro = form.querySelector('input');
@@ -1129,79 +1204,148 @@ function abreForm(origem){
 }
 function fechaForm(){
   if(modal.open && typeof modal.close === 'function') modal.close(); else modal.removeAttribute('open');
-  host.appendChild(form);           // devolve o formulário para a seção
+  moverForm(host);                  // devolve o formulário para a seção
 }
 document.querySelectorAll('[data-form]').forEach(b=>b.addEventListener('click',()=>abreForm(b.dataset.cta)));
 document.getElementById('modalClose').addEventListener('click',fechaForm);
-modal.addEventListener('close',()=>{ if(!host.contains(form)) host.appendChild(form); });
+modal.addEventListener('close',()=>{ if(!host.contains(form)) moverForm(host); });
 modal.addEventListener('click',e=>{ if(e.target===modal) fechaForm(); });
+
+/* ===== Verificação anti-robô (Cloudflare Turnstile) ===========
+   Invisível: só aparece se a Cloudflare desconfiar. É montada quando a
+   pessoa começa a preencher e refeita quando o formulário muda de lugar
+   (o iframe recarrega em branco ao mudar de lugar na página). Se não
+   carregar, o lead segue mesmo assim pelo WhatsApp: nunca trava. */
+const TS = { id:null, token:'', falhou:false, esperando:false, timer:0 };
+function tsMontar(){
+  if(!window.turnstile || TS.id !== null) return;
+  TS.token = ''; TS.falhou = false;
+  try{
+    TS.id = turnstile.render('#tsBox',{
+      sitekey:'0x4AAAAAAFb1BPLP56497eyv', language:'pt-br', theme:'dark', size:'flexible',
+      appearance:'interaction-only',
+      callback:t=>{ TS.token = t; document.getElementById('tsAviso').style.display='none'; if(TS.esperando) enviar(); },
+      'expired-callback':()=>{ TS.token = ''; },
+      'before-interactive-callback':()=>{ if(TS.esperando){ clearTimeout(TS.timer); botao(false); document.getElementById('tsAviso').style.display='block'; } },
+      'error-callback':()=>{ TS.falhou = true; if(TS.esperando) enviar(); }
+    });
+  }catch(e){ TS.falhou = true; }
+}
+function tsDesmontar(){
+  if(TS.id !== null){ try{ turnstile.remove(TS.id); }catch(e){} }
+  TS.id = null; TS.token = '';
+}
+function moverForm(destino){ destino.appendChild(form); tsDesmontar(); }
+form.addEventListener('focusin',()=>{ if(TS.id === null) tsMontar(); });
+document.addEventListener('ts-ok',()=>{ if(TS.esperando || form.contains(document.activeElement)) tsMontar(); });
 
 /* ===== Envio do formulário ===================================== */
 function marca(c,ok){ const f=c.closest('.field'); if(f) f.classList.toggle('invalid',!ok); return ok; }
+const escolhido = n => (form.querySelector('input[name="'+n+'"]:checked') || {}).value || '';
+// o aviso de erro some assim que a pessoa corrige
+form.addEventListener('input',e=>{ const f=e.target.closest('.field'); if(f) f.classList.remove('invalid'); });
+form.addEventListener('change',e=>{
+  const f=e.target.closest('.field'); if(f) f.classList.remove('invalid');
+  if(e.target.id==='humano' && e.target.checked) document.getElementById('humanoErr').style.display='none';
+});
+
+const btnEnviar = form.querySelector('.btn-enviar');
+const txtEnviar = btnEnviar.querySelector('.txt').textContent;
+function botao(carregando, texto){
+  btnEnviar.classList.toggle('carregando', carregando);
+  btnEnviar.querySelector('.txt').textContent = texto || txtEnviar;
+  const seta = btnEnviar.querySelector('.seta'), spin = btnEnviar.querySelector('.spin');
+  if(carregando && !spin){ const s=document.createElement('span'); s.className='spin'; s.setAttribute('aria-hidden','true'); btnEnviar.prepend(s); }
+  if(!carregando && spin) spin.remove();
+  if(seta) seta.style.display = carregando ? 'none' : '';
+}
 
 form.addEventListener('submit',function(e){
   e.preventDefault();
   if(document.getElementById('site_empresa').value !== '') return;   // honeypot
+  if(TS.esperando) return;
 
   const nome=document.getElementById('nome'), zap=document.getElementById('zap'),
-        negocio=document.getElementById('negocio'), onde=document.getElementById('onde'),
-        fat=document.getElementById('fat'), desafio=document.getElementById('desafio'),
-        humano=document.getElementById('humano');
+        negocio=document.getElementById('negocio'), humano=document.getElementById('humano');
   const dig = zap.value.replace(/\D/g,'');
   let ok = true;
   ok = marca(nome, nome.value.trim().length>=2) && ok;
   ok = marca(zap, dig.length>=10 && dig.length<=13) && ok;
   ok = marca(negocio, negocio.value.trim().length>=2) && ok;
-  ok = marca(onde, onde.value!=='') && ok;
-  ok = marca(fat, fat.value!=='') && ok;
+  ok = marca(document.getElementById('ondeBox'), escolhido('onde')!=='') && ok;
+  ok = marca(document.getElementById('fatBox'), escolhido('fat')!=='') && ok;
   document.getElementById('humanoErr').style.display = humano.checked ? 'none':'block';
   ok = humano.checked && ok;
-  if(!ok){ const p = form.querySelector('.invalid input, .invalid select') || (humano.checked?null:humano); if(p) p.focus(); return; }
+  if(!ok){ const p = form.querySelector('.invalid input') || (humano.checked?null:humano); if(p) p.focus(); return; }
 
-  const captcha = (form.querySelector('[name="cf-turnstile-response"]') || {}).value || '';
-  document.getElementById('captchaErr').style.display = captcha ? 'none' : 'block';
-  if(!captcha) return;
+  // verificação pronta (o normal: roda enquanto a pessoa preenche) ou com erro: envia já
+  if(TS.token || TS.falhou){ enviar(); return; }
+  // ainda verificando (ou o script da Cloudflare ainda carregando): espera um pouco,
+  // sem a pessoa precisar clicar de novo; depois disso segue sem a verificação
+  TS.esperando = true;
+  botao(true,'Verificando…');
+  if(TS.id === null) tsMontar();
+  TS.timer = setTimeout(()=>{ if(TS.esperando) enviar(); }, 8000);
+});
+
+function enviar(){
+  TS.esperando = false; clearTimeout(TS.timer);
+  const nome=document.getElementById('nome'), zap=document.getElementById('zap'),
+        negocio=document.getElementById('negocio'), desafio=document.getElementById('desafio');
+  const onde = escolhido('onde'), fat = escolhido('fat');
+  const dig = zap.value.replace(/\D/g,'');
+  const captcha = TS.token;
 
   const linhas = ['Olá! Quero minha análise gratuita da Aquila.','',
     'Nome: '+nome.value.trim(), 'WhatsApp: '+zap.value.trim(),
-    'Negócio/produto: '+negocio.value.trim(), 'Onde vende: '+onde.value,
-    'Faturamento mensal: '+fat.value];
+    'Negócio/produto: '+negocio.value.trim(), 'Onde vende: '+onde,
+    'Faturamento mensal: '+fat];
   if(desafio.value.trim()) linhas.push('Maior desafio: '+desafio.value.trim());
   const origem = UTM.map(k=>utms[k]?k+'='+utms[k]:'').filter(Boolean).join(' | ');
   if(origem) linhas.push('', 'Origem: '+origem);
   linhas.push('Campanha: Black Friday Aquila');
 
-  rastreia('Lead',{faturamento:fat.value,canal:onde.value,origem:document.getElementById('origem_cta').value});
+  rastreia('Lead',{faturamento:fat,canal:onde,origem:document.getElementById('origem_cta').value});
 
   // Envia o lead para o CRM sem esperar a resposta; keepalive garante o envio
-  // mesmo com o WhatsApp abrindo logo em seguida
-  const extras = ['Faturamento: '+fat.value, 'Canal: '+onde.value];
-  if(desafio.value.trim()) extras.push('Maior desafio: '+desafio.value.trim());
-  extras.push('Botão: '+(document.getElementById('origem_cta').value || '-'));
-  if(utms.utm_content) extras.push('utm_content: '+utms.utm_content);
-  if(utms.utm_term) extras.push('utm_term: '+utms.utm_term);
-  extras.push('Campanha: Black Friday Aquila');
-  fetch('https://spyeugqfbfxhpmqmwxjv.supabase.co/functions/v1/site-lead',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    keepalive:true,
-    body:JSON.stringify({
-      name:nome.value.trim(), phone:dig, email:'',
-      company:negocio.value.trim(), message:extras.join('\n'),
-      page:location.href,
-      utm_source:utms.utm_source||'', utm_medium:utms.utm_medium||'', utm_campaign:utms.utm_campaign||'',
-      website:'',                      // isca anti-robô do CRM: sempre vazio
-      turnstile:captcha                // verificação da Cloudflare (conferida no CRM)
-    })
-  }).catch(()=>{});
+  // mesmo com o WhatsApp abrindo logo em seguida. Sem a verificação o CRM
+  // recusaria: aí o lead chega pela mensagem do WhatsApp.
+  if(captcha){
+    const extras = ['Faturamento: '+fat, 'Canal: '+onde];
+    if(desafio.value.trim()) extras.push('Maior desafio: '+desafio.value.trim());
+    extras.push('Botão: '+(document.getElementById('origem_cta').value || '-'));
+    if(utms.utm_content) extras.push('utm_content: '+utms.utm_content);
+    if(utms.utm_term) extras.push('utm_term: '+utms.utm_term);
+    extras.push('Campanha: Black Friday Aquila');
+    fetch('https://spyeugqfbfxhpmqmwxjv.supabase.co/functions/v1/site-lead',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      keepalive:true,
+      body:JSON.stringify({
+        name:nome.value.trim(), phone:dig, email:'',
+        company:negocio.value.trim(), message:extras.join('\n'),
+        page:location.href,
+        utm_source:utms.utm_source||'', utm_medium:utms.utm_medium||'', utm_campaign:utms.utm_campaign||'',
+        website:'',                      // isca anti-robô do CRM: sempre vazio
+        turnstile:captcha                // verificação da Cloudflare (conferida no CRM)
+      })
+    }).catch(()=>{});
+  }
 
-  window.open(linkWhats(linhas.join('\n')),'_blank','noopener');
+  const link = linkWhats(linhas.join('\n'));
+  const alt = document.getElementById('waAlt');
+  alt.href = link;
+  const aba = window.open(link,'_blank','noopener');
+  // depois da espera o navegador pode bloquear a janela: fica o link para tocar
+  alt.style.display = aba ? 'none' : 'block';
 
-  const btn = form.querySelector('button[type="submit"]'), txt = btn.textContent;
-  btn.textContent = 'Dados enviados — continue no WhatsApp';
-  if(window.turnstile) turnstile.reset();
-  setTimeout(()=>{ btn.textContent = txt; form.reset(); UTM.forEach(k=>{const c=document.getElementById(k); if(c) c.value=utms[k];}); },5000);
-});
+  botao(false,'Pronto! Continue no WhatsApp');
+  tsDesmontar();                       // a verificação vale uma vez só
+  setTimeout(()=>{
+    botao(false); alt.style.display='none'; form.reset();
+    UTM.forEach(k=>{const c=document.getElementById(k); if(c) c.value=utms[k];});
+  },8000);
+}
 
 /* ===== Vídeo de apresentação ====================================
    Dois arquivos: horizontal para desktop, vertical para celular. Só o
