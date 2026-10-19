@@ -559,6 +559,7 @@ section.light h2 b{
   html{scroll-behavior:auto}
 }
 </style>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
@@ -932,6 +933,9 @@ section.light h2 b{
           <div class="check"><input id="humano" type="checkbox" required>
             <label for="humano" style="margin:0;font-weight:400">Confirmo que sou uma pessoa real e autorizo o contato pelo WhatsApp.</label></div>
           <span class="err" id="humanoErr" style="display:none;color:#FF9B9B;font-size:.79rem">Marque a confirmação para continuar.</span>
+          <!-- verificação anti-robô da Cloudflare (o CRM confere o resultado) -->
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAFb1BPLP56497eyv" data-language="pt-br" data-theme="dark" data-size="flexible" style="margin-top:.75rem"></div>
+          <span class="err" id="captchaErr" style="display:none;color:#FF9B9B;font-size:.79rem">Aguarde a verificação de segurança terminar e clique de novo.</span>
     
           <input type="hidden" name="utm_source" id="utm_source"><input type="hidden" name="utm_medium" id="utm_medium">
           <input type="hidden" name="utm_campaign" id="utm_campaign"><input type="hidden" name="utm_content" id="utm_content">
@@ -1154,6 +1158,10 @@ form.addEventListener('submit',function(e){
   ok = humano.checked && ok;
   if(!ok){ const p = form.querySelector('.invalid input, .invalid select') || (humano.checked?null:humano); if(p) p.focus(); return; }
 
+  const captcha = (form.querySelector('[name="cf-turnstile-response"]') || {}).value || '';
+  document.getElementById('captchaErr').style.display = captcha ? 'none' : 'block';
+  if(!captcha) return;
+
   const linhas = ['Olá! Quero minha análise gratuita da Aquila.','',
     'Nome: '+nome.value.trim(), 'WhatsApp: '+zap.value.trim(),
     'Negócio/produto: '+negocio.value.trim(), 'Onde vende: '+onde.value,
@@ -1182,7 +1190,8 @@ form.addEventListener('submit',function(e){
       company:negocio.value.trim(), message:extras.join('\n'),
       page:location.href,
       utm_source:utms.utm_source||'', utm_medium:utms.utm_medium||'', utm_campaign:utms.utm_campaign||'',
-      website:''                       // isca anti-robô do CRM: sempre vazio
+      website:'',                      // isca anti-robô do CRM: sempre vazio
+      turnstile:captcha                // verificação da Cloudflare (conferida no CRM)
     })
   }).catch(()=>{});
 
@@ -1190,6 +1199,7 @@ form.addEventListener('submit',function(e){
 
   const btn = form.querySelector('button[type="submit"]'), txt = btn.textContent;
   btn.textContent = 'Dados enviados — continue no WhatsApp';
+  if(window.turnstile) turnstile.reset();
   setTimeout(()=>{ btn.textContent = txt; form.reset(); UTM.forEach(k=>{const c=document.getElementById(k); if(c) c.value=utms[k];}); },5000);
 });
 
