@@ -971,6 +971,9 @@ section.light h2 b{
               <input id="zap" name="zap" type="tel" inputmode="numeric" autocomplete="tel" placeholder="(13) 90000-0000" required>
               <span class="err">Informe um WhatsApp com DDD.</span></div>
           </div>
+          <div class="field"><label for="email">E-mail <span class="opt">(opcional)</span></label>
+            <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="voce@sualoja.com.br">
+            <span class="err">Confira o e-mail (ex.: voce@sualoja.com.br).</span></div>
           <div class="field"><label for="negocio">O que você vende</label>
             <input id="negocio" name="negocio" type="text" placeholder="Ex.: autopeças, moda, utilidades" required>
             <span class="err">Conte o que você vende.</span></div>
@@ -1000,7 +1003,7 @@ section.light h2 b{
 
           <label class="aceite" for="humano"><input id="humano" type="checkbox" required>
             <span class="box" aria-hidden="true"><svg width="13" height="13"><use href="#ck"/></svg></span>
-            <span>Confirmo que sou uma pessoa real e autorizo o contato pelo WhatsApp.</span></label>
+            <span>Confirmo que sou uma pessoa real e autorizo o contato pelo WhatsApp e por e-mail.</span></label>
           <span class="err" id="humanoErr" style="display:none;color:#FF9B9B;font-size:.79rem">Marque a confirmação para continuar.</span>
           <!-- verificação anti-robô da Cloudflare: invisível, só aparece se ela desconfiar (o CRM confere o resultado) -->
           <div class="ts-box" id="tsBox"></div>
@@ -1266,11 +1269,14 @@ form.addEventListener('submit',function(e){
   if(TS.esperando) return;
 
   const nome=document.getElementById('nome'), zap=document.getElementById('zap'),
-        negocio=document.getElementById('negocio'), humano=document.getElementById('humano');
+        negocio=document.getElementById('negocio'), humano=document.getElementById('humano'),
+        email=document.getElementById('email');
   const dig = zap.value.replace(/\D/g,'');
+  const mail = email.value.trim();
   let ok = true;
   ok = marca(nome, nome.value.trim().length>=2) && ok;
   ok = marca(zap, dig.length>=10 && dig.length<=13) && ok;
+  ok = marca(email, !mail || /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(mail)) && ok;
   ok = marca(negocio, negocio.value.trim().length>=2) && ok;
   ok = marca(document.getElementById('ondeBox'), escolhido('onde')!=='') && ok;
   ok = marca(document.getElementById('fatBox'), escolhido('fat')!=='') && ok;
@@ -1293,11 +1299,13 @@ function enviar(){
   const nome=document.getElementById('nome'), zap=document.getElementById('zap'),
         negocio=document.getElementById('negocio'), desafio=document.getElementById('desafio');
   const onde = escolhido('onde'), fat = escolhido('fat');
+  const mail = document.getElementById('email').value.trim().toLowerCase();
   const dig = zap.value.replace(/\D/g,'');
   const captcha = TS.token;
 
   const linhas = ['Olá! Quero minha análise gratuita da Aquila.','',
     'Nome: '+nome.value.trim(), 'WhatsApp: '+zap.value.trim(),
+    ...(mail ? ['E-mail: '+mail] : []),
     'Negócio/produto: '+negocio.value.trim(), 'Onde vende: '+onde,
     'Faturamento mensal: '+fat];
   if(desafio.value.trim()) linhas.push('Maior desafio: '+desafio.value.trim());
@@ -1322,7 +1330,7 @@ function enviar(){
       headers:{'Content-Type':'application/json'},
       keepalive:true,
       body:JSON.stringify({
-        name:nome.value.trim(), phone:dig, email:'',
+        name:nome.value.trim(), phone:dig, email:mail,
         company:negocio.value.trim(), message:extras.join('\n'),
         page:location.href,
         utm_source:utms.utm_source||'', utm_medium:utms.utm_medium||'', utm_campaign:utms.utm_campaign||'',
