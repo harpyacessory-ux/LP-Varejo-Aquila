@@ -1176,6 +1176,24 @@ const utms = {};
   });
 })();
 
+/* ===== Clique do anúncio ======================================= */
+// gclid/gbraid/wbraid (Google) e fbclid (Meta): vão para o CRM com o lead, para
+// medir anúncio → reunião → cliente e, depois, devolver a venda ao Google/Meta.
+// Guardados por 90 dias (quem volta outro dia ainda conta para o anúncio).
+const CLIQUE = ['gclid','gbraid','wbraid','fbclid'];
+const clique = {};
+(function(){
+  const q = new URLSearchParams(location.search);
+  let salvo = {};
+  try{ salvo = JSON.parse(localStorage.getItem('aquila_clique') || '{}'); }catch(e){}
+  if(salvo.em && Date.now() - salvo.em > 90*864e5) salvo = {};
+  const novo = CLIQUE.some(k => q.get(k));
+  CLIQUE.forEach(k => { clique[k] = novo ? (q.get(k) || '') : (salvo[k] || ''); });
+  // fbc no formato do Meta (API de Conversões): fb.1.<quando>.<fbclid>
+  clique.fbc = clique.fbclid ? (novo && q.get('fbclid') ? 'fb.1.'+Date.now()+'.'+clique.fbclid : (salvo.fbc || '')) : '';
+  if(novo){ try{ localStorage.setItem('aquila_clique', JSON.stringify({...clique, em: Date.now()})); }catch(e){} }
+})();
+
 /* ===== WhatsApp ================================================ */
 const linkWhats = t => 'https://wa.me/'+CONFIG.whatsapp+'?text='+encodeURIComponent(t);
 ['waFloat','waFooter'].forEach(id=>{
@@ -1334,6 +1352,8 @@ function enviar(){
         company:negocio.value.trim(), message:extras.join('\n'),
         page:location.href,
         utm_source:utms.utm_source||'', utm_medium:utms.utm_medium||'', utm_campaign:utms.utm_campaign||'',
+        utm_content:utms.utm_content||'', utm_term:utms.utm_term||'',
+        gclid:clique.gclid||'', gbraid:clique.gbraid||'', wbraid:clique.wbraid||'', fbclid:clique.fbclid||'', fbc:clique.fbc||'',
         website:'',                      // isca anti-robô do CRM: sempre vazio
         turnstile:captcha                // verificação da Cloudflare (conferida no CRM)
       })
