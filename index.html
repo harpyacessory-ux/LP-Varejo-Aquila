@@ -1188,11 +1188,22 @@ const clique = {};
   if(novo){ try{ localStorage.setItem('aquila_clique', JSON.stringify({...clique, em: Date.now()})); }catch(e){} }
 })();
 
+/* ===== Indicação de parceiro ================================== */
+// link do parceiro: www.aquiladigital.com.br/?ref=codigo (vale 90 dias, como o clique do anúncio)
+let parceiro = '';
+(function(){
+  const r = (new URLSearchParams(location.search).get('ref') || '').toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,30);
+  try{
+    if(r.length >= 3){ localStorage.setItem('aquila_ref', JSON.stringify({ref:r, em:Date.now()})); parceiro = r; }
+    else { const s = JSON.parse(localStorage.getItem('aquila_ref') || '{}'); if(s.ref && Date.now() - s.em < 90*864e5) parceiro = s.ref; }
+  }catch(e){ parceiro = r.length >= 3 ? r : ''; }
+})();
+
 /* ===== WhatsApp ================================================ */
 const linkWhats = t => 'https://wa.me/'+CONFIG.whatsapp+'?text='+encodeURIComponent(t);
 ['waFloat','waFooter'].forEach(id=>{
   const el = document.getElementById(id);
-  if(el){ el.href = linkWhats(CONFIG.msgPadrao); el.target='_blank'; el.rel='noopener'; }
+  if(el){ el.href = linkWhats(CONFIG.msgPadrao + (parceiro ? ' (Indicação: '+parceiro+')' : '')); el.target='_blank'; el.rel='noopener'; }
 });
 
 /* ===== Rastreio (Meta Pixel / GA4 / dataLayer) ================= */
@@ -1324,6 +1335,7 @@ function enviar(){
   const origem = UTM.map(k=>utms[k]?k+'='+utms[k]:'').filter(Boolean).join(' | ');
   if(origem) linhas.push('', 'Origem: '+origem);
   linhas.push('Campanha: Black Friday Aquila');
+  if(parceiro) linhas.push('Indicação: '+parceiro);
 
   rastreia('Lead',{faturamento:fat,canal:onde,origem:document.getElementById('origem_cta').value});
 
@@ -1348,6 +1360,7 @@ function enviar(){
         utm_source:utms.utm_source||'', utm_medium:utms.utm_medium||'', utm_campaign:utms.utm_campaign||'',
         utm_content:utms.utm_content||'', utm_term:utms.utm_term||'',
         gclid:clique.gclid||'', gbraid:clique.gbraid||'', wbraid:clique.wbraid||'', fbclid:clique.fbclid||'', fbc:clique.fbc||'',
+        parceiro:parceiro||'',
         website:'',                      // isca anti-robô do CRM: sempre vazio
         turnstile:captcha                // verificação da Cloudflare (conferida no CRM)
       })
