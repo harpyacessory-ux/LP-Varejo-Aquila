@@ -1335,6 +1335,7 @@ function enviar(){
   const origem = UTM.map(k=>utms[k]?k+'='+utms[k]:'').filter(Boolean).join(' | ');
   if(origem) linhas.push('', 'Origem: '+origem);
   linhas.push('Campanha: Black Friday Aquila');
+  if(document.getElementById('origem_cta').value === 'consultoria') linhas.push('Interesse: Consultoria para começar (R$ 500/mês)');
   if(parceiro) linhas.push('Indicação: '+parceiro);
 
   rastreia('Lead',{faturamento:fat,canal:onde,origem:document.getElementById('origem_cta').value});
