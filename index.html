@@ -681,8 +681,8 @@ section.light h2 b{
       <p class="micro">Sem compromisso · Resposta em até 2h úteis · Dados protegidos (LGPD)</p>
 
       <div class="stats">
-        <div class="stat"><b class="n">+800</b><span>contas de lojistas já gerenciadas</span></div>
-        <div class="stat"><b class="n">R$ 10,6 mi</b><span>em vendas geradas nas contas atendidas</span></div>
+        <div class="stat"><b class="n">+800</b><span>contas de lojistas já gerenciadas pela nossa equipe</span></div>
+        <div class="stat"><b class="n">R$ 10,6 mi</b><span>em vendas nas contas que a nossa equipe atendeu</span></div>
       </div>
     </div>
 
@@ -866,7 +866,7 @@ section.light h2 b{
   <div class="wrap">
     <div class="head reveal">
       <span class="eyebrow">Resultados reais</span>
-      <h2>Os painéis de lojas que <b>já passaram pela nossa gestão.</b></h2>
+      <h2>Painéis de lojas que <b>a nossa equipe já gerenciou.</b></h2>
       <p class="lead">Prints direto do painel de cada canal, comparando o período com o intervalo anterior da
       mesma loja. O resultado depende de produto, preço e estoque — por isso a análise vem antes da proposta.</p>
     </div>
@@ -916,8 +916,8 @@ section.light h2 b{
     <div class="head mid reveal">
       <span class="eyebrow">Black Friday Aquila</span>
       <h2>40% OFF e <b>o menor valor de entrada do ano.</b></h2>
-      <p class="lead">Quem fecha nesta condição entra pagando R$ 750 em vez de R$ 1.250. Vale enquanto houver
-      vaga — o acompanhamento é próximo, então o número é limitado de verdade.</p>
+      <p class="lead">Quem fecha nesta condição entra pagando R$ 750 em vez de R$ 1.250. Vale para quem fechar
+      até 30/11.</p>
     </div>
 
     <div class="split reveal">
@@ -938,8 +938,6 @@ section.light h2 b{
           <div><b data-m>00</b><i>min</i></div><div><b data-s>00</b><i>seg</i></div>
         </div>
 
-        <div class="vagas-top"><span>Vagas nesta condição</span><span><strong id="vagasLeft">—</strong> restantes de <span id="vagasTotal">—</span></span></div>
-        <div class="bar"><i id="vagasBar" style="width:0%"></i></div>
 
         <ul class="checks" style="margin:1.5rem 0">
           <li><svg width="18" height="18"><use href="#ck"/></svg>Otimização e ranqueamento dos anúncios</li>
@@ -953,6 +951,9 @@ section.light h2 b{
 
         <button class="btn btn-block" data-form data-cta="oferta">Quero minha análise gratuita</button>
         <p class="micro">Válida até 30/11/2026 · Sem compromisso · Resposta em até 2h úteis</p>
+        <p class="micro" style="margin-top:.8rem">Ainda não vende em nenhum marketplace? Temos a <strong>Consultoria para começar</strong>:
+        R$ 500/mês, com especialistas no WhatsApp e 3 reuniões por mês, do cadastro às primeiras vendas.
+        <button type="button" data-form data-cta="consultoria" style="background:none;border:0;padding:0;color:inherit;font:inherit;text-decoration:underline;cursor:pointer">Quero começar</button></p>
       </div>
 
       <!-- o formulário vive aqui e é movido para o modal quando um CTA é clicado -->
@@ -1064,7 +1065,9 @@ section.light h2 b{
       <details class="faq"><summary>Funciona se eu estou começando do zero?</summary>
         <p>Funciona. Atendemos desde a loja que ainda não vendeu a primeira unidade no canal até operações acima de
         R$ 100 mil por mês. Começando do zero, o foco é estrutura: cadastro correto, precificação com margem real,
-        primeiros anúncios e reputação desde o primeiro pedido.</p></details>
+        primeiros anúncios e reputação desde o primeiro pedido. Para quem ainda não vende em nenhum marketplace, existe a
+        Consultoria para começar: R$ 500 por mês, com especialistas no WhatsApp e 3 reuniões por mês, do zero até as
+        primeiras vendas consistentes.</p></details>
       <details class="faq"><summary>Quais marketplaces vocês atendem?</summary>
         <p>Mercado Livre, Shopee e Amazon — é só nisso que trabalhamos. Se a sua loja já vende em um canal e quer
         abrir outro, a entrada no novo marketplace faz parte do acompanhamento.</p></details>
@@ -1140,8 +1143,6 @@ section.light h2 b{
 const CONFIG = {
   whatsapp: "5511917575499",            // número do CRM (vira lead no Funil); não usar o do Nicolas
   deadline: "2026-11-30T23:59:59-03:00",// fim da campanha (Cyber Monday)
-  vagasTotais: 12,                      // DEFINIR
-  vagasRestantes: 7,                    // DEFINIR
   msgPadrao: "Olá! Vim pela página da assessoria e quero saber mais."
 };
 
@@ -1156,13 +1157,6 @@ function tick(){
 }
 tick(); setInterval(tick,1000);
 
-/* ===== Vagas =================================================== */
-(function(){
-  const left = Math.max(0, Math.min(CONFIG.vagasRestantes, CONFIG.vagasTotais));
-  document.getElementById('vagasLeft').textContent = left;
-  document.getElementById('vagasTotal').textContent = CONFIG.vagasTotais;
-  document.getElementById('vagasBar').style.width = (CONFIG.vagasTotais ? (1-left/CONFIG.vagasTotais)*100 : 0).toFixed(0)+'%';
-})();
 
 /* ===== UTMs ==================================================== */
 const UTM = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
