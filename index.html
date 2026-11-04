@@ -10,14 +10,57 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Aquila Marketing Digital — Assessoria em Mercado Livre, Shopee e Amazon</title>
-<meta name="description" content="Assessoria especializada em marketplace. Ads calibrado, anúncios ranqueados e processos automatizados para escalar vendas sem perder margem. Black Friday: R$ 750/mês, de R$ 1.250.">
+<title>Assessoria Mercado Livre, Shopee e Amazon | Aquila Marketing Digital</title>
+<meta name="description" content="Assessoria de marketplace para lojistas no Mercado Livre, Shopee e Amazon. Ads calibrado, anúncios ranqueados e processos automatizados para escalar vendas sem perder margem. Black Friday: R$ 750/mês, de R$ 1.250.">
 <meta name="theme-color" content="#0A1440">
 <meta property="og:title" content="Aquila Marketing Digital — Escale no marketplace sem perder margem">
 <meta property="og:description" content="Especialista dedicado, acompanhamento próximo e estratégia construída a partir da análise da sua concorrência.">
 <link rel="icon" href="assets/logo-aquila.webp">
 <link rel="apple-touch-icon" href="assets/logo-aquila.webp">
-<meta property="og:image" content="assets/logo-aquila.webp">
+<!-- SEO: ao trocar o domínio, substitua https://lpvarejoaquila.vercel.app aqui, no robots.txt e no sitemap.xml -->
+<link rel="canonical" href="https://lpvarejoaquila.vercel.app/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Aquila Marketing Digital">
+<meta property="og:url" content="https://lpvarejoaquila.vercel.app/">
+<meta property="og:image" content="https://lpvarejoaquila.vercel.app/assets/logo-aquila.webp">
+<meta name="twitter:card" content="summary">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://lpvarejoaquila.vercel.app/#empresa",
+      "name": "Aquila Marketing Digital",
+      "url": "https://lpvarejoaquila.vercel.app/",
+      "logo": "https://lpvarejoaquila.vercel.app/assets/logo-aquila.webp",
+      "image": "https://lpvarejoaquila.vercel.app/assets/logo-aquila.webp",
+      "description": "Assessoria para lojistas que vendem no Mercado Livre, Shopee e Amazon: margem por produto, gestão de ads, otimização e ranqueamento de anúncios e operação da conta.",
+      "telephone": "+55-11-91757-5499",
+      "areaServed": { "@type": "Country", "name": "Brasil" },
+      "knowsAbout": ["Mercado Livre", "Shopee", "Amazon", "Mercado Ads", "Shopee Ads", "Amazon Ads", "Ranqueamento de anúncios", "Precificação em marketplace"],
+      "makesOffer": {
+        "@type": "Offer",
+        "name": "Assessoria de marketplace",
+        "price": "750.00",
+        "priceCurrency": "BRL",
+        "priceValidUntil": "2026-11-30",
+        "itemOffered": { "@type": "Service", "name": "Assessoria em Mercado Livre, Shopee e Amazon", "serviceType": "Assessoria de marketplace" }
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://lpvarejoaquila.vercel.app/#pagina",
+      "url": "https://lpvarejoaquila.vercel.app/",
+      "name": "Assessoria Mercado Livre, Shopee e Amazon | Aquila Marketing Digital",
+      "inLanguage": "pt-BR",
+      "about": { "@id": "https://lpvarejoaquila.vercel.app/#empresa" }
+    }
+  ]
+}
+</script>
 <link rel="preload" as="image" href="assets/mascote-aquila.webp" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1199,17 +1242,28 @@ const clique = {};
   if(novo){ try{ localStorage.setItem('aquila_clique', JSON.stringify({...clique, em: Date.now()})); }catch(e){} }
 })();
 
-/* ===== Indicação de parceiro ================================== */
-// link do parceiro: www.aquiladigital.com.br/?ref=codigo (vale 90 dias, como o clique do anúncio)
-let parceiro = '';
-(function(){
-  const r = (new URLSearchParams(location.search).get('ref') || '').toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,30);
-  try{
-    if(r.length >= 3){ localStorage.setItem('aquila_ref', JSON.stringify({ref:r, em:Date.now()})); parceiro = r; }
-    else { const s = JSON.parse(localStorage.getItem('aquila_ref') || '{}'); if(s.ref && Date.now() - s.em < 90*864e5) parceiro = s.ref; }
-  }catch(e){ parceiro = r.length >= 3 ? r : ''; }
-})();
-
+/* ===== Indicação de parceiro ================================== */
+
+// link do parceiro: www.aquiladigital.com.br/?ref=codigo (vale 90 dias, como o clique do anúncio)
+
+let parceiro = '';
+
+(function(){
+
+  const r = (new URLSearchParams(location.search).get('ref') || '').toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,30);
+
+  try{
+
+    if(r.length >= 3){ localStorage.setItem('aquila_ref', JSON.stringify({ref:r, em:Date.now()})); parceiro = r; }
+
+    else { const s = JSON.parse(localStorage.getItem('aquila_ref') || '{}'); if(s.ref && Date.now() - s.em < 90*864e5) parceiro = s.ref; }
+
+  }catch(e){ parceiro = r.length >= 3 ? r : ''; }
+
+})();
+
+
+
 /* ===== WhatsApp ================================================ */
 const linkWhats = t => 'https://wa.me/'+CONFIG.whatsapp+'?text='+encodeURIComponent(t);
 ['waFloat','waFooter'].forEach(id=>{
