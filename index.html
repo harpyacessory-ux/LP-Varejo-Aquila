@@ -162,12 +162,13 @@ section{position:relative;padding:clamp(4rem,8vw,7.5rem) 0}
    Sao os tres custos que faziam a reproducao engasgar. */
 body.tocando .nav,
 body.tocando .sticky,
-body.tocando .hero-chip,
+body.tocando .ntf,
 body.tocando .print-zoom{backdrop-filter:none}
 body.tocando .nav{background:#070D2A}
 body.tocando .sticky{background:#05060F}
-body.tocando .mk,
-body.tocando .mq-track{animation-play-state:paused}
+body.tocando .ntf,
+body.tocando .mq-track,
+body.tocando .brands-track{animation-play-state:paused}
 
 /* botao de play sobre o poster; some assim que o video comeca */
 .vplay{position:absolute;inset:7px;display:grid;place-items:center;cursor:pointer;
@@ -196,21 +197,7 @@ section.light .ilustra{filter:drop-shadow(0 26px 40px rgba(14,26,69,.18))}
   #sistema .ilustra{align-self:start;margin-top:calc(-1 * clamp(5rem,12vw,11rem))}
 }
 
-/* Print de painel. O arquivo e muito largo para a coluna, entao entra ampliado
-   e ancorado no canto superior esquerdo, onde ficam os numeros que importam.
-   O card inteiro e um link que abre o print completo. */
-.print{position:relative;display:block;min-height:320px;overflow:hidden;
-  border:1px solid var(--line-2);border-radius:20px;background:#fff;text-decoration:none;cursor:zoom-in}
-/* Cada print tem o painel numa posicao diferente, entao o enquadramento e por
-   canal. As margens sao em %, que o CSS calcula sempre sobre a largura do card:
-   assim o recorte acompanha o card em qualquer tela. */
-.print img{position:absolute;top:0;left:0;max-width:none;height:auto;
-  width:var(--zoom,215%);margin-left:var(--mx,0);margin-top:var(--my,0);
-  transition:transform .4s ease}
-.print.sp img{--zoom:253%;--mx:-34.5%;--my:-31.6%}
-.print.ml img{--zoom:296%;--mx:-9.2%;--my:-52.9%}
-.print:hover img,.print:focus-visible img{transform:scale(1.03)}
-.print .mkt{position:absolute;top:.8rem;left:.8rem;z-index:2}
+/* selo "ampliar" sobre os prints de painel (seção Resultados) */
 .print-zoom{position:absolute;right:.7rem;bottom:.7rem;z-index:2;font-size:.68rem;
   letter-spacing:.04em;padding:.3rem .6rem;border-radius:999px;
   background:rgba(5,8,26,.72);color:#fff;backdrop-filter:blur(6px)}
@@ -254,57 +241,223 @@ section.light .ilustra{filter:drop-shadow(0 26px 40px rgba(14,26,69,.18))}
 .nav-links a:hover{color:#fff}
 @media(min-width:1000px){.nav-links{display:flex}}
 
+/* ===== 5b. BARRA PROMOCIONAL (topo) ==============================
+   Fica acima do header e rola junto com a página; o header continua sticky.
+   Para trocar a campanha, edite só o HTML do <aside class="promo"> e as
+   variáveis --promo-* abaixo. */
+.promo{--promo-wine:#5A0C1C;--promo-red:#B3122E;--promo-accent:#FF8FA3;
+  position:relative;z-index:51;overflow:hidden;isolation:isolate;color:#fff;
+  padding-top:env(safe-area-inset-top,0px);
+  background:
+    radial-gradient(520px 140px at 50% 0%,rgba(179,18,46,.55),transparent 70%),
+    radial-gradient(380px 120px at 12% 100%,rgba(46,123,232,.16),transparent 70%),
+    linear-gradient(90deg,#07060B 0%,#1A0710 26%,var(--promo-wine) 50%,#1A0710 74%,#07060B 100%);
+  border-bottom:1px solid rgba(255,90,120,.28)}
+/* filete de luz na base */
+.promo::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;z-index:-1;
+  background:linear-gradient(90deg,transparent,rgba(255,110,135,.9),transparent)}
+.promo .wrap{display:flex;align-items:center;justify-content:center;gap:clamp(1rem,2.4vw,2rem);
+  min-height:60px;padding-top:.55rem;padding-bottom:.55rem}
+/* "BLACK" e "ÁQUILA" no mesmo tamanho e com a mesma largura: cada linha é um
+   flex com as letras distribuídas de ponta a ponta. */
+.promo-brand{flex:none}
+.promo-title{display:grid;width:5.4em;margin:0;font-family:var(--f-display);font-weight:800;
+  font-size:.98rem;line-height:1.08;text-transform:uppercase}
+.promo-title .l{display:flex;justify-content:space-between}
+.promo-title i{font-style:normal}
+.promo-title .l1{color:var(--promo-accent)}
+.promo-title .l2{padding-top:.1em;
+  background:linear-gradient(180deg,#fff 30%,#F3C9D1);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.promo-sep{width:1px;height:30px;flex:none;background:linear-gradient(transparent,rgba(255,255,255,.35),transparent)}
+.promo-text{margin:0;max-width:none;font-size:.9rem;line-height:1.4;font-weight:500;color:#F4F1F5}
+@media(min-width:1024px){.promo-text{white-space:nowrap}}
+.promo-text em{font-style:normal;color:var(--promo-accent)}
+/* botão na mesma cor do destaque "por tempo limitado" */
+.promo-btn{display:inline-flex;align-items:center;gap:.4rem;flex:none;white-space:nowrap;
+  font-family:var(--f-display);font-weight:700;font-size:.78rem;text-decoration:none;
+  padding:.45rem .95rem;border-radius:999px;color:#fff;text-shadow:0 1px 1px rgba(90,12,28,.35);
+  background:linear-gradient(180deg,var(--promo-accent),#F26A86);
+  box-shadow:0 6px 18px -8px rgba(255,80,110,.8),inset 0 1px 0 rgba(255,255,255,.3);
+  transition:transform .2s ease,box-shadow .2s ease,filter .2s ease}
+.promo-btn svg{transition:transform .2s ease}
+.promo-btn:hover{transform:translateY(-1px);filter:brightness(1.06);
+  box-shadow:0 10px 24px -8px rgba(255,80,110,1),inset 0 1px 0 rgba(255,255,255,.3)}
+.promo-btn:hover svg{transform:translateY(2px)}
+.promo-btn:focus-visible{outline-color:#fff}
+.promo[hidden]{display:none}
+/* tablet: some o separador, texto menor */
+@media(max-width:900px){
+  .promo-sep{display:none}
+  .promo-text{font-size:.82rem}
+}
+/* mobile: marca + botão na linha de cima, frase embaixo */
+@media(max-width:640px){
+  .promo .wrap{display:grid;grid-template-columns:1fr auto;grid-template-areas:"brand btn" "text text";
+    gap:.45rem .8rem;justify-content:stretch}
+  .promo-brand{grid-area:brand}
+  .promo-title{font-size:.9rem}
+  .promo-btn{grid-area:btn;font-size:.74rem;padding:.42rem .85rem}
+  .promo-text{grid-area:text;font-size:.78rem;line-height:1.35;color:#E9E2E6}
+}
+@media(prefers-reduced-motion:reduce){.promo-btn,.promo-btn svg{transition:none}}
+
 /* ===== 6. HERO =================================================== */
-.hero{padding-top:clamp(2.5rem,5vw,4.5rem);padding-bottom:clamp(2.5rem,5vw,4rem)}
-.hero h1{margin-bottom:1.2rem;max-width:15ch}
-.hero .lead{max-width:48ch}
+/* O hero ocupa a primeira dobra inteira: altura da tela menos o header e a
+   barra promocional (--promo-h é medido pelo JS; some se a barra sumir).
+   A faixa de marcas fica presa no rodapé do próprio hero. */
+.hero{--promo-h:61px;display:flex;flex-direction:column;padding:0;overflow-x:clip;
+  min-height:calc(100vh - var(--nav-h) - var(--promo-h));
+  min-height:calc(100svh - var(--nav-h) - var(--promo-h))}
+.hero>.split{flex:1;align-content:center;
+  padding-top:clamp(1.75rem,3vw,2.75rem);padding-bottom:clamp(1.75rem,3vw,2.75rem)}
+/* 60% texto / 40% visual, com mais respiro entre as colunas */
+@media(min-width:960px){.hero .split{grid-template-columns:1.5fr 1fr;gap:clamp(3rem,6vw,6.5rem)}}
+
+/* Faixa de marcas no rodapé do hero. Brancas por padrão; no hover a faixa
+   pausa e a marca em foco volta à cor dela. Os arquivos em assets/marcas/
+   são as versões das marcas para fundo escuro. --h equilibra o peso visual
+   de cada logo (cada arquivo tem proporções diferentes). */
+.brands{position:relative;overflow:hidden;padding:1.35rem 0;
+  border-top:1px solid var(--line);background:rgba(5,8,26,.35);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.brands-track{display:flex;width:max-content;animation:slide 40s linear infinite}
+.brands:hover .brands-track{animation-play-state:paused}
+.brands-set{display:flex;align-items:center;gap:clamp(3rem,6vw,5.5rem);
+  padding-right:clamp(3rem,6vw,5.5rem);margin:0;list-style:none}
+.brand{display:flex;align-items:center;height:40px}
+.brand img{display:block;height:var(--h,28px);width:auto;
+  filter:brightness(0) invert(1);opacity:.78;
+  transition:filter .4s ease,opacity .4s ease,transform .4s ease}
+.brand:hover img{filter:none;opacity:1;transform:scale(1.06)}
+@media(max-width:700px){.brand img{height:calc(var(--h,28px)*.82)}.brands{padding:1.1rem 0}}
+@media(prefers-reduced-motion:reduce){.brands-track{animation:none}}
+.hero h1{margin-bottom:1.2rem;font-size:clamp(2.05rem,4.4vw,3.55rem)}
+.hero .lead{max-width:58ch}
 .hero-cta{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.8rem}
-.stats{display:flex;gap:clamp(1.5rem,4vw,3rem);flex-wrap:wrap;margin-top:2.6rem;
-  padding-top:1.8rem;border-top:1px solid var(--line)}
-.stat b{display:block;font-family:var(--f-display);font-weight:800;color:#fff;
-  font-size:clamp(1.8rem,3.6vw,2.6rem);line-height:1;letter-spacing:-.03em}
-.stat span{font-size:.86rem;color:var(--muted);display:block;margin-top:.35rem;max-width:20ch}
+
+/* Carrossel do título. Todas as frases ficam empilhadas na mesma célula do
+   grid, então a altura é sempre a da frase mais longa e nada abaixo pula.
+   Para trocar/adicionar frases, edite só os <b class="rot-item"> no HTML. */
+.rot{display:grid;margin-top:.08em}
+.rot-item{grid-area:1/1;font-weight:800;color:#fff;
+  opacity:0;filter:blur(10px);transform:translateY(.32em);
+  transition:opacity .6s ease,filter .6s ease,transform .6s cubic-bezier(.4,0,.2,1)}
+.rot-item.is-on{opacity:1;filter:none;transform:none;
+  transition-duration:.8s;transition-delay:.3s;transition-timing-function:ease,ease,cubic-bezier(.2,.7,.2,1)}
+/* palavras em destaque dentro de cada frase */
+.rot-item em{font-style:normal;
+  background:linear-gradient(100deg,#9CC4FF 0%,var(--electric) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+@media(prefers-reduced-motion:reduce){.rot-item{transition:none}}
+
+/* lado direito: mascote menor + cards de prova social */
+.hero-side{display:flex;flex-direction:column;gap:2.4rem}
+.hero-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.9rem}
+.stat-card{display:flex;flex-direction:column;gap:.55rem;padding:1rem 1rem 1.1rem;border-radius:20px;
+  background:var(--glass),rgba(10,20,64,.55);border:1px solid var(--line);
+  box-shadow:0 18px 40px -22px rgba(2,5,20,.9),inset 0 1px 0 rgba(255,255,255,.06)}
+.stat-top{display:flex;align-items:center;gap:.7rem}
+.stat-ico{display:grid;place-items:center;flex:none;width:38px;height:38px;border-radius:50%;color:#fff;
+  background:radial-gradient(circle at 30% 25%,#6FA8F5,var(--electric) 55%,var(--royal));
+  box-shadow:0 8px 20px -6px rgba(46,123,232,.75),inset 0 1px 0 rgba(255,255,255,.35)}
+.stat-card b{font-family:var(--f-display);font-weight:800;color:#fff;
+  font-size:clamp(1.3rem,1.85vw,1.6rem);line-height:1;letter-spacing:-.03em;white-space:nowrap}
+.stat-card p{margin:0;font-size:.84rem;line-height:1.45;color:var(--muted)}
+
 .hero-art{position:relative;display:grid;place-items:center;isolation:isolate}
 /* mascote 3D: a foto manda no tamanho do bloco, o resto flutua em volta */
-.hero-art .peng-photo{position:relative;z-index:2;display:block;width:min(100%,430px);height:auto;
+.hero-art .peng-photo{position:relative;z-index:2;display:block;width:min(62%,272px);height:auto;
   filter:drop-shadow(0 34px 44px rgba(2,5,20,.55))}
 /* marca d'água do símbolo Aquila, atrás do mascote */
 .hero-art .art-mark{position:absolute;z-index:1;width:min(42%,190px);height:auto;top:0;right:0;
   opacity:.07;transform:rotate(-6deg);pointer-events:none}
-.hero-chip{position:absolute;z-index:3;display:flex;align-items:center;gap:.5rem;font-size:.78rem;
-  background:rgba(5,8,26,.86);border:1px solid var(--line-2);border-radius:12px;padding:.55rem .8rem;
-  backdrop-filter:blur(8px);white-space:nowrap}
-.hero-chip b{font-family:var(--f-display);color:#7CF0B6}
-.chip-a{top:6%;left:0}
-.chip-b{bottom:22%;right:-2%}
+/* Notificações de venda flutuando em volta do mascote (vidro líquido).
+   Tudo é medido em em: --nf (font-size) escala a notificação inteira.
+   --s dá a profundidade (maior = mais perto), --d é o atraso de entrada.
+   z-index 1 fica atrás do mascote (z 2); z 3 fica na frente. */
+.ntf{--nf:14px;--s:1;--d:0s;--ico:3.1em;position:absolute;z-index:3;font-size:var(--nf);
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:0 .75em;
+  width:16.5em;padding:.72em .9em .72em .72em;border-radius:1.35em;
+  font-family:var(--f-text);color:#11131C;line-height:1.25;
+  background:linear-gradient(140deg,rgba(255,255,255,.74) 0%,rgba(244,247,255,.56) 55%,rgba(255,255,255,.66) 100%);
+  -webkit-backdrop-filter:blur(14px) saturate(1.7);backdrop-filter:blur(14px) saturate(1.7);
+  border:1px solid rgba(255,255,255,.62);
+  box-shadow:0 22px 44px -20px rgba(2,5,20,.75),0 2px 6px rgba(2,5,20,.12),
+    inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.35);
+  scale:var(--s);opacity:0;translate:0 18px;
+  animation:ntfIn .9s cubic-bezier(.2,.7,.2,1) var(--d) forwards,
+            ntfFloat 7s ease-in-out calc(var(--d) + .9s) infinite}
+/* reflexo do vidro: brilho suave no topo */
+.ntf::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(120% 70% at 18% -10%,rgba(255,255,255,.7),transparent 55%),
+    linear-gradient(180deg,rgba(255,255,255,.28),transparent 42%)}
+.ntf-ico{display:block;width:var(--ico);height:var(--ico);border-radius:.78em;object-fit:cover;
+  box-shadow:0 2px 6px rgba(2,5,20,.18)}
+/* ícone do ML: recorte do aperto de mãos no logo oficial */
+.ntf-ico-ml{background:#FFE600 url("assets/logo-mercado-livre.webp") no-repeat;
+  background-size:calc(var(--ico)*2.96) auto;
+  background-position:calc(var(--ico)*-.273) calc(var(--ico)*-.951)}
+.ntf-txt{display:flex;flex-direction:column;gap:.12em;min-width:0}
+.ntf-txt b{font-family:var(--f-display);font-weight:700;font-size:1.12em;letter-spacing:-.01em;color:#0E1020}
+.ntf-txt span{font-size:.92em;color:#5E6474;white-space:nowrap}
+/* texto "borrado" do produto e do valor, como nos prints reais */
+.ntf-blur{display:inline-block;vertical-align:-.1em;width:var(--w,6em);height:.85em;border-radius:99px;
+  background:linear-gradient(90deg,#9AA1B2,#C3C8D4 30%,#8F97A8 60%,#B9BFCC);filter:blur(2.4px);opacity:.9}
+.ntf-time{align-self:start;font-size:.8em;color:#6B7180;white-space:nowrap;padding-top:.15em}
+@keyframes ntfIn{to{opacity:1;translate:0 0}}
+@keyframes ntfFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@media(prefers-reduced-motion:reduce){.ntf{animation:none;opacity:1;translate:none}}
 
-/* Selos dos marketplaces flutuando ao redor do mascote.
-   Os arquivos de logo vêm com fundo sólido e muita margem em volta, então o
-   enquadramento é feito aqui: background-size amplia a arte até o logo ocupar
-   ~55% da altura da pílula, e background-color repete o fundo do arquivo para
-   cobrir as sobras laterais. --mkh controla a escala dos três de uma vez. */
-.mk{--mkh:46px;position:absolute;z-index:3;height:var(--mkh);border-radius:999px;
-  background-repeat:no-repeat;background-position:center;
-  box-shadow:0 14px 30px rgba(2,5,20,.45);animation:mkFloat 6s ease-in-out infinite}
-.mk-amz{width:calc(var(--mkh)*2.37);top:20%;left:-4%;animation-delay:-.6s;
-  background-color:#fff;background-image:url("assets/logo-amazon.webp");background-size:auto 100%}
-.mk-sp{width:calc(var(--mkh)*2.17);top:50%;right:-6%;animation-delay:-2.4s;
-  background-image:url("assets/logo-shopee.webp");background-size:auto 114%}
-.mk-ml{width:calc(var(--mkh)*2.61);bottom:6%;left:-6%;animation-delay:-4.1s;
-  background-color:var(--ml-yellow);background-image:url("assets/logo-mercado-livre.webp");
-  background-size:auto 275%}
-@keyframes mkFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-@media(prefers-reduced-motion:reduce){.mk{animation:none}}
+/* posições em zigue-zague: ML em cima à direita, Amazon no meio à esquerda
+   (atrás da asa do mascote, escondendo só o lado do horário), Shopee embaixo à direita */
+.ntf-ml{top:-7%;right:-21%;--s:.96;--d:.25s}
+.ntf-amz{top:37%;left:-19%;--s:.86;--d:.55s;z-index:1}
+.ntf-sp{bottom:3%;right:-12%;--s:1.04;--d:.85s}
 
+/* tablet: texto em cima, mascote e cards lado a lado embaixo */
+@media(min-width:701px) and (max-width:959px){
+  .hero-side{display:grid;grid-template-columns:1fr 1fr;align-items:center}
+  .hero-stats{grid-template-columns:1fr}
+}
+/* mobile: mascote em cima, texto, e os cards depois dos botões */
 @media(max-width:700px){
-  .hero-art{order:-1;margin-bottom:1rem}
-  .hero-art .peng-photo{width:min(78%,300px)}
+  .hero-side{display:contents}
+  .hero-art{order:-1;margin-bottom:.5rem}
+  .hero-stats{gap:.7rem}
+  .stat-card{padding:.95rem;border-radius:16px}
+  .stat-ico{width:36px;height:36px}
+  .stat-ico svg{width:18px;height:18px}
+  .stat-top{flex-direction:column;align-items:flex-start;gap:.6rem}
+  .stat-card b{font-size:1.35rem}
+  .stat-card p{font-size:.8rem}
+  .hero-art .peng-photo{width:min(50%,200px)}
   .hero-art .art-mark{width:62%;right:2%}
-  .chip-a{left:-4px}.chip-b{right:-4px}
-  .mk{--mkh:34px;box-shadow:0 10px 20px rgba(2,5,20,.4)}
-  .mk-amz{left:-2%;top:16%}.mk-sp{right:-2%}.mk-ml{left:-2%;bottom:2%}
+  .hero-art{padding:1.6rem 0 1.4rem}
+  .ntf{--nf:10px}
+  .ntf-ml{right:-7%;top:-3%}.ntf-amz{left:-5%;top:38%}.ntf-sp{right:-4%;bottom:0}
+}
+@media(max-width:360px){
+  .ntf{--nf:8.8px}
 }
 
+/* notebooks com tela baixa: compacta o hero para a faixa de marcas caber na 1ª dobra */
+@media(min-width:960px) and (max-height:820px){
+  .hero>.split{padding-top:1.1rem;padding-bottom:1.1rem}
+  .hero .eyebrow{margin-bottom:.9rem}
+  .hero h1{font-size:clamp(1.9rem,3.1vw,2.6rem);margin-bottom:.7rem}
+  .hero .lead{font-size:1rem;margin-bottom:0}
+  .hero-cta{margin-top:1.2rem}
+  .hero .micro{margin-top:.6rem}
+  .hero-side{gap:1.5rem}
+  .hero-art .peng-photo{width:min(50%,200px)}
+  .ntf{--nf:12.5px}
+  .ntf-ml{top:-1%;right:-15%}
+  .stat-card{padding:.8rem .9rem .9rem}
+  .brands{padding:.9rem 0}
+}
 /* mascote em linha, ao lado de textos de apoio (oferta e formulario) */
 .mascote-inline{display:block;flex:none;width:clamp(96px,14vw,130px);height:auto;
   filter:drop-shadow(0 18px 26px rgba(2,5,20,.5))}
@@ -348,11 +501,6 @@ section.light .ilustra{filter:drop-shadow(0 26px 40px rgba(14,26,69,.18))}
   color:var(--electric-soft);font-weight:600;margin-bottom:.7rem}
 .card[hidden]{display:none}
 
-/* ===== 10. RESULTADOS — depoimentos =============================== */
-.quote{min-width:300px;max-width:360px;flex:0 0 auto;border:1px solid var(--line);border-radius:16px;
-  padding:1.4rem;background:rgba(10,20,64,.55);white-space:normal}
-.quote p{font-size:.98rem;margin:0 0 .7rem;color:#fff}
-.quote cite{font-style:normal;font-size:.82rem;color:var(--muted)}
 
 /* ===== 11. OFERTA BLACK FRIDAY =================================== */
 .bf{background:radial-gradient(900px 520px at 50% 0%,rgba(46,123,232,.22),transparent 62%),var(--bf-black);
@@ -501,7 +649,7 @@ section.light .ilustra{filter:drop-shadow(0 26px 40px rgba(14,26,69,.18))}
 .lb::backdrop{background:rgba(3,6,20,.92);backdrop-filter:blur(6px)}
 .lb-fig{margin:0;flex:1 1 auto;min-width:0;display:flex;flex-direction:column;
   align-items:center;gap:.9rem;animation:lbIn .28s cubic-bezier(.2,.8,.3,1)}
-.lb-fig img{display:block;max-width:100%;max-height:78vh;width:auto;height:auto;
+.lb-fig img{display:block;max-width:100%;max-height:78vh;width:auto;height:auto;min-width:min(100%,560px);object-fit:contain;
   border-radius:14px;background:#fff;box-shadow:0 30px 70px rgba(0,0,0,.55)}
 .lb-fig figcaption{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;justify-content:center;
   color:rgba(255,255,255,.76);font-size:.86rem;text-align:center;max-width:70ch}
@@ -572,8 +720,6 @@ section.light .media{border-color:rgba(14,26,69,.16);color:#5A678F;
 section.light .btn-ghost{color:#0A1440;border-color:rgba(14,26,69,.25)}
 section.light .pill{color:#1B3FA8}
 section.light .checks svg,section.light .layers li::before{color:#1B3FA8}
-section.light .quote{background:#fff;border-color:rgba(14,26,69,.12)}
-section.light .quote p{color:#0A1440}
 section.light .marquee{background:transparent;border-color:rgba(14,26,69,.12)}
 #resultados .media{min-height:260px}
 section.light .faq summary{color:#0A1440}
@@ -583,7 +729,7 @@ section.light .faq summary::after{color:#1B3FA8}
 :root{--r-sec:clamp(26px,4.2vw,52px)}
 section.light,section.bf,section.band{border-radius:var(--r-sec)}
 .channels{border-radius:var(--r-sec) var(--r-sec) 0 0}
-#paraquem{border-radius:0 0 var(--r-sec) var(--r-sec);margin-top:-1px}
+#apresentacao{border-radius:0 0 var(--r-sec) var(--r-sec);margin-top:-1px}
 section.light+section.light{border-top:0}
 .marquee:first-of-type{border-radius:var(--r-sec) var(--r-sec) 0 0;border-bottom:0}
 
@@ -602,7 +748,7 @@ section.light+section.light{border-top:0}
 section.light::before,.channels::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;
   border-radius:var(--r-sec) var(--r-sec) 0 0;
   background:linear-gradient(90deg,var(--ml-yellow) 0%,var(--shopee) 42%,var(--amz-orange) 72%,var(--ml-blue) 100%)}
-#paraquem::before{display:none}
+#apresentacao::before{display:none}
 
 /* brilho suave das cores no fundo claro */
 section.light{background-image:
@@ -631,16 +777,216 @@ section.light .card::after{content:"";position:absolute;top:0;left:0;right:0;hei
 #paraquem .card:nth-child(2){--mk:var(--shopee)}
 #paraquem .card:nth-child(3){--mk:var(--amz-orange)}
 #paraquem .card:nth-child(4){--mk:var(--ml-blue)}
+/* ===== 14e. SEÇÃO 2 — APRESENTAÇÃO EM VÍDEO ===================== */
+.eyebrow-ic{display:inline-flex;align-items:center;gap:.5rem}
+.eyebrow-ic svg{flex:none}
+#apresentacao{padding-top:clamp(2.5rem,5vw,4.5rem)}
+.vframe-xl{max-width:980px;margin-inline:auto}
+section.light .vframe .vplayer{
+  background:linear-gradient(150deg,rgba(46,123,232,.55),rgba(27,63,168,.12) 45%,rgba(46,123,232,.4));
+  box-shadow:0 46px 90px -44px rgba(10,20,64,.6),0 12px 30px -18px rgba(10,20,64,.35)}
+.apres-head{max-width:780px;margin:clamp(2.4rem,5vw,3.6rem) auto 0;text-align:center}
+.apres-head h2{margin-bottom:.9rem}
+.apres-head .lead{margin:0 auto 1.8rem;max-width:58ch}
 
-/* etiqueta do canal nos prints */
-.mkt{display:inline-block;padding:.26rem .75rem;border-radius:999px;font-family:var(--f-display);
-  font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.5rem}
-.mkt.ml{background:var(--ml-yellow);color:var(--ml-blue)}
-.mkt.sp{background:var(--shopee);color:#fff}
-.mkt.az{background:var(--amz-dark);color:var(--amz-orange)}
-#resultados .media.sp{border-color:rgba(238,77,45,.34)}
-#resultados .media.ml{border-color:rgba(45,50,119,.28)}
-#resultados .media.az{border-color:rgba(255,153,0,.38)}
+/* ===== 14f. SEÇÃO 3 — DOR DO LOJISTA + CARROSSEL ================= */
+.dor{display:grid;gap:clamp(2.2rem,4vw,3rem);align-items:center}
+@media(min-width:960px){.dor{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(2.5rem,5vw,4.5rem)}}
+.dor-txt h2{margin-bottom:1.1rem}
+.dor-chamada{margin:0 0 1.1rem;font-size:1.02rem}
+.dor-final{color:var(--muted);margin:0 0 1.8rem;max-width:44ch}
+/* no desktop a chamada aponta para os cards; no mobile os cards vêm logo depois dela */
+@media(max-width:959px){
+  .dor{display:flex;flex-direction:column;align-items:stretch;gap:0}
+  .dor-txt{display:contents}
+  .dor-txt .eyebrow{align-self:flex-start}
+  .dc{order:1;margin-bottom:1.6rem}
+  .dor-final{order:2}
+  .dor-txt>.reveal:last-child{order:3}
+}
+
+/* botão cápsula com círculo branco e seta */
+.btn-pill{display:inline-flex;align-items:center;gap:1rem;border:0;cursor:pointer;
+  padding:.5rem .5rem .5rem 1.6rem;border-radius:999px;color:#fff;
+  font-family:var(--f-display);font-weight:700;font-size:.98rem;line-height:1.2;
+  background:linear-gradient(135deg,#2E7BE8,#1B3FA8);
+  box-shadow:0 14px 34px -14px rgba(46,123,232,1),inset 0 1px 0 rgba(255,255,255,.26);
+  transition:filter .25s ease,box-shadow .25s ease,transform .25s ease}
+.btn-pill i{display:grid;place-items:center;flex:none;width:2.6rem;height:2.6rem;border-radius:50%;
+  background:#fff;color:#1B3FA8;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.btn-pill:hover{filter:brightness(1.08);transform:translateY(-1px);
+  box-shadow:0 20px 44px -14px rgba(46,123,232,1),inset 0 1px 0 rgba(255,255,255,.26)}
+.btn-pill:hover i{transform:translateX(3px)}
+.btn-pill:active{transform:translateY(0)}
+
+/* carrossel: rolagem nativa com snap; ~2 cards + um pedaço do próximo */
+.dc{--gap:1rem;min-width:0}
+.dc-track{display:flex;gap:var(--gap);overflow-x:auto;scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;overscroll-behavior-x:contain;scrollbar-width:none;
+  padding:.4rem .2rem 1rem;margin:-.4rem -.2rem 0;outline-offset:4px;border-radius:22px;
+  -webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent)}
+.dc-track::-webkit-scrollbar{display:none}
+.dc-track.no-fim{-webkit-mask-image:none;mask-image:none}
+/* Cards altos (~460px no desktop, perto da altura da coluna da esquerda).
+   Ordem interna: ícone + número no topo, título e descrição logo abaixo,
+   e o próprio ícone em tamanho grande e bem apagado no canto de baixo
+   (.dc-bg, criado pelo JS) para ocupar a área sem acrescentar texto. */
+.dc-card{position:relative;overflow:hidden;isolation:isolate;
+  flex:0 0 calc((100% - var(--gap)*2) / 2.2);scroll-snap-align:start;
+  display:flex;flex-direction:column;min-height:clamp(400px,34vw,470px);
+  padding:clamp(1.6rem,2.4vw,2.1rem) clamp(1.5rem,2.2vw,1.9rem);border-radius:26px;
+  background:
+    radial-gradient(120% 60% at 100% 100%,rgba(46,123,232,.16),transparent 60%),
+    linear-gradient(165deg,rgba(255,255,255,.09),rgba(255,255,255,.025));
+  border:1px solid var(--line);box-shadow:0 26px 50px -30px rgba(2,5,20,.95),inset 0 1px 0 rgba(255,255,255,.07);
+  transition:border-color .3s ease,transform .3s ease,background .3s ease}
+.dc-card:hover{border-color:var(--line-2);transform:translateY(-4px)}
+.dc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(2.2rem,4vw,3.2rem)}
+.dc-ico{display:grid;place-items:center;width:62px;height:62px;border-radius:18px;
+  background:rgba(46,123,232,.18);border:1px solid rgba(111,168,245,.26);color:var(--electric-soft);
+  box-shadow:0 10px 24px -12px rgba(46,123,232,.7)}
+.dc-ico svg,.dc-bg svg{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+.dc-ico svg{width:28px;height:28px;stroke-width:1.9}
+.dc-n{font-family:var(--f-display);font-size:.76rem;font-weight:700;letter-spacing:.16em;
+  color:var(--electric-soft);padding:.38rem .85rem;border-radius:999px;background:rgba(46,123,232,.14);
+  border:1px solid rgba(111,168,245,.18)}
+.dc-card h3{font-size:clamp(1.3rem,1.9vw,1.6rem);line-height:1.15;margin-bottom:.8rem;letter-spacing:-.02em}
+.dc-card p{margin:0;font-size:clamp(.96rem,1.15vw,1.05rem);line-height:1.6;color:var(--muted);max-width:30ch}
+.dc-bg{position:absolute;z-index:-1;right:-8%;bottom:-10%;width:58%;aspect-ratio:1;
+  color:var(--electric-soft);opacity:.07;pointer-events:none;transition:opacity .4s ease,transform .5s ease}
+.dc-bg svg{width:100%;height:100%;stroke-width:1.2}
+.dc-card:hover .dc-bg{opacity:.11;transform:rotate(-4deg) scale(1.03)}
+.dc-nav{display:flex;gap:.6rem;margin-top:1rem}
+.dc-btn{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;
+  background:transparent;border:1px solid var(--line-2);color:#fff;
+  transition:background .25s ease,border-color .25s ease,opacity .25s ease}
+.dc-btn:hover:not(:disabled){background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.4)}
+.dc-btn:disabled{opacity:.35;cursor:default}
+@media(max-width:959px){.dc-card{flex-basis:calc((100% - var(--gap)) / 1.6);min-height:360px}}
+/* celular: altura acompanha o conteúdo, navegação por toque */
+@media(max-width:600px){.dc-card{flex-basis:84%;min-height:0;padding-bottom:3.4rem}
+  .dc-top{margin-bottom:1.8rem}.dc-bg{width:44%}.dc-nav{display:none}}
+@media(prefers-reduced-motion:reduce){.dc-track{scroll-behavior:auto}.dc-card,.btn-pill,.btn-pill i{transition:none}}
+
+
+/* ===== RESULTADOS: comparativos antes/depois por canal ==========
+   Cada .caso recebe as cores do canal por variáveis (--c-*), então para
+   ajustar o tom de um canal basta mexer no bloco .caso-ml/.caso-sp/.caso-az.
+   Os prints entram INTEIROS: object-fit:contain + proporção do arquivo. */
+.casos{display:grid;gap:clamp(1.4rem,3vw,2.2rem)}
+.caso{position:relative;overflow:hidden;border-radius:28px;
+  padding:clamp(1.1rem,2.6vw,2.2rem);
+  background:var(--c-bg);border:1px solid var(--c-borda);
+  box-shadow:0 26px 60px -40px rgba(10,20,64,.55),0 2px 6px -2px rgba(10,20,64,.06)}
+/* filete de cor do canal no topo */
+.caso::before{content:"";position:absolute;inset:0 0 auto;height:4px;background:var(--c-filete)}
+.caso-ml{--c-bg:linear-gradient(165deg,#FFFDF0 0%,#FFF8D6 100%);--c-borda:rgba(214,178,0,.32);
+  --c-filete:var(--ml-yellow);--c-tag:var(--ml-yellow);--c-tag-tx:var(--ml-blue);
+  --c-logo:var(--ml-yellow) url("assets/logo-mercado-livre.webp") center/128% no-repeat}
+.caso-sp{--c-bg:linear-gradient(165deg,#FFF8F4 0%,#FFEDE3 100%);--c-borda:rgba(238,77,45,.22);
+  --c-filete:var(--shopee);--c-tag:var(--shopee);--c-tag-tx:#fff;
+  --c-logo:#F1502E url("assets/logo-shopee.webp") center/cover no-repeat}
+.caso-az{--c-bg:linear-gradient(165deg,#FFFFFF 0%,#FAF9F7 100%);--c-borda:rgba(35,47,62,.13);
+  --c-filete:linear-gradient(90deg,var(--amz-dark) 0 70%,var(--amz-orange) 70%);
+  --c-tag:var(--amz-dark);--c-tag-tx:var(--amz-orange);
+  --c-logo:#fff url("assets/logo-amazon.webp") center/86% no-repeat}
+
+.caso-top{display:flex;align-items:center;gap:1rem;margin-bottom:clamp(1.1rem,2.4vw,1.7rem)}
+.caso-logo{flex:none;width:118px;height:52px;border-radius:14px;background:var(--c-logo);
+  box-shadow:inset 0 0 0 1px rgba(14,26,69,.08),0 6px 16px -10px rgba(10,20,64,.5)}
+.caso-id{display:flex;flex-direction:column;align-items:flex-start;gap:.35rem;min-width:0}
+.caso-id h3{margin:0;font-size:clamp(1.25rem,2vw,1.55rem);line-height:1.1}
+.caso-selo{display:inline-flex;align-items:center;gap:.35rem;font-size:.74rem;font-weight:600;
+  color:#3A4874;background:rgba(255,255,255,.75);border:1px solid rgba(14,26,69,.1);
+  border-radius:999px;padding:.22rem .65rem .22rem .5rem}
+.caso-selo svg{color:#1E9E5A}
+
+.caso-cmp{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;gap:clamp(.8rem,1.8vw,1.4rem)}
+.caso-lado{margin:0;min-width:0;display:flex;flex-direction:column;gap:.7rem}
+.caso-lado figcaption{display:flex}
+.tag-fase{font-family:var(--f-display);font-weight:800;font-size:.8rem;letter-spacing:.18em;
+  text-transform:uppercase;border-radius:999px;padding:.42rem 1rem;line-height:1}
+.tag-fase.antes{color:#46537C;background:#fff;border:1px solid rgba(14,26,69,.18)}
+.tag-fase.depois{color:var(--c-tag-tx);background:var(--c-tag);
+  box-shadow:0 8px 18px -10px rgba(10,20,64,.55)}
+.caso-seta{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;
+  margin-top:2.1rem;color:var(--c-tag-tx);background:var(--c-tag);
+  box-shadow:0 10px 22px -12px rgba(10,20,64,.6)}
+
+/* moldura neutra: o print inteiro, centralizado, sem corte nem distorção */
+.cmp-print{position:relative;display:block;border-radius:18px;padding:clamp(6px,.8vw,10px);
+  background:#EEF1F6;border:1px solid rgba(14,26,69,.1);cursor:zoom-in;text-decoration:none;
+  transition:transform .3s ease,box-shadow .3s ease}
+.cmp-print img{display:block;width:100%;height:auto;aspect-ratio:1800/1344;object-fit:contain;
+  object-position:center;border-radius:12px;background:#fff}
+.cmp-print:hover,.cmp-print:focus-visible{transform:translateY(-3px);
+  box-shadow:0 22px 40px -26px rgba(10,20,64,.6)}
+.cmp-print:focus-visible{outline:3px solid #2E7BE8;outline-offset:3px}
+
+@media(max-width:760px){
+  .caso{border-radius:22px}
+  .caso-logo{width:96px;height:44px;border-radius:12px}
+  .caso-cmp{grid-template-columns:minmax(0,1fr);gap:.9rem}
+  .caso-seta{margin:0 auto;width:40px;height:40px;transform:rotate(90deg)}
+}
+@media(prefers-reduced-motion:reduce){.cmp-print{transition:none}}
+
+/* ===== RESULTADOS: depoimentos reais + vídeo ======================
+   Grid: 3 cards em cima e 2 centralizados embaixo (desktop), 2 colunas
+   no tablet e 1 no celular. O print fica dentro do card, inteiro. */
+.depo{margin-top:clamp(4rem,8vw,6.5rem)}
+.dep-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(1rem,2vw,1.5rem)}
+.dep-card{grid-column:span 2;display:flex;flex-direction:column;min-width:0;
+  padding:clamp(1.3rem,2.2vw,1.7rem);border-radius:22px;background:#fff;
+  border:1px solid rgba(14,26,69,.09);
+  box-shadow:0 22px 44px -34px rgba(10,20,64,.55),0 2px 6px -3px rgba(10,20,64,.06)}
+.dep-card:nth-child(4){grid-column:2 / span 2}
+.dep-card:nth-child(5){grid-column:4 / span 2}
+.dep-aspas{color:#2E7BE8;margin-bottom:1rem;flex:none}
+.dep-card h3{margin:0 0 .55rem;font-size:clamp(1.05rem,1.4vw,1.18rem);line-height:1.3}
+.dep-card > p{margin:0;font-size:.92rem;line-height:1.55;color:#5A678F}
+.dep-card > .dep-autor{display:flex;flex-direction:column;gap:.1rem;margin:1.1rem 0}
+.dep-autor b{font-size:.92rem;color:#0A1440}
+.dep-autor span{font-size:.8rem;color:#6A7799}
+/* moldura do print: fundo neutro, imagem centralizada e inteira */
+.dep-print{position:relative;margin-top:auto;display:grid;place-items:center;min-height:190px;
+  padding:10px;border-radius:16px;background:#EEF1F6;border:1px solid rgba(14,26,69,.08);
+  cursor:zoom-in;text-decoration:none;transition:transform .3s ease,box-shadow .3s ease}
+.dep-print img{display:block;width:auto;height:auto;max-width:100%;max-height:260px;
+  object-fit:contain;border-radius:10px}
+.dep-print:hover,.dep-print:focus-visible{transform:translateY(-3px);box-shadow:0 18px 34px -24px rgba(10,20,64,.6)}
+.dep-print:focus-visible{outline:3px solid #2E7BE8;outline-offset:3px}
+
+/* vídeo em destaque: texto + capa inteira (contain, proporção do arquivo) */
+.dep-video{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.4fr);align-items:center;
+  gap:clamp(1.5rem,4vw,3.5rem);margin-top:clamp(2.5rem,5vw,4rem);padding:clamp(1.2rem,2.6vw,2.2rem);
+  border-radius:28px;background:#fff;border:1px solid rgba(14,26,69,.09);
+  box-shadow:0 26px 60px -40px rgba(10,20,64,.55)}
+.dep-video-txt{padding-left:clamp(0rem,1.5vw,1rem)}
+.dep-video-txt h3{margin:.9rem 0 .7rem;font-size:clamp(1.4rem,2.4vw,1.9rem);line-height:1.15}
+.dep-video-txt p{margin:0;color:#5A678F;line-height:1.6}
+.dep-video-capa{margin:0;border-radius:20px;overflow:hidden;background:#0A1440;
+  aspect-ratio:1422 / 999;box-shadow:0 24px 50px -30px rgba(10,20,64,.7)}
+.dep-video-capa img,.dep-video-capa video{display:block;width:100%;height:100%;object-fit:contain}
+.dep-video-capa.tem-video{cursor:pointer}
+.dep-video-capa.tem-video:focus-visible{outline:3px solid #2E7BE8;outline-offset:3px}
+
+@media(max-width:959px){
+  .dep-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dep-card,.dep-card:nth-child(4){grid-column:auto}
+  .dep-card:nth-child(5){grid-column:1 / -1;justify-self:center;
+    width:calc((100% - clamp(1rem,2vw,1.5rem)) / 2)}
+  .dep-video{grid-template-columns:minmax(0,1fr)}
+  .dep-video-txt{padding-left:0}
+}
+@media(max-width:600px){
+  .dep-grid{grid-template-columns:minmax(0,1fr)}
+  .dep-card:nth-child(5){width:100%}
+  .dep-print{min-height:0}
+  .dep-video{border-radius:22px}
+}
+@media(prefers-reduced-motion:reduce){.dep-print{transition:none}}
 
 /* numeração do sistema em camadas com as cores dos canais */
 #sistema .layers li:nth-child(1)::before{color:var(--ml-blue)}
@@ -656,9 +1002,12 @@ section.light h2 b{
   color:transparent;-webkit-text-fill-color:transparent}
 @supports not ((background-clip:text) or (-webkit-background-clip:text)){
   section.light h2 b{color:var(--ml-blue);-webkit-text-fill-color:currentColor}}
+/* seção 2: destaque do título em azul da Áquila (as outras claras mantêm o degradê das marcas) */
+#apresentacao h2 b{background:linear-gradient(100deg,#0A1440 0%,#1B3FA8 45%,#2E7BE8 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
 
 /* ===== 15. ANIMAÇÃO ============================================= */
-.reveal{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1);transition-delay:var(--rd,0s)}
 .reveal.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){
   .reveal{opacity:1;transform:none;transition:none}
@@ -697,10 +1046,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 
 
+  <symbol id="medalha" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5.5"/><path d="M8.6 13.4L7 21.5l5-2.6 5 2.6-1.6-8.1"/><path d="M12 6.6l.8 1.6 1.7.2-1.2 1.2.3 1.7-1.6-.8-1.6.8.3-1.7-1.2-1.2 1.7-.2z" fill="currentColor" stroke-width="1"/></g></symbol>
+  <symbol id="aspas" viewBox="0 0 26 20"><path fill="currentColor" d="M0 20V12.2C0 5.6 3.4 1.5 10 0l1.3 2.6C7.6 3.8 5.8 6.1 5.6 9.4H10.5V20H0zm15.5 0V12.2C15.5 5.6 18.9 1.5 25.5 0l1.3 2.6c-3.7 1.2-5.5 3.5-5.7 6.8H26V20H15.5z"/></symbol>
   <symbol id="ck" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="al" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5v6M12 16.6v.1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
   <symbol id="wa" viewBox="0 0 24 24"><path fill="#fff" d="M12.04 2C6.6 2 2.2 6.4 2.2 11.84c0 1.94.52 3.76 1.44 5.32L2 22l4.98-1.6a9.8 9.8 0 0 0 5.06 1.4c5.44 0 9.84-4.4 9.84-9.84S17.48 2 12.04 2m0 17.8c-1.62 0-3.12-.44-4.4-1.2l-.32-.18-2.96.94.96-2.88-.2-.34a8 8 0 0 1-1.26-4.3c0-4.42 3.6-8.02 8.04-8.02s8.02 3.6 8.02 8.02-3.6 8.02-8.02 8.02zm4.52-5.98c-.24-.12-1.46-.72-1.68-.8s-.4-.12-.56.12-.64.8-.78.96-.28.18-.52.06a6.6 6.6 0 0 1-1.94-1.2 7.3 7.3 0 0 1-1.34-1.68c-.14-.24 0-.36.1-.48.12-.12.24-.28.36-.42.12-.14.16-.24.24-.4s.04-.3-.02-.42-.56-1.34-.76-1.84c-.2-.48-.4-.42-.56-.42h-.48c-.16 0-.42.06-.64.3s-.84.82-.84 2 .86 2.32.98 2.48 1.7 2.6 4.12 3.64c.58.25 1.03.4 1.38.51.58.18 1.1.16 1.52.1.46-.07 1.46-.6 1.66-1.18s.2-1.06.14-1.16-.22-.18-.46-.3"/></symbol>
 </defs></svg>
+
+<!-- ============ BARRA PROMOCIONAL ============
+     Troca de campanha: edite os textos aqui. O atributo data-fim esconde a
+     barra sozinho depois dessa data (deixe vazio para nunca esconder). -->
+<aside class="promo" id="promo" aria-label="Campanha Black Áquila" data-fim="2026-11-30T23:59:59-03:00">
+  <div class="wrap">
+    <div class="promo-brand">
+      <!-- as letras ficam separadas para as duas linhas terem a mesma largura -->
+      <p class="promo-title"><span class="sr-only">Black Áquila</span>
+        <span class="l l1" aria-hidden="true"><i>B</i><i>L</i><i>A</i><i>C</i><i>K</i></span>
+        <span class="l l2" aria-hidden="true"><i>Á</i><i>Q</i><i>U</i><i>I</i><i>L</i><i>A</i></span></p>
+    </div>
+    <span class="promo-sep" aria-hidden="true"></span>
+    <p class="promo-text">Condições especiais <em>por tempo limitado</em> para acelerar seus resultados nos marketplaces.</p>
+    <a class="promo-btn" href="#oferta" data-promo-cta>Ver planos e preços
+      <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+</aside>
 
 <!-- ============ HEADER ============ -->
 <header class="nav">
@@ -724,50 +1093,95 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="wrap split">
     <div class="reveal">
       <span class="eyebrow">Para lojistas que vendem em marketplace</span>
-      <h1>Sua loja já vende no marketplace. <b>Falta o lucro acompanhar o faturamento.</b></h1>
-      <p class="lead">Assessoria para donos de loja do varejo que vendem em Mercado Livre, Shopee e Amazon.
-      Cuidamos da margem por produto, do ads, do ranqueamento dos anúncios e do operacional que consome o seu dia —
-      com um especialista no seu WhatsApp.</p>
+      <!-- Carrossel: a 1ª frase é fixa; as frases rotativas são os <b class="rot-item">.
+           <em> marca as palavras em destaque. Tempo de cada frase: data-intervalo (ms). -->
+      <h1>Sua loja já vende no marketplace.
+        <span class="sr-only">Falta o lucro acompanhar o faturamento.</span>
+        <span class="rot" id="heroRot" data-intervalo="4800" aria-hidden="true">
+          <b class="rot-item is-on">Falta o <em>lucro</em> acompanhar o faturamento.</b>
+          <b class="rot-item">Falta uma <em>equipe especializada</em> na sua conta.</b>
+          <b class="rot-item">Falta <em>estratégia</em> para crescer com consistência.</b>
+          <b class="rot-item">Falta ter mais <em>controle</em> sobre suas margens.</b>
+          <b class="rot-item">Falta uma <em>gestão profissional</em> para escalar.</b>
+        </span>
+      </h1>
+      <p class="lead">Assessoria especializada em Mercado Livre, Amazon e Shopee. Cuidamos de Ads, margens,
+      precificação, ranqueamento, catálogo e operação — com acompanhamento próximo pelo WhatsApp.</p>
       <div class="hero-cta">
         <button class="btn" data-form data-cta="hero">Quero minha análise gratuita</button>
         <a class="btn btn-ghost" href="#resultados">Ver resultados reais</a>
       </div>
       <p class="micro">Sem compromisso · Resposta em até 2h úteis · Dados protegidos (LGPD)</p>
-
-      <div class="stats">
-        <div class="stat"><b class="n">+800</b><span>contas de lojistas já gerenciadas pela nossa equipe</span></div>
-        <div class="stat"><b class="n">R$ 10,6 mi</b><span>em vendas nas contas que a nossa equipe atendeu</span></div>
-      </div>
     </div>
 
-    <div class="hero-art reveal" aria-hidden="true">
+    <div class="hero-side reveal">
+    <div class="hero-art" aria-hidden="true">
       <img class="art-mark" src="assets/simbolo-aquila.webp" alt="" width="1097" height="1434">
 
       <img class="peng-photo" src="assets/mascote-aquila.webp" alt=""
            width="1101" height="1428" fetchpriority="high" decoding="async">
 
-      <div class="hero-chip chip-a"><b>▲ 49,3%</b> Mercado Livre</div>
-      <div class="hero-chip chip-b"><b>ACOS</b> sob controle</div>
+      <!-- Notificações de venda. Para trocar: o ícone (img/span), o título,
+           as larguras do texto borrado (--w) e o tempo. Posição/escala no CSS (.ntf-*). -->
+      <div class="ntf ntf-ml">
+        <span class="ntf-ico ntf-ico-ml"></span>
+        <div class="ntf-txt"><b>Você vendeu!</b>
+          <span>Produto: <i class="ntf-blur" style="--w:6.4em"></i></span>
+          <span>R$ <i class="ntf-blur" style="--w:4.4em"></i></span></div>
+        <span class="ntf-time">agora</span>
+      </div>
+      <div class="ntf ntf-amz">
+        <img class="ntf-ico" src="assets/notificacoes/amazon.svg" alt="" width="100" height="100">
+        <div class="ntf-txt"><b>Você vendeu!</b>
+          <span>Produto: <i class="ntf-blur" style="--w:5.8em"></i></span>
+          <span>R$ <i class="ntf-blur" style="--w:5em"></i></span></div>
+        <span class="ntf-time">há 2m</span>
+      </div>
+      <div class="ntf ntf-sp">
+        <img class="ntf-ico" src="assets/notificacoes/shopee.svg" alt="" width="100" height="100">
+        <div class="ntf-txt"><b>Você vendeu!</b>
+          <span>Produto: <i class="ntf-blur" style="--w:6.8em"></i></span>
+          <span>R$ <i class="ntf-blur" style="--w:4em"></i></span></div>
+        <span class="ntf-time">há 5m</span>
+      </div>
+    </div>
 
-      <!-- selos dos canais atendidos (logos oficiais, enquadrados via CSS) -->
-      <div class="mk mk-amz" role="img" aria-label="Amazon"></div>
-      <div class="mk mk-sp" role="img" aria-label="Shopee"></div>
-      <div class="mk mk-ml" role="img" aria-label="Mercado Livre"></div>
+    <!-- prova social -->
+    <div class="hero-stats">
+      <div class="stat-card">
+        <div class="stat-top">
+          <span class="stat-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.8 5.5-4.8s4.9 1.8 5.5 4.8"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.3c2.3.1 4 1.6 4.5 4.2"/></svg></span>
+          <b class="n">+800</b>
+        </div>
+        <p>contas de lojistas já gerenciadas pela nossa equipe</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top">
+          <span class="stat-ico" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V14M10 20v-9M16 20v-5M3 20h18"/><path d="M4 9l5-4 4 3 7-5"/><path d="M16 3h4v4"/></svg></span>
+          <b class="n">R$ 10,6 mi</b>
+        </div>
+        <p>em vendas nas contas que a nossa equipe atendeu</p>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- Faixa de marcas (rodapé do hero). Para incluir/remover uma marca, edite
+       só esta lista; o JS duplica o conjunto para o carrossel ficar contínuo.
+       --h ajusta a altura de cada logo. -->
+  <div class="brands" aria-label="Canais e plataformas com que trabalhamos">
+    <div class="brands-track">
+      <ul class="brands-set">
+        <li class="brand" style="--h:27px"><img src="assets/marcas/amazon.svg" alt="Amazon" width="603" height="182"></li>
+        <li class="brand" style="--h:30px"><img src="assets/marcas/shopee.svg" alt="Shopee" width="1000" height="320"></li>
+        <li class="brand" style="--h:34px"><img src="assets/marcas/mercado-livre.svg" alt="Mercado Livre" width="345" height="136"></li>
+        <li class="brand" style="--h:24px"><img src="assets/marcas/magalu.svg" alt="Magalu" width="490" height="150"></li>
+        <li class="brand" style="--h:36px"><img src="assets/marcas/tiktok-shop.png" alt="TikTok Shop" width="300" height="116"></li>
+        <li class="brand" style="--h:30px"><img src="assets/marcas/bling.svg" alt="Bling" width="103" height="50"></li>
+      </ul>
     </div>
   </div>
 </section>
-
-<!-- marquee de temas -->
-<div class="marquee" aria-hidden="true">
-  <div class="mq-track">
-    <span>Mercado Ads</span><span>Shopee Ads</span><span>Amazon Ads</span><span>Buy Box</span>
-    <span>ACOS e TACOS</span><span>Ranqueamento</span><span>Full e FBA</span><span>Margem por SKU</span>
-    <span>Reputação</span><span>Precificação</span><span>Catálogo</span><span>Giro de estoque</span><span>Concorrência</span>
-    <span>Mercado Ads</span><span>Shopee Ads</span><span>Amazon Ads</span><span>Buy Box</span>
-    <span>ACOS e TACOS</span><span>Ranqueamento</span><span>Full e FBA</span><span>Margem por SKU</span>
-    <span>Reputação</span><span>Precificação</span><span>Catálogo</span><span>Giro de estoque</span><span>Concorrência</span>
-  </div>
-</div>
 
 <!-- faixa branca dos canais -->
 <div class="channels">
@@ -776,7 +1190,89 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </div>
 
-<!-- ============ 2. PARA QUEM É ============ -->
+<!-- ============ 2. APRESENTAÇÃO EM VÍDEO (fundo branco) ============ -->
+<section id="apresentacao" class="light">
+  <div class="wrap">
+    <!-- Vídeo sem animação de entrada (fica estável). O arquivo certo
+         (horizontal ou vertical) é escolhido por JS — ver bloco "Vídeo". -->
+    <figure class="vframe vframe-xl">
+      <div class="vplayer">
+        <video id="vApres" preload="none" playsinline
+               aria-label="Nicolas Tasso explica o método da Áquila em menos de um minuto"
+               poster="assets/video-poster-desktop.jpg"
+               data-desk="assets/video-desktop.mp4"  data-desk-poster="assets/video-poster-desktop.jpg"
+               data-mob="assets/video-mobile.mp4"    data-mob-poster="assets/video-poster-mobile.jpg">
+          <source src="assets/video-desktop.mp4" type="video/mp4">
+          Seu navegador não reproduz vídeo.
+          <a href="assets/video-desktop.mp4">Baixar a apresentação</a>.
+        </video>
+        <button class="vplay" type="button" aria-label="Assistir à apresentação">
+          <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">
+            <path d="M8 5.2v13.6L19 12z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </figure>
+
+    <div class="apres-head">
+      <span class="eyebrow eyebrow-ic reveal"><svg width="15" height="15" aria-hidden="true"><use href="#medalha"/></svg>Sua loja pode ir mais longe</span>
+      <h2 class="reveal" style="--rd:.08s">Sua loja vende, mas você sente que poderia estar <b>faturando muito mais?</b></h2>
+      <p class="lead reveal" style="--rd:.16s">Anúncios sem resultado, preços mal definidos e falta de estratégia
+      podem estar limitando seu crescimento. Descubra como a Áquila ajuda a <strong>destravar sua operação</strong>.</p>
+      <div class="reveal" style="--rd:.24s">
+        <button class="btn" data-form data-cta="apresentacao">Quero minha análise gratuita</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. O PROBLEMA (fundo azul) ============ -->
+<section id="problema">
+  <div class="wrap dor">
+    <div class="dor-txt">
+      <span class="eyebrow eyebrow-ic reveal"><svg width="15" height="15" aria-hidden="true"><use href="#medalha"/></svg>A principal dor do lojista</span>
+      <h2 class="reveal" style="--rd:.08s">O prejuízo raramente aparece na venda. <b>Ele aparece no fechamento do mês.</b></h2>
+      <p class="dor-chamada reveal" style="--rd:.16s"><strong>Quando isso acontece, a loja sente:</strong></p>
+      <p class="dor-final reveal" style="--rd:.24s">Quando esses problemas se acumulam, o faturamento cresce, mas o lucro
+      não acompanha. A Áquila ajuda a identificar e corrigir esses gargalos.</p>
+      <div class="reveal" style="--rd:.32s">
+        <button class="btn-pill" data-form data-cta="problema">Quero aumentar minhas vendas
+          <i aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Carrossel dos problemas: rolagem nativa com snap (arraste no
+         celular, setas no teclado quando focado) + botões anterior/próximo.
+         Para editar, mexa só nos <article class="dc-card">. -->
+    <div class="dc reveal" style="--rd:.2s">
+      <div class="dc-track" id="dcTrack" tabindex="0" role="region" aria-roledescription="carrossel"
+           aria-label="Problemas mais comuns do lojista no marketplace">
+        <article class="dc-card"><div class="dc-top"><span class="dc-ico"><svg viewBox="0 0 24 24"><path d="M19 5L5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></span><span class="dc-n">01</span></div>
+          <h3>Margem comprometida</h3><p>Taxas, frete e Ads consomem o lucro das vendas.</p></article>
+        <article class="dc-card"><div class="dc-top"><span class="dc-ico"><svg viewBox="0 0 24 24"><path d="M3 7l6 6 4-4 8 8"/><path d="M21 11v6h-6"/></svg></span><span class="dc-n">02</span></div>
+          <h3>Ads sem eficiência</h3><p>ACOS e TACOS elevados comprometem o retorno.</p></article>
+        <article class="dc-card"><div class="dc-top"><span class="dc-ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8.5 11h5"/></svg></span><span class="dc-n">03</span></div>
+          <h3>Anúncios sem desempenho</h3><p>Falta de ranqueamento e dificuldade para conquistar a Buy Box.</p></article>
+        <article class="dc-card"><div class="dc-top"><span class="dc-ico"><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg></span><span class="dc-n">04</span></div>
+          <h3>Problemas operacionais</h3><p>Ruptura de estoque, catálogo desorganizado e produtos parados no Full.</p></article>
+        <article class="dc-card"><div class="dc-top"><span class="dc-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg></span><span class="dc-n">05</span></div>
+          <h3>Falta de estratégia</h3><p>Decisões de preço sem dados e excesso de tarefas operacionais.</p></article>
+        <article class="dc-card"><div class="dc-top"><span class="dc-ico"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M12 8v5M12 16v.01"/></svg></span><span class="dc-n">06</span></div>
+          <h3>Conta sob risco</h3><p>Problemas de reputação prejudicam vendas e crescimento.</p></article>
+      </div>
+      <div class="dc-nav">
+        <button type="button" class="dc-btn" data-dir="-1" aria-controls="dcTrack" aria-label="Problema anterior">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button type="button" class="dc-btn" data-dir="1" aria-controls="dcTrack" aria-label="Próximo problema">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ============ 4. PARA QUEM É (fundo branco) ============ -->
 <section id="paraquem" class="light">
   <div class="wrap">
     <div class="pq-top">
@@ -803,59 +1299,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <p class="reveal" style="margin:2rem 0 0;max-width:72ch"><strong>Não faz sentido</strong> se você procura curso,
     fórmula pronta, promessa de faturamento garantido ou não pretende investir nada em anúncio dentro dos canais.</p>
-  </div>
-</section>
-
-<!-- ============ 3. O PROBLEMA ============ -->
-<section id="problema">
-  <div class="wrap split">
-    <div class="reveal">
-      <span class="eyebrow">O problema real do lojista</span>
-      <h2>O prejuízo raramente aparece na venda. <b>Ele aparece no fechamento do mês.</b></h2>
-      <p class="lead">Faturamento subindo e lucro parado é o sintoma mais comum de quem tem loja no marketplace.
-      A causa quase nunca é falta de trabalho — é anúncio mal calibrado, margem desconhecida produto a produto e
-      decisão de preço tomada no achismo.</p>
-
-      <p style="margin-bottom:1.2rem"><strong>Quando isso acontece, a loja sente:</strong></p>
-      <ul class="checks two">
-        <li><svg width="19" height="19"><use href="#al"/></svg>Margem consumida por taxas, frete e ads</li>
-        <li><svg width="19" height="19"><use href="#al"/></svg>ACOS e TACOS altos, verba queimando</li>
-        <li><svg width="19" height="19"><use href="#al"/></svg>Anúncio sem ranquear e sem Buy Box</li>
-        <li><svg width="19" height="19"><use href="#al"/></svg>Reputação e conta sob risco</li>
-        <li><svg width="19" height="19"><use href="#al"/></svg>Ruptura e estoque parado no Full</li>
-        <li><svg width="19" height="19"><use href="#al"/></svg>Nenhuma clareza de qual produto dá lucro</li>
-        <li><svg width="19" height="19"><use href="#al"/></svg>Agência generalista que não entende o canal</li>
-        <li><svg width="19" height="19"><use href="#al"/></svg>Dia inteiro no operacional, zero estratégia</li>
-      </ul>
-
-      <p style="margin-top:1.6rem">Ajustar a conta antes do pico de vendas custa muito menos do que consertar
-      prejuízo depois. Se a sua loja se identifica com dois desses pontos, precisamos conversar.</p>
-      <button class="btn" data-form data-cta="problema">Quero minha análise gratuita</button>
-    </div>
-
-    <!-- Apresentação em vídeo. O arquivo certo (horizontal ou vertical) é
-         escolhido por JS conforme a largura da tela — ver bloco "Vídeo". -->
-    <figure class="vframe reveal">
-      <div class="vplayer">
-        <video id="vApres" preload="none" playsinline
-               poster="assets/video-poster-desktop.jpg"
-               data-desk="assets/video-desktop.mp4"  data-desk-poster="assets/video-poster-desktop.jpg"
-               data-mob="assets/video-mobile.mp4"    data-mob-poster="assets/video-poster-mobile.jpg">
-          <source src="assets/video-desktop.mp4" type="video/mp4">
-          Seu navegador não reproduz vídeo.
-          <a href="assets/video-desktop.mp4">Baixar a apresentação</a>.
-        </video>
-        <button class="vplay" type="button" aria-label="Assistir à apresentação">
-          <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true">
-            <path d="M8 5.2v13.6L19 12z" fill="currentColor"/>
-          </svg>
-        </button>
-      </div>
-      <figcaption>
-        <strong>Como a gente trabalha</strong>
-        <span>Nicolas Tasso explica o método em menos de um minuto</span>
-      </figcaption>
-    </figure>
   </div>
 </section>
 
@@ -920,46 +1363,194 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="wrap">
     <div class="head reveal">
       <span class="eyebrow">Resultados reais</span>
-      <h2>Painéis de lojas que <b>a nossa equipe já gerenciou.</b></h2>
-      <p class="lead">Prints direto do painel de cada canal, comparando o período com o intervalo anterior da
-      mesma loja. O resultado depende de produto, preço e estoque — por isso a análise vem antes da proposta.</p>
+      <h2>Antes e depois de operações que <b>nossa equipe já gerenciou.</b></h2>
+      <p class="lead">Comparativos reais de painéis no Mercado Livre, Shopee e Amazon. Cada operação depende de
+      produto, preço, estoque e estratégia — por isso a análise vem antes da proposta.</p>
     </div>
 
-    <!-- GALERIA DE PRINTS — trocar cada .media pela imagem real do painel.
-         Um print de cada canal: Shopee · Mercado Livre · Amazon -->
-    <div class="grid g3 reveal">
-      <a class="print sp reveal" href="assets/painel-shopee.webp" target="_blank" rel="noopener">
-        <img src="assets/painel-shopee.webp" width="3520" height="1612" loading="lazy" decoding="async"
-             alt="Painel da Shopee no mês: R$ 117.812,98 em vendas e 1.495 pedidos, alta de 413,04% sobre o mês anterior">
-        <span class="mkt sp">Shopee</span>
-        <span class="print-zoom">ampliar</span>
-      </a>
-      <a class="print ml reveal" href="assets/painel-mercado-livre.webp" target="_blank" rel="noopener">
-        <img src="assets/painel-mercado-livre.webp" width="3520" height="2268" loading="lazy" decoding="async"
-             alt="Painel do Mercado Livre: R$ 68.719 em vendas brutas, 1.125 vendas e conversão de 7,7%, com alta de 2.336% sobre o período anterior">
-        <span class="mkt ml">Mercado Livre</span>
-        <span class="print-zoom">ampliar</span>
-      </a>
-      <a class="print az reveal" href="assets/painel-amazon.webp" target="_blank" rel="noopener">
-        <img src="assets/painel-amazon.webp" width="3520" height="1672" loading="lazy" decoding="async"
-             alt="Painel do canal no mês: R$ 642.774,48 em vendas e 737 pedidos, alta de 172,55% sobre o mês anterior">
-        <span class="mkt az">Amazon</span>
-        <span class="print-zoom">ampliar</span>
-      </a>
+    <!-- COMPARATIVOS ANTES/DEPOIS — um bloco por canal (ML · Shopee · Amazon).
+         Para trocar um print: substitua o arquivo em assets/resultados/ (mesmo
+         nome) ou ajuste href + src + alt do .cmp-print. Os prints aparecem
+         inteiros (object-fit:contain) e abrem ampliados no lightbox. -->
+    <div class="casos">
+
+      <article class="caso caso-ml reveal" aria-labelledby="caso-ml">
+        <header class="caso-top">
+          <span class="caso-logo" aria-hidden="true"></span>
+          <div class="caso-id">
+            <h3 id="caso-ml">Mercado Livre</h3>
+            <span class="caso-selo"><svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Caso real · painel do canal</span>
+          </div>
+        </header>
+        <div class="caso-cmp">
+          <figure class="caso-lado">
+            <figcaption><span class="tag-fase antes">Antes</span></figcaption>
+            <a class="cmp-print" data-galeria="resultados" href="assets/resultados/ml-antes.webp" data-canal="Mercado Livre · Antes" target="_blank" rel="noopener">
+              <img src="assets/resultados/ml-antes.webp" width="1800" height="1344" loading="lazy" decoding="async"
+                   alt="Painel do Mercado Livre, antes: R$ 525.283 em vendas brutas, 6.976 unidades vendidas, 3.645 vendas e conversão de 7,6%">
+              <span class="print-zoom" aria-hidden="true">ampliar</span>
+            </a>
+          </figure>
+          <span class="caso-seta" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <figure class="caso-lado">
+            <figcaption><span class="tag-fase depois">Depois</span></figcaption>
+            <a class="cmp-print" data-galeria="resultados" href="assets/resultados/ml-depois.webp" data-canal="Mercado Livre · Depois" target="_blank" rel="noopener">
+              <img src="assets/resultados/ml-depois.webp" width="1800" height="1344" loading="lazy" decoding="async"
+                   alt="Painel do Mercado Livre, depois: R$ 1.106.683 em vendas brutas, 13.129 unidades vendidas, 8.636 vendas e conversão de 8%">
+              <span class="print-zoom" aria-hidden="true">ampliar</span>
+            </a>
+          </figure>
+        </div>
+      </article>
+
+      <article class="caso caso-sp reveal" aria-labelledby="caso-sp">
+        <header class="caso-top">
+          <span class="caso-logo" aria-hidden="true"></span>
+          <div class="caso-id">
+            <h3 id="caso-sp">Shopee</h3>
+            <span class="caso-selo"><svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Caso real · painel do canal</span>
+          </div>
+        </header>
+        <div class="caso-cmp">
+          <figure class="caso-lado">
+            <figcaption><span class="tag-fase antes">Antes</span></figcaption>
+            <a class="cmp-print" data-galeria="resultados" href="assets/resultados/shopee-antes.webp" data-canal="Shopee · Antes" target="_blank" rel="noopener">
+              <img src="assets/resultados/shopee-antes.webp" width="1800" height="1344" loading="lazy" decoding="async"
+                   alt="Painel da Shopee, antes (fevereiro de 2025): R$ 11.020,91 em vendas e 145 pedidos no mês">
+              <span class="print-zoom" aria-hidden="true">ampliar</span>
+            </a>
+          </figure>
+          <span class="caso-seta" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <figure class="caso-lado">
+            <figcaption><span class="tag-fase depois">Depois</span></figcaption>
+            <a class="cmp-print" data-galeria="resultados" href="assets/resultados/shopee-depois.webp" data-canal="Shopee · Depois" target="_blank" rel="noopener">
+              <img src="assets/resultados/shopee-depois.webp" width="1800" height="1344" loading="lazy" decoding="async"
+                   alt="Painel da Shopee, depois (julho de 2025): R$ 132.381,73 em vendas e 1.540 pedidos no mês">
+              <span class="print-zoom" aria-hidden="true">ampliar</span>
+            </a>
+          </figure>
+        </div>
+      </article>
+
+      <article class="caso caso-az reveal" aria-labelledby="caso-az">
+        <header class="caso-top">
+          <span class="caso-logo" aria-hidden="true"></span>
+          <div class="caso-id">
+            <h3 id="caso-az">Amazon</h3>
+            <span class="caso-selo"><svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>Caso real · painel do canal</span>
+          </div>
+        </header>
+        <div class="caso-cmp">
+          <figure class="caso-lado">
+            <figcaption><span class="tag-fase antes">Antes</span></figcaption>
+            <a class="cmp-print" data-galeria="resultados" href="assets/resultados/amazon-antes.webp" data-canal="Amazon · Antes" target="_blank" rel="noopener">
+              <img src="assets/resultados/amazon-antes.webp" width="1800" height="1344" loading="lazy" decoding="async"
+                   alt="Painel da Amazon, antes (julho de 2025): R$ 4.994,83 em vendas de produtos e 48 unidades pedidas">
+              <span class="print-zoom" aria-hidden="true">ampliar</span>
+            </a>
+          </figure>
+          <span class="caso-seta" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <figure class="caso-lado">
+            <figcaption><span class="tag-fase depois">Depois</span></figcaption>
+            <a class="cmp-print" data-galeria="resultados" href="assets/resultados/amazon-depois.webp" data-canal="Amazon · Depois" target="_blank" rel="noopener">
+              <img src="assets/resultados/amazon-depois.webp" width="1800" height="1344" loading="lazy" decoding="async"
+                   alt="Painel da Amazon, depois (agosto de 2025): R$ 9.812,53 em vendas de produtos e 104 unidades pedidas">
+              <span class="print-zoom" aria-hidden="true">ampliar</span>
+            </a>
+          </figure>
+        </div>
+      </article>
+
     </div>
   </div>
 
-  <!-- depoimentos em marquee -->
-  <div class="marquee slow" style="margin-top:clamp(2.5rem,5vw,4rem);padding:1.6rem 0">
-    <div class="mq-track" style="gap:1.2rem">
-      <blockquote class="quote"><p>“Nossas vendas estão indo cada dia melhor. Vocês são preciosos!!”</p><cite>Operação de marketplace</cite></blockquote>
-      <blockquote class="quote"><p>“Depois de muito tempo, fizemos 50 envios e tivemos 50 vendas no mesmo dia.”</p><cite>Loja de auto peças · Goiânia</cite></blockquote>
-      <blockquote class="quote"><p>“Em menos de 15 dias trabalhando ativos no Mercado Livre, batemos mais de R$ 20 mil de faturamento.”</p><cite>Seller no Mercado Livre</cite></blockquote>
-      <blockquote class="quote"><p>“1 mês de operação e +30% de aumento nas vendas vs. o mesmo período do mês passado. Nosso principal concorrente teve queda de 6%.”</p><cite>Operação de marketplace</cite></blockquote>
-      <blockquote class="quote"><p>“Nossas vendas estão indo cada dia melhor. Vocês são preciosos!!”</p><cite>Operação de marketplace</cite></blockquote>
-      <blockquote class="quote"><p>“Depois de muito tempo, fizemos 50 envios e tivemos 50 vendas no mesmo dia.”</p><cite>Loja de auto peças · Goiânia</cite></blockquote>
-      <blockquote class="quote"><p>“Em menos de 15 dias trabalhando ativos no Mercado Livre, batemos mais de R$ 20 mil de faturamento.”</p><cite>Seller no Mercado Livre</cite></blockquote>
-      <blockquote class="quote"><p>“1 mês de operação e +30% de aumento nas vendas vs. o mesmo período do mês passado. Nosso principal concorrente teve queda de 6%.”</p><cite>Operação de marketplace</cite></blockquote>
+  <!-- ===== DEPOIMENTOS REAIS (2ª parte da prova social) =====
+       Cada card = aspas + título + texto + cliente/categoria + print real da
+       conversa (inteiro, object-fit:contain, abre ampliado no lightbox).
+       Para trocar um print: substitua o arquivo em assets/depoimentos/ e
+       ajuste width/height do <img> para o tamanho do novo arquivo. -->
+  <div class="wrap depo" id="depoimentos">
+    <div class="head reveal">
+      <span class="eyebrow">Depoimentos reais</span>
+      <h2>O que os nossos clientes dizem <b>sobre a operação.</b></h2>
+      <p class="lead">Mensagens reais e resultados reais de quem confiou na Áquila para crescer dentro dos marketplaces.</p>
+    </div>
+
+    <div class="dep-grid">
+      <article class="dep-card reveal">
+        <svg class="dep-aspas" width="26" height="20" viewBox="0 0 26 20" aria-hidden="true"><use href="#aspas"/></svg>
+        <h3>Nossas vendas estão melhorando a cada dia</h3>
+        <p>Cliente relatando evolução constante nas vendas e satisfação com o suporte da equipe.</p>
+        <p class="dep-autor"><b>Cliente</b><span>Operação de marketplace</span></p>
+        <a class="dep-print" href="assets/depoimentos/depoimento-1.webp" data-galeria="depoimentos" data-canal="Depoimento real" target="_blank" rel="noopener">
+          <img src="assets/depoimentos/depoimento-1.webp" width="760" height="384" loading="lazy" decoding="async"
+               alt="Print de conversa no WhatsApp: “Tbm já avisando. Nossas vendas estão indo cada dia melhor. Time!!! Vcs são preciosos!!”">
+          <span class="print-zoom" aria-hidden="true">ampliar</span>
+        </a>
+      </article>
+
+      <article class="dep-card reveal" style="--rd:.08s">
+        <svg class="dep-aspas" width="26" height="20" viewBox="0 0 26 20" aria-hidden="true"><use href="#aspas"/></svg>
+        <h3>Obrigado por todo o suporte, vocês são demais</h3>
+        <p>Feedback espontâneo destacando o suporte recebido e o avanço dos resultados.</p>
+        <p class="dep-autor"><b>Cliente</b><span>Operação de marketplace</span></p>
+        <a class="dep-print" href="assets/depoimentos/depoimento-2.webp" data-galeria="depoimentos" data-canal="Depoimento real" target="_blank" rel="noopener">
+          <img src="assets/depoimentos/depoimento-2.webp" width="336" height="195" loading="lazy" decoding="async"
+               alt="Print de conversa no WhatsApp: “Oooo gente kkkk. Obrigado por todo suporte, vocês são demais. Vamos dobra essa meta aí. Obrigado mesmo”">
+          <span class="print-zoom" aria-hidden="true">ampliar</span>
+        </a>
+      </article>
+
+      <article class="dep-card reveal" style="--rd:.16s">
+        <svg class="dep-aspas" width="26" height="20" viewBox="0 0 26 20" aria-hidden="true"><use href="#aspas"/></svg>
+        <h3>50 envios e 50 vendas no mesmo dia</h3>
+        <p>Cliente comemorando retomada de performance e aumento de volume nos envios.</p>
+        <p class="dep-autor"><b>Cliente</b><span>Loja de autopeças · Goiânia</span></p>
+        <a class="dep-print" href="assets/depoimentos/depoimento-3.webp" data-galeria="depoimentos" data-canal="Depoimento real" target="_blank" rel="noopener">
+          <img src="assets/depoimentos/depoimento-3.webp" width="760" height="252" loading="lazy" decoding="async"
+               alt="Print de conversa no WhatsApp: “queria agradecer a todos pela atenção, ontem depois de muito tempo fizemos 50 envios, hoje tmb tivemos 50 vendas, mas com 3 cancelamentos”">
+          <span class="print-zoom" aria-hidden="true">ampliar</span>
+        </a>
+      </article>
+
+      <article class="dep-card reveal">
+        <svg class="dep-aspas" width="26" height="20" viewBox="0 0 26 20" aria-hidden="true"><use href="#aspas"/></svg>
+        <h3>Mais de R$ 20 mil em menos de 15 dias</h3>
+        <p>Relato de crescimento rápido após o início do trabalho ativo no Mercado Livre.</p>
+        <p class="dep-autor"><b>Cliente</b><span>Mercado Livre</span></p>
+        <a class="dep-print" href="assets/depoimentos/depoimento-4.webp" data-galeria="depoimentos" data-canal="Depoimento real" target="_blank" rel="noopener">
+          <img src="assets/depoimentos/depoimento-4.webp" width="570" height="104" loading="lazy" decoding="async"
+               alt="Print de mensagem: “Boa tarde pessoal, quero ressaltar aqui a importância que está sendo esse suporte que estamos recebendo de vcs, estamos muito satisfeito por em menos de 15 dias que estamos trabalhando ativos realmente no mercado livre batemos até momento mais de 20 mil de faturamento, obrigado por esse suporte e vamos ainda mais longe”">
+          <span class="print-zoom" aria-hidden="true">ampliar</span>
+        </a>
+      </article>
+
+      <article class="dep-card reveal" style="--rd:.08s">
+        <svg class="dep-aspas" width="26" height="20" viewBox="0 0 26 20" aria-hidden="true"><use href="#aspas"/></svg>
+        <h3>+30% nas vendas em relação ao mês anterior</h3>
+        <p>Cliente comparando a evolução da operação com o mês passado e com o principal concorrente.</p>
+        <p class="dep-autor"><b>Cliente</b><span>Operação de marketplace</span></p>
+        <a class="dep-print" href="assets/depoimentos/depoimento-5.webp" data-galeria="depoimentos" data-canal="Depoimento real" target="_blank" rel="noopener">
+          <img src="assets/depoimentos/depoimento-5.webp" width="940" height="302" loading="lazy" decoding="async"
+               alt="Print de conversa no WhatsApp: “1 mês de operação e +30% de aumento nas vendas em relação ao mesmo período do mês passado. Números a se aplaudir, pois consideramos que estamos sem full, diferente do mês passado e o principal concorrente com uma queda de 6% no mesmo período”">
+          <span class="print-zoom" aria-hidden="true">ampliar</span>
+        </a>
+      </article>
+    </div>
+
+    <!-- VÍDEO EM DESTAQUE — por enquanto só a capa. Quando o vídeo estiver
+         no projeto, preencha data-video com o caminho (ex.: assets/depoimento-saas.mp4):
+         a capa vira clicável e o vídeo toca no mesmo lugar, sem outra mudança. -->
+    <div class="dep-video reveal">
+      <div class="dep-video-txt">
+        <span class="eyebrow">Depoimento em vídeo</span>
+        <h3>Veja um depoimento em vídeo</h3>
+        <p>Um relato direto de quem viveu a experiência de construir um projeto com o acompanhamento da Áquila.</p>
+      </div>
+      <figure class="dep-video-capa" data-video="">
+        <img src="assets/depoimentos/capa-video-saas.webp" width="1422" height="999" loading="lazy" decoding="async"
+             alt="Capa do depoimento em vídeo “Da ideia ao SaaS”: um relato real sobre o desenvolvimento de um sistema">
+      </figure>
     </div>
   </div>
 </section>
@@ -1175,13 +1766,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- lightbox dos prints de painel -->
 <dialog class="lb" id="lightbox" aria-label="Print do painel ampliado">
   <button class="lb-btn lb-x" type="button" data-lb="fechar" aria-label="Fechar">&#10005;</button>
-  <button class="lb-btn lb-nav lb-prev" type="button" data-lb="anterior" aria-label="Case anterior">&#8249;</button>
+  <button class="lb-btn lb-nav lb-prev" type="button" data-lb="anterior" aria-label="Print anterior">&#8249;</button>
   <figure class="lb-fig">
     <img id="lbImg" src="" alt="">
     <!-- a legenda repete o alt da imagem, entao fica fora da arvore de acessibilidade -->
     <figcaption aria-hidden="true"><span class="lb-canal" id="lbCanal"></span><span id="lbCap"></span></figcaption>
   </figure>
-  <button class="lb-btn lb-nav lb-next" type="button" data-lb="proximo" aria-label="Próximo case">&#8250;</button>
+  <button class="lb-btn lb-nav lb-next" type="button" data-lb="proximo" aria-label="Próximo print">&#8250;</button>
 </dialog>
 
 <!-- modal do formulário -->
@@ -1277,6 +1868,17 @@ function rastreia(ev,dados){
   try{ if(typeof gtag==='function') gtag('event',ev,dados||{}); }catch(e){}
   try{ window.dataLayer=window.dataLayer||[]; window.dataLayer.push(Object.assign({event:ev},dados||{})); }catch(e){}
 }
+
+/* ===== Barra promocional ======================================= */
+(function(){
+  const promo = document.getElementById('promo');
+  if(!promo) return;
+  const fim = promo.dataset.fim ? new Date(promo.dataset.fim).getTime() : 0;
+  if(fim && Date.now() > fim){ promo.hidden = true; return; }
+  // o scroll suave vem do CSS (html{scroll-behavior:smooth}); aqui só mede o clique
+  const cta = promo.querySelector('[data-promo-cta]');
+  if(cta) cta.addEventListener('click',()=>rastreia('ClickPromoBar',{origem:'promo-bar'}));
+})();
 
 /* ===== Modal do formulário ===================================== */
 const modal = document.getElementById('modal');
@@ -1487,35 +2089,69 @@ function enviar(){
   ['pause','ended','emptied'].forEach(e => v.addEventListener(e, () => leve(false)));
 })();
 
-/* ===== Lightbox dos prints de painel ===========================
-   Os cards continuam sendo links para o arquivo: se o JS não rodar,
-   o print abre em nova aba como antes. */
+/* ===== Carrossel dos problemas (seção 3) =======================
+   A rolagem é nativa (arraste no celular, setas do teclado com o foco
+   no carrossel). Aqui só entram os botões e o estado de início/fim. */
+(() => {
+  const track = document.getElementById('dcTrack');
+  if(!track) return;
+  // marca d'água: cópia grande do ícone de cada card
+  track.querySelectorAll('.dc-card').forEach(card => {
+    const ico = card.querySelector('.dc-ico svg');
+    if(!ico) return;
+    const bg = document.createElement('span');
+    bg.className = 'dc-bg'; bg.setAttribute('aria-hidden','true');
+    bg.appendChild(ico.cloneNode(true));
+    card.appendChild(bg);
+  });
+  const btns = document.querySelectorAll('.dc-btn');
+  const passo = () => {
+    const card = track.querySelector('.dc-card');
+    return card ? card.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 16) : track.clientWidth;
+  };
+  btns.forEach(b => b.addEventListener('click', () => {
+    track.scrollBy({left: passo() * Number(b.dataset.dir), behavior: 'smooth'});
+  }));
+  const estado = () => {
+    const max = track.scrollWidth - track.clientWidth - 2;
+    btns.forEach(b => { b.disabled = b.dataset.dir === '-1' ? track.scrollLeft <= 2 : track.scrollLeft >= max; });
+    track.classList.toggle('no-fim', track.scrollLeft >= max);   // tira o esmaecido da borda no último card
+  };
+  track.addEventListener('scroll', estado, {passive: true});
+  window.addEventListener('resize', estado);
+  estado();
+})();
+
+/* ===== Lightbox dos prints (painéis e depoimentos) ==============
+   Todo link com data-galeria abre aqui; as setas percorrem só os itens
+   da mesma galeria. Os cards continuam sendo links para o arquivo: se o
+   JS não rodar, o print abre em nova aba. */
 (() => {
   const lb = document.getElementById('lightbox');
-  const cards = [...document.querySelectorAll('.print')];
-  if(!lb || !cards.length || typeof lb.showModal !== 'function') return;
+  const todos = [...document.querySelectorAll('[data-galeria]')];
+  if(!lb || !todos.length || typeof lb.showModal !== 'function') return;
 
   const img   = document.getElementById('lbImg');
   const canal = document.getElementById('lbCanal');
   const cap   = document.getElementById('lbCap');
   const prev  = lb.querySelector('[data-lb="anterior"]');
   const next  = lb.querySelector('[data-lb="proximo"]');
-  let i = 0;
+  let cards = todos, i = 0;
 
   const mostrar = (n) => {
     i = (n + cards.length) % cards.length;
     const card = cards[i], foto = card.querySelector('img');
     img.src = card.getAttribute('href');
     img.alt = foto ? foto.alt : '';
-    canal.textContent = (card.querySelector('.mkt') || {}).textContent || '';
+    canal.textContent = card.dataset.canal || '';
     cap.textContent = foto ? foto.alt : '';
   };
 
-  if(cards.length < 2){ prev.hidden = next.hidden = true; }
-
-  cards.forEach((card, n) => card.addEventListener('click', (e) => {
+  todos.forEach((card) => card.addEventListener('click', (e) => {
     e.preventDefault();
-    mostrar(n);
+    cards = todos.filter((c) => c.dataset.galeria === card.dataset.galeria);
+    prev.hidden = next.hidden = cards.length < 2;
+    mostrar(cards.indexOf(card));
     lb.showModal();
     document.body.style.overflow = 'hidden';
   }));
@@ -1529,6 +2165,74 @@ function enviar(){
     if(e.key === 'ArrowLeft'){  e.preventDefault(); mostrar(i - 1); }
     if(e.key === 'ArrowRight'){ e.preventDefault(); mostrar(i + 1); }
   });
+})();
+
+/* ===== Vídeo do depoimento ======================================
+   Enquanto data-video estiver vazio, fica só a capa (sem clique).
+   Com o caminho preenchido, a capa vira botão e o vídeo toca no lugar. */
+(() => {
+  document.querySelectorAll('.dep-video-capa').forEach((fig) => {
+    const src = (fig.dataset.video || '').trim();
+    const capa = fig.querySelector('img');
+    if(!src || !capa) return;
+    fig.classList.add('tem-video');
+    fig.setAttribute('role', 'button');
+    fig.setAttribute('tabindex', '0');
+    fig.setAttribute('aria-label', 'Assistir ao depoimento em vídeo');
+    const tocar = () => {
+      const v = document.createElement('video');
+      v.src = src; v.poster = capa.src; v.controls = true; v.playsInline = true;
+      v.setAttribute('aria-label', capa.alt);
+      fig.replaceChildren(v);
+      fig.classList.remove('tem-video');
+      fig.removeAttribute('role'); fig.removeAttribute('tabindex'); fig.removeAttribute('aria-label');
+      v.play().catch(() => {});
+      if(typeof rastreia === 'function') rastreia('PlayVideoDepoimento', {video: src});
+    };
+    fig.addEventListener('click', tocar, {once: true});
+    fig.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); tocar(); }
+    });
+  });
+})();
+
+/* ===== Hero: altura da 1ª dobra e faixa de marcas ============== */
+(function(){
+  const hero = document.getElementById('topo');
+  const promo = document.getElementById('promo');
+  // desconta a barra promocional da altura do hero (0 quando ela some)
+  function mede(){ hero.style.setProperty('--promo-h', (promo && !promo.hidden ? promo.offsetHeight : 0) + 'px'); }
+  mede();
+  if('ResizeObserver' in window && promo) new ResizeObserver(mede).observe(promo);
+  else window.addEventListener('resize', mede);
+
+  // repete o conjunto de marcas até cobrir telas largas; o CSS anima -50%
+  const track = hero.querySelector('.brands-track');
+  const set = track && track.querySelector('.brands-set');
+  if(set){
+    for(let k=0;k<3;k++){
+      const c = set.cloneNode(true);
+      c.setAttribute('aria-hidden','true');
+      c.querySelectorAll('img').forEach(im=>im.alt='');
+      track.appendChild(c);
+    }
+  }
+})();
+
+/* ===== Carrossel do título do hero ============================= */
+(function(){
+  const rot = document.getElementById('heroRot');
+  if(!rot) return;
+  const itens = rot.querySelectorAll('.rot-item');
+  const semMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(itens.length < 2 || semMovimento) return; // sem animação: fica na 1ª frase
+  let i = 0;
+  setInterval(()=>{
+    if(document.hidden) return;              // não troca com a aba em segundo plano
+    itens[i].classList.remove('is-on');
+    i = (i + 1) % itens.length;
+    itens[i].classList.add('is-on');
+  }, Number(rot.dataset.intervalo) || 4800);
 })();
 
 /* ===== Animação de entrada ===================================== */
