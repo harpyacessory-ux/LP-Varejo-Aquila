@@ -132,7 +132,7 @@ section{position:relative;padding:clamp(4rem,8vw,7.5rem) 0}
 .head.mid p{margin-inline:auto}
 .grid{display:grid;gap:1.1rem}
 @media(min-width:700px){.g2{grid-template-columns:1fr 1fr}}
-@media(min-width:960px){.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:960px){.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}.g2{grid-template-columns:repeat(2,1fr)}}
 .split{display:grid;gap:clamp(2rem,4vw,4rem);align-items:center}
 @media(min-width:960px){.split{grid-template-columns:1.05fr .95fr}}
 
@@ -191,11 +191,6 @@ body.tocando .brands-track{animation-play-state:paused}
 .ilustra{display:block;width:100%;max-width:640px;height:auto;margin-inline:auto;
   filter:drop-shadow(0 28px 44px rgba(2,5,20,.45))}
 section.light .ilustra{filter:drop-shadow(0 26px 40px rgba(14,26,69,.18))}
-/* no bloco de camadas a arte e vertical e sobe ate a altura do cabecalho */
-#sistema .ilustra{max-width:470px}
-@media(min-width:960px){
-  #sistema .ilustra{align-self:start;margin-top:calc(-1 * clamp(5rem,12vw,11rem))}
-}
 
 /* selo "ampliar" sobre os prints de painel (seção Resultados) */
 .print-zoom{position:absolute;right:.7rem;bottom:.7rem;z-index:2;font-size:.68rem;
@@ -766,13 +761,18 @@ section.light .card::after{content:"";position:absolute;top:0;left:0;right:0;hei
 .pq-foto{display:block;height:clamp(200px,44vw,270px);width:auto;
   margin:.4rem -1rem -.6rem auto;pointer-events:none}
 @media(min-width:960px){
-  .pq-top{min-height:clamp(380px,38vw,520px)}
+  .pq-top{--sobe:clamp(0px,4.2vw,64px);min-height:calc(clamp(380px,38vw,520px) - var(--sobe))}
   .pq-top .head{max-width:min(52%,56ch)}
   .pq-foto{position:absolute;right:0;bottom:0;margin:0;
-    height:calc(100% + clamp(1.5rem,3vw,3rem));max-width:46%;object-fit:contain;
+    height:calc(clamp(380px,38vw,520px) + clamp(1.5rem,3vw,3rem));bottom:calc(-1 * var(--sobe));max-width:46%;object-fit:contain;
     object-position:bottom right}
 }
 
+/* cards mais compactos (altura igual pelo grid) e acima da base esfumada da foto */
+#paraquem .grid{position:relative;z-index:1}
+#paraquem .card{padding:clamp(1rem,1.6vw,1.3rem) clamp(1.1rem,1.8vw,1.4rem)}
+#paraquem .card .pill{margin-bottom:.45rem}
+#paraquem .card h3{margin-bottom:.3rem}
 #paraquem .card:nth-child(1){--mk:var(--ml-yellow)}
 #paraquem .card:nth-child(2){--mk:var(--shopee)}
 #paraquem .card:nth-child(3){--mk:var(--amz-orange)}
@@ -988,11 +988,301 @@ section.light .vframe .vplayer{
 }
 @media(prefers-reduced-motion:reduce){.dep-print{transition:none}}
 
-/* numeração do sistema em camadas com as cores dos canais */
-#sistema .layers li:nth-child(1)::before{color:var(--ml-blue)}
-#sistema .layers li:nth-child(2)::before{color:var(--shopee)}
-#sistema .layers li:nth-child(3)::before{color:#C9A200}
-#sistema .layers li:nth-child(4)::before{color:var(--amz-orange)}
+/* ===== PARA QUEM É: carrossel de categorias (por etapas) =========
+   Faixa azul-marinho com cápsulas. Com JS (.js) o trilho anda por
+   transform, centralizando a cápsula ativa; sem JS vira rolagem lateral. */
+.cats{margin-top:clamp(2rem,4vw,3rem);padding:clamp(1.3rem,2.6vw,1.8rem) clamp(.6rem,1.6vw,1.1rem);
+  border-radius:24px;color:#16234F;border:1px solid rgba(27,63,168,.12);
+  background:linear-gradient(180deg,#FFFFFF 0%,#F6F9FF 100%);
+  box-shadow:0 22px 44px -36px rgba(10,20,64,.5)}
+.cats .cats-tit{margin:0 0 .6rem;padding:0 1rem;text-align:center;color:#0A1440;
+  font-size:clamp(1.05rem,1.8vw,1.3rem);line-height:1.3}
+.cats .cats-tit b{background:linear-gradient(95deg,#1F6FE0 0%,#7B3FD0 52%,#EE6A1C 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.cats .cats-sub{margin:0 auto .9rem;padding:0 1rem;max-width:74ch;text-align:center;color:#5A678F;font-size:clamp(.88rem,1.2vw,.98rem);line-height:1.55}
+.cats-faixa{position:relative;display:flex;align-items:center;gap:.5rem}
+.cats-seta{flex:none;z-index:2;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;
+  cursor:pointer;color:#1B3FA8;background:#fff;border:1px solid rgba(27,63,168,.2);
+  box-shadow:0 6px 14px -8px rgba(10,20,64,.35);
+  transition:background .2s ease,border-color .2s ease}
+.cats-seta:hover{background:#EEF4FF;border-color:rgba(46,123,232,.55)}
+.cats-seta:focus-visible{outline:2px solid #2E7BE8;outline-offset:2px}
+.cats-seta svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.cats-janela{flex:1;min-width:0;overflow-x:auto;scrollbar-width:none;user-select:none;-webkit-user-select:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 92%,transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 92%,transparent 100%)}
+.cats-janela::-webkit-scrollbar{display:none}
+.cats-janela:focus-visible{outline:2px solid #6FA8F5;outline-offset:3px;border-radius:14px}
+.cats-trilho{list-style:none;margin:0;padding:.85rem 0;display:flex;gap:.45rem;width:max-content}
+.cat button{display:inline-flex;align-items:center;gap:.42rem;white-space:nowrap;cursor:pointer;
+  padding:.5rem .82rem .5rem .66rem;border-radius:999px;font:500 .8rem/1 var(--f-text);
+  color:#16306E;background:#fff;border:1px solid rgba(46,123,232,.28);
+  box-shadow:0 2px 6px -3px rgba(10,20,64,.18);
+  transition:background-color .4s ease,border-color .4s ease,box-shadow .4s ease,color .4s ease}
+.cat button:hover{border-color:rgba(46,123,232,.6)}
+.cat button:focus-visible{outline:2px solid #2E7BE8;outline-offset:2px}
+.cat svg{flex:none;width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round}
+.cat.ativa button{background:#fff;border-color:rgba(123,63,208,.5);
+  box-shadow:0 0 0 3px rgba(123,63,208,.08),0 6px 18px -6px rgba(123,63,208,.4)}
+.cat.ativa button span{background:linear-gradient(95deg,#1F6FE0 0%,#7B3FD0 55%,#EE6A1C 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.cat.ativa svg{stroke:url(#gradCat)}
+.cats.js .cats-janela{overflow:hidden;touch-action:pan-y;cursor:grab}
+.cats.js .cats-janela.arrastando{cursor:grabbing}
+.cats.js .cats-trilho{transition:transform .4s cubic-bezier(.25,.8,.25,1);will-change:transform}
+.cats.sem-trans .cats-trilho,.cats.sem-trans .cat button{transition:none}
+.cats:not(.js) .cats-seta{display:none}
+/* celular: setas sobre as bordas esfumadas, para sobrar espaço às cápsulas */
+@media(max-width:600px){
+  .cats{border-radius:20px;padding-inline:.4rem}
+  .cats-seta{position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;
+    background:rgba(255,255,255,.94)}
+  .cats-seta[data-dir="-1"]{left:0}.cats-seta[data-dir="1"]{right:0}
+  .cats-janela{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 13%,#000 87%,transparent 100%);
+            mask-image:linear-gradient(90deg,transparent 0,#000 13%,#000 87%,transparent 100%)}
+  .cat button{font-size:.75rem;gap:.35rem;padding:.46rem .7rem .46rem .56rem}
+  .cat svg{width:14px;height:14px}
+}
+@media(prefers-reduced-motion:reduce){.cats.js .cats-trilho,.cat button,.cats-seta{transition:none}}
+
+/* Método: cards 2x2 (60%) + ilustração 3D (40%), centralizada na vertical */
+.metodo-row{display:grid;gap:clamp(1.5rem,3vw,2.5rem);align-items:center}
+.metodo-ilustra{display:block;width:auto;max-width:100%;max-height:clamp(300px,34vw,440px);height:auto;margin-inline:auto;
+  filter:drop-shadow(0 26px 40px rgba(2,5,20,.45))}
+@media(min-width:960px){.metodo-row{grid-template-columns:57fr 43fr}
+  .metodo-ilustra{max-height:clamp(440px,44vw,600px);margin-block:calc(-1 * clamp(20px,4.5vw,65px))}}
+
+/* ===== SISTEMA: interface interativa das 5 camadas ===============
+   Abas à esquerda; cada painel = demonstração (centro) + texto (direita).
+   Painéis empilhados na mesma célula: altura estável na troca.
+   As animações só rodam com .play (posto pelo JS ao ativar a aba). */
+.sx{display:grid;grid-template-columns:minmax(220px,23fr) minmax(0,77fr);
+  gap:clamp(1.2rem,2.4vw,2.2rem);align-items:center}
+.sx-nav{position:relative;display:flex;flex-direction:column;gap:.6rem}
+.sx-tab{display:flex;align-items:center;gap:.75rem;width:100%;padding:.7rem 1rem .7rem .7rem;
+  border-radius:999px;border:1px solid rgba(14,26,69,.12);background:#fff;color:#16234F;
+  font:600 .9rem/1.25 var(--f-display);text-align:left;cursor:pointer;
+  box-shadow:0 8px 20px -16px rgba(10,20,64,.5);
+  transition:border-color .3s ease,box-shadow .3s ease,transform .3s ease}
+.sx-tab:hover{border-color:rgba(46,123,232,.45);background:#F5F8FF;transform:translateX(2px)}
+.sx-tab:focus-visible{outline:3px solid #2E7BE8;outline-offset:3px}
+.sx-ic{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;
+  background:rgba(27,63,168,.08);color:#1B3FA8}
+.sx-ic svg,.sx-seta{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+.sx-nome{flex:1;min-width:0}
+.sx-seta{flex:none;width:16px;height:16px;opacity:.4;transition:transform .3s ease,opacity .3s ease}
+.sx-tab.ativo{background:linear-gradient(135deg,#1B3FA8,#2E7BE8);color:#fff;border-color:transparent;
+  box-shadow:0 16px 30px -16px rgba(27,63,168,.75)}
+.sx-tab.ativo .sx-ic{background:rgba(255,255,255,.18);color:#fff}
+.sx-tab.ativo .sx-seta{opacity:1;transform:translateX(3px)}
+.sx-tab.ativo:hover{transform:none}
+
+.sx-paineis{display:grid;min-width:0}
+.sx-painel{grid-area:1/1;display:grid;grid-template-columns:minmax(0,39fr) minmax(0,38fr);
+  gap:clamp(1.4rem,3vw,2.8rem);align-items:center;min-width:0;
+  opacity:0;visibility:hidden;transform:translateY(8px);
+  transition:opacity .4s ease,transform .4s ease,visibility 0s linear .4s}
+.sx-painel.ativo{opacity:1;visibility:visible;transform:none;
+  transition:opacity .4s ease,transform .4s ease,visibility 0s}
+.sx-painel:focus-visible{outline:3px solid #2E7BE8;outline-offset:6px;border-radius:26px}
+
+/* texto da camada (direita) */
+.sx-num{display:block;font:700 .74rem/1 var(--f-display);letter-spacing:.14em;text-transform:uppercase;color:#1B3FA8}
+.sx-num em{font-style:normal;color:#8A96B8}
+.sx-pilha{display:flex;gap:5px;margin:.85rem 0 1.15rem}
+.sx-pilha i{width:26px;height:5px;border-radius:3px;background:rgba(14,26,69,.12)}
+.sx-pilha i.on{background:linear-gradient(90deg,#1B3FA8,#2E7BE8)}
+.sx-info h3{font-size:clamp(1.35rem,2.2vw,1.8rem);line-height:1.15;margin:0 0 .8rem}
+.sx-info p{margin:0;color:#5A678F;font-size:clamp(.98rem,1.2vw,1.06rem);line-height:1.65}
+
+/* moldura comum das demonstrações (centro) */
+.sx-demo{position:relative;overflow:hidden;isolation:isolate;align-self:stretch;min-height:410px;display:flex;flex-direction:column;
+  gap:.95rem;padding:clamp(1.1rem,2vw,1.45rem);border-radius:24px;color:#16234F;font-family:var(--f-text);
+  background:linear-gradient(170deg,#FFFFFF 0%,#F5F8FF 100%);border:1px solid rgba(14,26,69,.1);
+  box-shadow:0 30px 60px -42px rgba(10,20,64,.6),0 2px 6px -3px rgba(10,20,64,.06)}
+.sx-demo::before{content:"";position:absolute;z-index:-1;right:-25%;top:-35%;width:70%;aspect-ratio:1;
+  border-radius:50%;background:radial-gradient(closest-side,rgba(46,123,232,.13),transparent);pointer-events:none}
+.sx-demo-top{display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
+.sx-demo-tit{font:700 .7rem/1.2 var(--f-display);letter-spacing:.16em;text-transform:uppercase;color:#3A4874}
+.sx-ex{font-size:.64rem;font-weight:600;color:#1B3FA8;background:rgba(27,63,168,.07);
+  border:1px solid rgba(27,63,168,.16);border-radius:999px;padding:.2rem .55rem;white-space:nowrap}
+.sx-chips{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+
+/* 1 · margem por produto */
+.mg-lista{list-style:none;margin:0;padding:0;flex:1;display:flex;flex-direction:column;justify-content:center;gap:.65rem}
+.mg{padding:.75rem .85rem;border-radius:14px;background:#fff;border:1px solid rgba(14,26,69,.08)}
+.mg.pos{--c:#1E9E5A;--cbg:rgba(30,158,90,.1)}
+.mg.med{--c:#2E7BE8;--cbg:rgba(46,123,232,.1)}
+.mg.neg{--c:#D93A3A;--cbg:rgba(217,58,58,.1);background:#FFF8F8;border-color:rgba(217,58,58,.28)}
+.mg-lin{display:flex;align-items:center;gap:.5rem;margin-bottom:.55rem;min-width:0}
+.mg-nome{font-weight:700;font-size:.86rem;white-space:nowrap}
+.mg-tag{display:inline-flex;align-items:center;gap:.25rem;font-size:.66rem;font-weight:600;color:var(--c);
+  background:var(--cbg);border-radius:999px;padding:.16rem .5rem;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.mg-tag svg{flex:none;width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.mg-lin b{margin-left:auto;font:700 1rem/1 var(--f-display);color:var(--c);font-variant-numeric:tabular-nums}
+.mg-trilho{display:block;height:8px;border-radius:5px;background:rgba(14,26,69,.07);overflow:hidden}
+.mg-trilho i{display:block;height:100%;width:var(--w);border-radius:inherit;background:var(--c);transform-origin:left}
+.mg-comp{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+.mg-comp::before{content:"Entra no cálculo:";font-size:.66rem;font-weight:700;color:#3A4874;margin-right:.1rem}
+.mg-comp span,.cc-chips span,.ad-canais span{font-size:.65rem;font-weight:600;border-radius:999px;padding:.2rem .55rem}
+.mg-comp span{color:#3A4874;background:rgba(14,26,69,.06)}
+
+/* 2 · concorrência */
+.cc-graf{flex:1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;min-height:215px}
+.cc-col{display:grid;grid-template-rows:1fr auto;gap:.5rem;min-width:0}
+.cc-trilho{display:flex;align-items:flex-end;justify-content:center;padding-top:1.6rem;
+  border-bottom:1px solid rgba(14,26,69,.14)}
+.cc-barra{position:relative;width:min(100%,58px);height:var(--h);border-radius:10px 10px 3px 3px;
+  background:linear-gradient(180deg,#CBD5EC,#E4EAF7)}
+.cc-preco{position:absolute;left:50%;bottom:calc(100% + .35rem);transform:translateX(-50%);
+  font:700 .68rem/1 var(--f-display);color:#3A4874;white-space:nowrap}
+.cc-nome{font-size:.68rem;font-weight:600;color:#5A678F;text-align:center;line-height:1.2}
+.cc-col.eu .cc-barra{background:linear-gradient(180deg,#3D8BF0,#1B3FA8);box-shadow:0 12px 26px -12px rgba(46,123,232,.85)}
+.cc-col.eu .cc-preco,.cc-col.eu .cc-nome{color:#1B3FA8;font-weight:700}
+.cc-leg{display:flex;flex-wrap:wrap;gap:.35rem 1rem;font-size:.66rem;color:#5A678F}
+.cc-leg span{display:inline-flex;align-items:center;gap:.35rem}
+.cc-q{width:10px;height:10px;border-radius:3px;background:#CBD5EC}
+.cc-q.eu{background:#2E7BE8}
+.cc-chips{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+.cc-chips::before,.ad-canais::before{font-size:.66rem;font-weight:700;color:#3A4874;margin-right:.1rem}
+.cc-chips::before{content:"Comparamos:"}
+.cc-chips span{color:#1B3FA8;background:rgba(46,123,232,.08)}
+
+/* 3 · anúncio otimizado */
+.an-campo{padding:.85rem .95rem;border-radius:14px;background:#fff;border:1px solid rgba(46,123,232,.35);
+  box-shadow:0 0 0 4px rgba(46,123,232,.07)}
+.an-rot{display:block;font-size:.66rem;font-weight:600;color:#5A678F;margin-bottom:.35rem}
+.an-titulo{margin:0;min-height:2.8em;font:600 .95rem/1.4 var(--f-display);color:#0A1440}
+.an-cursor{display:inline-block;width:2px;height:1.05em;margin-left:2px;vertical-align:-.15em;
+  background:#2E7BE8;animation:sxPisca 1s steps(1) infinite}
+.an-prog-top{display:flex;justify-content:space-between;gap:.5rem;font-size:.78rem;color:#3A4874;margin-bottom:.45rem}
+.an-prog-top b{font-family:var(--f-display);color:#0A1440;font-variant-numeric:tabular-nums}
+.an-trilho{display:block;height:8px;border-radius:5px;background:rgba(14,26,69,.07);overflow:hidden}
+.an-trilho i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#1B3FA8,#2E7BE8);transform-origin:left}
+.an-checks{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.4rem}
+.an-checks li{display:inline-flex;align-items:center;gap:.3rem;font-size:.7rem;font-weight:600;color:#1E7A48;
+  background:rgba(30,158,90,.1);border-radius:999px;padding:.24rem .6rem .24rem .4rem}
+.an-checks li::before{content:"";width:13px;height:13px;border-radius:50%;
+  background:#1E9E5A url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.2 4.2L19 7' fill='none' stroke='white' stroke-width='3.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/9px no-repeat}
+.an-ok{margin-top:auto;display:flex;align-items:center;gap:.55rem;padding:.7rem .9rem;border-radius:12px;
+  background:rgba(30,158,90,.08);border:1px solid rgba(30,158,90,.25);color:#1E7A48;font:700 .82rem/1 var(--f-display)}
+.an-ok svg,.op-status svg{flex:none;border-radius:50%;background:#1E9E5A;fill:none;stroke:#fff;
+  stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+.an-ok svg{width:20px;height:20px;padding:3px}
+
+/* 4 · ads */
+.ad-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem}
+.ad-kpis span{padding:.6rem .7rem;border-radius:12px;background:#fff;border:1px solid rgba(14,26,69,.08);min-width:0}
+.ad-kpis small{display:block;font-size:.62rem;color:#5A678F;margin-bottom:.3rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ad-kpis b{font:700 1.05rem/1 var(--f-display);color:#0A1440;font-variant-numeric:tabular-nums}
+.ad-lista{list-style:none;margin:0;padding:0;flex:1;display:flex;flex-direction:column;justify-content:center;gap:.7rem}
+.ad{padding:.55rem .7rem;border-radius:14px;border:1px solid transparent}
+.ad.top{background:rgba(46,123,232,.06);border-color:rgba(46,123,232,.22)}
+.ad-lin{display:flex;align-items:center;gap:.45rem;font-size:.78rem;font-weight:600;color:#16234F;margin-bottom:.4rem;min-width:0}
+.ad-lin>span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.ad-selo{flex:none;font-style:normal;font-size:.6rem;font-weight:700;color:#fff;background:#1E9E5A;border-radius:999px;padding:.15rem .45rem}
+.ad-acos{flex:none;margin-left:auto;font-size:.68rem;font-weight:700;color:#1B3FA8;background:rgba(46,123,232,.1);
+  border-radius:6px;padding:.15rem .4rem;white-space:nowrap}
+.ad-acos.ok{color:#1E7A48;background:rgba(30,158,90,.12)}
+.ad-acos.alto{color:#B42D2D;background:rgba(217,58,58,.1)}
+.ad-trilho{display:flex;align-items:center;gap:.5rem}
+.ad-trilho i{flex:none;display:block;height:10px;width:calc(var(--w) * .72);border-radius:6px;
+  background:linear-gradient(90deg,#8FB2EE,#B9CEF4);transform-origin:left}
+.ad.top .ad-trilho i{background:linear-gradient(90deg,#1B3FA8,#2E7BE8)}
+.ad-trilho small{font-size:.66rem;color:#5A678F;white-space:nowrap}
+.ad-canais{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+.ad-canais::before{content:"Canais:"}
+.ad-canais span{color:#3A4874;background:rgba(14,26,69,.06)}
+
+/* 5 · controle operacional */
+.op-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem}
+.op-card{display:flex;flex-direction:column;gap:.3rem;min-width:0;padding:.7rem .8rem;border-radius:14px;
+  background:#fff;border:1px solid rgba(14,26,69,.08)}
+.op-card small,.op-mini,.op-graf-top small{font-size:.65rem;color:#5A678F}
+.op-card b{font:700 1.12rem/1 var(--f-display);color:#0A1440;font-variant-numeric:tabular-nums}
+.op-termo{display:flex;gap:3px;margin-top:.15rem}
+.op-termo i{flex:1;height:6px;border-radius:3px;opacity:.28}
+.op-termo i:nth-child(1){background:#D93A3A}.op-termo i:nth-child(2){background:#F08A24}
+.op-termo i:nth-child(3){background:#F2C230}.op-termo i:nth-child(4){background:#9BD26B}
+.op-termo i:nth-child(5){background:#1E9E5A}
+.op-termo i.on{opacity:1;box-shadow:0 0 0 2px rgba(30,158,90,.22)}
+.op-trilho{display:block;height:6px;margin-top:.15rem;border-radius:3px;background:rgba(14,26,69,.07);overflow:hidden}
+.op-trilho i{display:block;height:100%;width:98%;border-radius:inherit;background:#1E9E5A;transform-origin:left}
+.op-graf{flex:1;display:flex;flex-direction:column;min-height:118px;padding:.7rem .8rem;border-radius:14px;
+  background:#fff;border:1px solid rgba(14,26,69,.08)}
+.op-graf-top{display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap;margin-bottom:.4rem}
+.op-status{display:inline-flex;align-items:center;gap:.3rem;font-size:.66rem;font-weight:700;color:#1E7A48;
+  background:rgba(30,158,90,.1);border-radius:999px;padding:.2rem .55rem .2rem .25rem}
+.op-status svg{width:15px;height:15px;padding:2px}
+.op-linha{display:block;flex:1;width:100%;height:70px;min-height:56px}
+.op-area{fill:rgba(46,123,232,.1)}
+.op-traco{fill:none;stroke:#2E7BE8;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1}
+
+/* animações (só no painel ativo, reiniciadas a cada troca) */
+@keyframes sxX{from{transform:scaleX(0)}}
+@keyframes sxAltura{from{height:0}}
+@keyframes sxSobe{from{opacity:0;transform:translateY(10px)}}
+@keyframes sxFade{from{opacity:0}}
+@keyframes sxPop{0%{opacity:0;transform:scale(.6)}70%{opacity:1;transform:scale(1.06)}100%{opacity:1;transform:none}}
+@keyframes sxPisca{50%{opacity:0}}
+@keyframes sxTraco{from{stroke-dashoffset:1}}
+@keyframes sxAlerta{50%{box-shadow:0 0 0 4px rgba(217,58,58,.16)}}
+@keyframes sxBrilho{50%{box-shadow:0 0 0 5px rgba(46,123,232,.24),0 12px 26px -12px rgba(46,123,232,.85)}}
+@keyframes sxConclui{40%{border-color:rgba(30,158,90,.5);box-shadow:0 0 0 5px rgba(30,158,90,.16),0 30px 60px -42px rgba(10,20,64,.6)}}
+.sx-painel.play .sx-info>*{animation:sxSobe .5s ease both}
+.sx-painel.play .sx-info>:nth-child(2){animation-delay:.05s}
+.sx-painel.play .sx-info>:nth-child(3){animation-delay:.1s}
+.sx-painel.play .sx-info>:nth-child(4){animation-delay:.16s}
+.sx-painel.play .mg{animation:sxSobe .45s var(--d) ease both}
+.sx-painel.play .mg-trilho i{animation:sxX .9s calc(var(--d) + .1s) cubic-bezier(.2,.8,.2,1) both}
+.sx-painel.play .mg.neg{animation:sxSobe .45s var(--d) ease both,sxAlerta 1.3s 1.3s ease-in-out 2}
+.sx-painel.play .cc-barra{animation:sxAltura .9s var(--d) cubic-bezier(.2,.8,.2,1) both}
+.sx-painel.play .cc-preco{animation:sxFade .35s calc(var(--d) + .75s) both}
+.sx-painel.play .cc-col.eu .cc-barra{animation:sxAltura .9s var(--d) cubic-bezier(.2,.8,.2,1) both,sxBrilho 1.5s 1.3s ease-in-out 2}
+.sx-painel.play .an-trilho i{animation:sxX .8s 1.7s cubic-bezier(.2,.8,.2,1) both}
+.sx-painel.play .an-checks li{animation:sxPop .35s var(--d) both}
+.sx-painel.play .an-ok{animation:sxPop .4s 2.6s both}
+.sx-painel.play#sx-p3 .sx-demo{animation:sxConclui 1.2s 2.6s ease-out}
+.sx-painel.play .ad-kpis span{animation:sxSobe .45s var(--d) ease both}
+.sx-painel.play .ad-trilho i{animation:sxX .9s var(--d) cubic-bezier(.2,.8,.2,1) both}
+.sx-painel.play .ad-trilho small{animation:sxFade .3s calc(var(--d) + .7s) both}
+.sx-painel.play .ad-selo{animation:sxPop .4s 1.4s both}
+.sx-painel.play .op-card{animation:sxSobe .45s var(--d) ease both}
+.sx-painel.play .op-trilho i{animation:sxX .9s .6s cubic-bezier(.2,.8,.2,1) both}
+.sx-painel.play .op-termo i.on{animation:sxPop .4s .7s both}
+.sx-painel.play .op-traco{animation:sxTraco 1.2s .5s ease-out both}
+.sx-painel.play .op-area{animation:sxFade .6s 1.3s both}
+.sx-painel.play .op-status{animation:sxPop .4s 1.6s both}
+/* parado até a seção entrar na tela; pausado quando sai */
+.sx.espera .sx-painel *,.sx.espera .sx-demo,.sx.fora .sx-painel *,.sx.fora .sx-demo{animation-play-state:paused}
+
+/* tablet: abas à esquerda, demonstração em cima do texto */
+@media(max-width:1099px){
+  .sx{grid-template-columns:minmax(200px,30%) minmax(0,1fr);align-items:start}
+  .sx-painel{grid-template-columns:minmax(0,1fr);align-items:start;gap:1.4rem}
+  .sx-demo{min-height:390px}
+}
+/* celular: abas viram uma faixa rolável por toque acima do painel */
+@media(max-width:759px){
+  .sx{grid-template-columns:minmax(0,1fr);gap:1.2rem}
+  .sx-nav{flex-direction:row;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;
+    gap:.5rem;margin-inline:-1.25rem;padding:.3rem 1.25rem .5rem;scroll-padding-inline:1.25rem}
+  .sx-nav::-webkit-scrollbar{display:none}
+  .sx-tab{flex:none;width:auto;scroll-snap-align:start;white-space:nowrap;
+    padding:.55rem .95rem .55rem .5rem;font-size:.84rem;gap:.55rem}
+  .sx-tab:hover{transform:none}
+  .sx-ic{width:30px;height:30px}
+  .sx-seta{display:none}
+  .sx-demo{min-height:0}
+  .sx-pilha{margin:.7rem 0 .9rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .sx-painel,.sx-tab,.sx-ic,.sx-seta{transition:none}
+  .sx-painel .sx-demo,.sx-painel .sx-demo *,.sx-painel .sx-info>*{animation:none !important}
+  .an-cursor{display:none}
+}
 
 
 /* títulos em degradê com as cores dos canais (só nas seções claras) */
@@ -1041,6 +1331,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- SVGs reutilizáveis: logo, mascote e ícones -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gradCat" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1F6FE0"/><stop offset=".5" stop-color="#7B3FD0"/><stop offset="1" stop-color="#EE6A1C"/></linearGradient>
   <!-- O simbolo da marca nao fica aqui: e o arquivo oficial
        assets/simbolo-aquila.webp, usado via <img class="mark"> -->
 
@@ -1278,23 +1569,54 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="pq-top">
       <div class="head reveal">
         <span class="eyebrow">Para quem é</span>
-        <h2>Feito para <b>dono de loja do varejo que vende dentro do marketplace.</b></h2>
-        <p class="lead">Se a sua loja já tem produto, estoque e fornecedor, o trabalho começa no primeiro dia.
-        Atendemos de quem está começando do zero a quem já passa de R$ 100 mil por mês no canal.</p>
+        <h2>Feito para <b>quem vende nos marketplaces.</b></h2>
+        <p class="lead">Do primeiro anúncio a operações acima de R$ 100 mil por mês. Estratégia para cada fase do seu negócio.</p>
       </div>
       <img class="pq-foto" src="assets/lojista-apontando.webp" alt=""
            width="1166" height="1349" loading="lazy" decoding="async">
     </div>
 
     <div class="grid g4 reveal">
-      <div class="card"><span class="pill">Perfil 01</span><h3>Loja física que migrou para o online</h3>
-        <p>Você conhece a margem no balcão, mas no marketplace o preço, a taxa e o frete embaralham a conta.</p></div>
+      <div class="card"><span class="pill">Perfil 01</span><h3>Loja física que migrou para online</h3>
+        <p>Adapte preços, taxas e frete para vender com lucro no digital.</p></div>
       <div class="card"><span class="pill">Perfil 02</span><h3>Loja que vive do marketplace</h3>
-        <p>Todo o faturamento depende do canal. Qualquer oscilação de ACOS, ranqueamento ou reputação bate direto no caixa.</p></div>
+        <p>Mais controle sobre anúncios, reputação e rentabilidade.</p></div>
       <div class="card"><span class="pill">Perfil 03</span><h3>Revenda e distribuição</h3>
-        <p>Catálogo grande, muitos produtos e guerra de preço. O desafio é descobrir onde está o lucro de verdade.</p></div>
+        <p>Gerencie seu catálogo e descubra onde está o lucro.</p></div>
       <div class="card"><span class="pill">Perfil 04</span><h3>Marca própria</h3>
-        <p>Produto seu, ficha sua. Aqui o ganho vem de ranqueamento, conteúdo de anúncio e defesa de preço.</p></div>
+        <p>Ganhe visibilidade, ranqueamento e competitividade nos marketplaces.</p></div>
+    </div>
+
+    <!-- CARROSSEL DE CATEGORIAS — avança uma cápsula a cada 3,5 s (por
+         etapas, não esteira). Setas, arraste, toque, clique e teclado.
+         Para editar: mexa só nos <li class="cat"> abaixo; o JS cria as
+         cópias do loop. Sem JS, vira uma faixa com rolagem lateral. -->
+    <div class="cats reveal" data-cats>
+      <h3 class="cats-tit">Cada segmento tem seus desafios. <b>Nossa estratégia acompanha.</b></h3>
+      <p class="cats-sub">Adaptamos a gestão à realidade de cada negócio: produtos, concorrência, margens e oportunidades nos marketplaces.</p>
+      <div class="cats-faixa">
+        <button class="cats-seta" type="button" data-dir="-1" aria-label="Categoria anterior">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="cats-janela" tabindex="0" role="region" aria-roledescription="carrossel"
+             aria-label="Categorias atendidas. Use as setas do teclado para navegar.">
+          <ul class="cats-trilho">
+            <li class="cat"><button type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></svg><span>Casa e Decoração</span></button></li>
+            <li class="cat"><button type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 3.5L3 6.5l2 4.5 3-1.3V21h8V9.7l3 1.3 2-4.5-5.5-3c-.5 1.6-2 2.7-3.5 2.7S9 5.1 8.5 3.5z"/></svg><span>Moda e Acessórios</span></button></li>
+            <li class="cat"><button type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3l1.8 5.2L18 10l-5.2 1.8L11 17l-1.8-5.2L4 10l5.2-1.8z"/><path d="M18.5 14.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg><span>Beleza e Cosméticos</span></button></li>
+            <li class="cat"><button type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M11 18.2h2"/></svg><span>Eletrônicos</span></button></li>
+            <li class="cat"><button type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5V12l2.1-5a2 2 0 0 1 1.8-1.2h8.2a2 2 0 0 1 1.8 1.2L20 12v4.5"/><path d="M3.5 12h17"/><path d="M4 16.5h16"/><circle cx="7.5" cy="16.8" r="1.9"/><circle cx="16.5" cy="16.8" r="1.9"/></svg><span>Autopeças e Motos</span></button></li>
+            <li class="cat"><button type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12.5c-2.6 0-5 2.7-5 5 0 1.6 1.3 2.5 2.8 2.5.9 0 1.5-.4 2.2-.4s1.3.4 2.2.4c1.5 0 2.8-.9 2.8-2.5 0-2.3-2.4-5-5-5z"/><circle cx="5.5" cy="10" r="1.8"/><circle cx="9.3" cy="5.8" r="1.8"/><circle cx="14.7" cy="5.8" r="1.8"/><circle cx="18.5" cy="10" r="1.8"/></svg><span>Pet Shop</span></button></li>
+            <li class="cat"><button type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12.5" r="8.5"/><path d="M9.2 15.3c1.6 1.2 4 1.2 5.6 0"/><path d="M9 11h.01M15 11h.01"/><path d="M12 4c1.4.9 1.4 2.6 0 3.4"/></svg><span>Bebês e Infantil</span></button></li>
+            <li class="cat"><button type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5v11M3.5 9v6M17.5 6.5v11M20.5 9v6M6.5 12h11"/></svg><span>Esportes e Fitness</span></button></li>
+            <li class="cat"><button type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5.5" y="2.5" width="13" height="19" rx="2"/><path d="M5.5 10h13M9 6v1.8M9 13v3"/></svg><span>Eletrodomésticos</span></button></li>
+            <li class="cat"><button type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>Informática e Games</span></button></li>
+            <li class="cat"><button type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><span>Ferramentas</span></button></li>
+            <li class="cat"><button type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg><span>Papelaria e Presentes</span></button></li>
+          </ul>
+        </div>
+        <button class="cats-seta" type="button" data-dir="1" aria-label="Próxima categoria">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
     </div>
 
     <p class="reveal" style="margin:2rem 0 0;max-width:72ch"><strong>Não faz sentido</strong> se você procura curso,
@@ -1313,22 +1635,203 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </div>
 
-  <div class="wrap split" style="margin-top:clamp(2rem,4vw,3rem)">
-    <ol class="layers reveal">
-      <li><div><h3>Margem real produto a produto</h3><p>Antes de qualquer campanha: custo de compra, taxa do canal, frete,
-      devolução e imposto. É esse número que define quanto o seu anúncio pode pagar por venda.</p></div></li>
-      <li><div><h3>Leitura da concorrência</h3><p>Quem está na sua frente, com qual preço, qual ficha e qual
-      volume. Replicamos o que funciona no canal e atacamos onde o concorrente está fraco.</p></div></li>
-      <li><div><h3>Anúncio otimizado e ranqueado</h3><p>Título, ficha técnica, imagem, variações e preço
-      trabalhados para posição orgânica — o que reduz a dependência de ads no médio prazo.</p></div></li>
-      <li><div><h3>Ads calibrado pela sua margem</h3><p>Verba concentrada no produto que dá lucro, ACOS e TACOS
-      monitorados por campanha. Product Ads, Mercado Ads, Shopee Ads, Amazon Ads, Google e Meta.</p></div></li>
-      <li><div><h3>Rotina da conta sob controle</h3><p>Reputação, perguntas, estoque no Full e prazos
-      acompanhados de perto, com painel de vendas e margem atualizado. A loja escala sem consumir o seu dia.</p></div></li>
-    </ol>
+  <!-- INTERFACE INTERATIVA DAS 5 CAMADAS
+       Esquerda: abas (role=tablist). Cada aba controla um painel com a
+       demonstração (centro) e o texto original da camada (direita).
+       Os 5 painéis ficam empilhados na mesma célula do grid: a altura é a do
+       maior e não muda na troca. Números das demonstrações são de EXEMPLO.
+       A ilustração antiga (assets/ilustracao-camadas.webp) segue no projeto. -->
+  <div class="wrap" style="margin-top:clamp(2rem,4vw,3rem)">
+    <div class="sx reveal" data-sx>
 
-    <img class="ilustra reveal" src="assets/ilustracao-camadas.webp" alt=""
-         width="1086" height="1448" loading="lazy" decoding="async">
+      <div class="sx-nav" role="tablist" aria-label="Camadas do sistema Áquila">
+        <button class="sx-tab ativo" type="button" role="tab" id="sx-t1" aria-controls="sx-p1" aria-selected="true">
+          <span class="sx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-7 7"/><circle cx="9" cy="9" r="1.2"/><circle cx="15" cy="15" r="1.2"/></svg></span>
+          <span class="sx-nome">Margem real por produto</span>
+          <svg class="sx-seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <button class="sx-tab" type="button" role="tab" id="sx-t2" aria-controls="sx-p2" aria-selected="false" tabindex="-1">
+          <span class="sx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M6.5 17v-6M11.5 17V6M16.5 17v-4"/><path d="M19 4l1.5 1.5"/></svg></span>
+          <span class="sx-nome">Leitura da concorrência</span>
+          <svg class="sx-seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <button class="sx-tab" type="button" role="tab" id="sx-t3" aria-controls="sx-p3" aria-selected="false" tabindex="-1">
+          <span class="sx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M8 8h8M8 12h8M8 16h4.5"/></svg></span>
+          <span class="sx-nome">Anúncio otimizado</span>
+          <svg class="sx-seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <button class="sx-tab" type="button" role="tab" id="sx-t4" aria-controls="sx-p4" aria-selected="false" tabindex="-1">
+          <span class="sx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10v4h4l6 4.5v-13L7 10H3z"/><path d="M16.5 9a4.2 4.2 0 010 6M19 6.5a7.8 7.8 0 010 11"/></svg></span>
+          <span class="sx-nome">Ads calibrado pela margem</span>
+          <svg class="sx-seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <button class="sx-tab" type="button" role="tab" id="sx-t5" aria-controls="sx-p5" aria-selected="false" tabindex="-1">
+          <span class="sx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span>
+          <span class="sx-nome">Rotina da conta</span>
+          <svg class="sx-seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+
+      <div class="sx-paineis">
+
+        <!-- 1 · MARGEM -->
+        <div class="sx-painel ativo" role="tabpanel" id="sx-p1" aria-labelledby="sx-t1" tabindex="0">
+          <div class="sx-demo" aria-hidden="true">
+            <div class="sx-demo-top"><span class="sx-demo-tit">Margem por produto</span><span class="sx-ex">Exemplo ilustrativo</span></div>
+            <ul class="mg-lista">
+              <li class="mg pos" style="--d:.15s">
+                <div class="mg-lin"><span class="mg-nome">Produto A</span><span class="mg-tag">Margem saudável</span><b data-n="24" data-pre="+" data-suf="%" data-delay="150">+24%</b></div>
+                <span class="mg-trilho"><i style="--w:82%"></i></span>
+              </li>
+              <li class="mg med" style="--d:.35s">
+                <div class="mg-lin"><span class="mg-nome">Produto B</span><span class="mg-tag">Margem apertada</span><b data-n="6" data-pre="+" data-suf="%" data-delay="350">+6%</b></div>
+                <span class="mg-trilho"><i style="--w:34%"></i></span>
+              </li>
+              <li class="mg neg" style="--d:.55s">
+                <div class="mg-lin"><span class="mg-nome">Produto C</span><span class="mg-tag"><svg viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17v.01"/></svg>Margem negativa</span><b data-n="-8" data-suf="%" data-delay="550">−8%</b></div>
+                <span class="mg-trilho"><i style="--w:22%"></i></span>
+              </li>
+            </ul>
+            <div class="mg-comp">
+              <span>Custo</span><span>Taxa do canal</span><span>Frete</span><span>Devolução</span><span>Imposto</span>
+            </div>
+          </div>
+          <div class="sx-info">
+            <span class="sx-num">Camada 01 <em>de 05</em></span>
+            <span class="sx-pilha" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span>
+            <h3>Margem real produto a produto</h3>
+            <p>Antes de qualquer campanha: custo de compra, taxa do canal, frete, devolução e imposto. É esse número
+            que define quanto o seu anúncio pode pagar por venda.</p>
+          </div>
+        </div>
+
+        <!-- 2 · CONCORRÊNCIA -->
+        <div class="sx-painel" role="tabpanel" id="sx-p2" aria-labelledby="sx-t2" tabindex="0">
+          <div class="sx-demo" aria-hidden="true">
+            <div class="sx-demo-top"><span class="sx-demo-tit">Análise de concorrência</span><span class="sx-ex">Exemplo ilustrativo</span></div>
+            <div class="cc-graf">
+              <div class="cc-col" style="--h:58%;--d:.1s"><span class="cc-trilho"><span class="cc-barra"><span class="cc-preco">R$ 94,90</span></span></span><span class="cc-nome">Concorrente A</span></div>
+              <div class="cc-col" style="--h:74%;--d:.22s"><span class="cc-trilho"><span class="cc-barra"><span class="cc-preco">R$ 99,90</span></span></span><span class="cc-nome">Concorrente B</span></div>
+              <div class="cc-col eu" style="--h:90%;--d:.34s"><span class="cc-trilho"><span class="cc-barra"><span class="cc-preco">R$ 89,90</span></span></span><span class="cc-nome">Sua loja</span></div>
+              <div class="cc-col" style="--h:42%;--d:.46s"><span class="cc-trilho"><span class="cc-barra"><span class="cc-preco">R$ 104,90</span></span></span><span class="cc-nome">Concorrente C</span></div>
+            </div>
+            <div class="cc-leg">
+              <span><i class="cc-q"></i>Altura: força do anúncio no canal</span>
+              <span><i class="cc-q eu"></i>Sua loja</span>
+            </div>
+            <div class="cc-chips"><span>Preço</span><span>Ficha técnica</span><span>Volume</span><span>Posicionamento</span></div>
+          </div>
+          <div class="sx-info">
+            <span class="sx-num">Camada 02 <em>de 05</em></span>
+            <span class="sx-pilha" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span>
+            <h3>Leitura da concorrência</h3>
+            <p>Quem está na sua frente, com qual preço, qual ficha e qual volume. Replicamos o que funciona no canal e
+            atacamos onde o concorrente está fraco.</p>
+          </div>
+        </div>
+
+        <!-- 3 · ANÚNCIO -->
+        <div class="sx-painel" role="tabpanel" id="sx-p3" aria-labelledby="sx-t3" tabindex="0">
+          <div class="sx-demo" aria-hidden="true">
+            <div class="sx-demo-top"><span class="sx-demo-tit">Anúncio otimizado</span><span class="sx-ex">Exemplo ilustrativo</span></div>
+            <div class="an-campo">
+              <span class="an-rot">Título do anúncio</span>
+              <p class="an-titulo"><span data-digita>Fone de Ouvido Bluetooth 5.3 sem Fio com Cancelamento de Ruído</span><i class="an-cursor"></i></p>
+            </div>
+            <div class="an-prog">
+              <div class="an-prog-top"><span>Atributos da ficha técnica</span><b data-n="38" data-suf="/38" data-delay="1700" data-dur="800">38/38</b></div>
+              <span class="an-trilho"><i></i></span>
+            </div>
+            <ul class="an-checks">
+              <li style="--d:2.0s">Título</li><li style="--d:2.1s">Ficha técnica</li><li style="--d:2.2s">Imagens</li>
+              <li style="--d:2.3s">Variações</li><li style="--d:2.4s">Preço</li>
+            </ul>
+            <div class="an-ok"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Otimização concluída</div>
+          </div>
+          <div class="sx-info">
+            <span class="sx-num">Camada 03 <em>de 05</em></span>
+            <span class="sx-pilha" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span>
+            <h3>Anúncio otimizado e ranqueado</h3>
+            <p>Título, ficha técnica, imagem, variações e preço trabalhados para posição orgânica — o que reduz a
+            dependência de ads no médio prazo.</p>
+          </div>
+        </div>
+
+        <!-- 4 · ADS -->
+        <div class="sx-painel" role="tabpanel" id="sx-p4" aria-labelledby="sx-t4" tabindex="0">
+          <div class="sx-demo" aria-hidden="true">
+            <div class="sx-demo-top"><span class="sx-demo-tit">Gestão estratégica de ads</span><span class="sx-ex">Exemplo ilustrativo</span></div>
+            <div class="ad-kpis">
+              <span style="--d:.1s"><small>ACOS</small><b data-n="11.2" data-dec="1" data-suf="%" data-delay="100">11,2%</b></span>
+              <span style="--d:.2s"><small>TACOS</small><b data-n="5.4" data-dec="1" data-suf="%" data-delay="200">5,4%</b></span>
+              <span style="--d:.3s"><small>Verba na curva A</small><b data-n="60" data-suf="%" data-delay="300">60%</b></span>
+            </div>
+            <ul class="ad-lista">
+              <li class="ad top" style="--w:100%;--d:.35s">
+                <div class="ad-lin"><span>Curva A · alta margem</span><em class="ad-selo">Mais eficiente</em><b class="ad-acos ok">ACOS 8%</b></div>
+                <span class="ad-trilho"><i></i><small>60% da verba</small></span>
+              </li>
+              <li class="ad" style="--w:47%;--d:.55s">
+                <div class="ad-lin"><span>Curva B · giro médio</span><b class="ad-acos">ACOS 13%</b></div>
+                <span class="ad-trilho"><i></i><small>28%</small></span>
+              </li>
+              <li class="ad" style="--w:20%;--d:.75s">
+                <div class="ad-lin"><span>Curva C · teste</span><b class="ad-acos alto">ACOS 21%</b></div>
+                <span class="ad-trilho"><i></i><small>12%</small></span>
+              </li>
+            </ul>
+            <div class="ad-canais"><span>Product Ads</span><span>Mercado Ads</span><span>Shopee Ads</span><span>Amazon Ads</span><span>Google</span><span>Meta</span></div>
+          </div>
+          <div class="sx-info">
+            <span class="sx-num">Camada 04 <em>de 05</em></span>
+            <span class="sx-pilha" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span>
+            <h3>Ads calibrado pela sua margem</h3>
+            <p>Verba concentrada no produto que dá lucro, ACOS e TACOS monitorados por campanha. Product Ads, Mercado
+            Ads, Shopee Ads, Amazon Ads, Google e Meta.</p>
+          </div>
+        </div>
+
+        <!-- 5 · ROTINA -->
+        <div class="sx-painel" role="tabpanel" id="sx-p5" aria-labelledby="sx-t5" tabindex="0">
+          <div class="sx-demo" aria-hidden="true">
+            <div class="sx-demo-top"><span class="sx-demo-tit">Controle operacional</span><span class="sx-ex">Exemplo ilustrativo</span></div>
+            <div class="op-grid">
+              <div class="op-card" style="--d:.1s">
+                <small>Reputação</small><b>Verde</b>
+                <span class="op-termo"><i></i><i></i><i></i><i></i><i class="on"></i></span>
+              </div>
+              <div class="op-card" style="--d:.2s">
+                <small>Estoque no Full</small><b><span data-n="32" data-delay="200">32</span> dias</b>
+                <span class="op-mini">de cobertura</span>
+              </div>
+              <div class="op-card" style="--d:.3s">
+                <small>Pedidos hoje</small><b data-n="48" data-delay="300">48</b>
+                <span class="op-mini">5 perguntas respondidas</span>
+              </div>
+              <div class="op-card" style="--d:.4s">
+                <small>Envios no prazo</small><b data-n="98" data-suf="%" data-delay="400">98%</b>
+                <span class="op-trilho"><i></i></span>
+              </div>
+            </div>
+            <div class="op-graf">
+              <div class="op-graf-top"><small>Vendas · últimas 8 semanas</small><span class="op-status"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Operação em dia</span></div>
+              <svg class="op-linha" viewBox="0 0 300 70" preserveAspectRatio="none">
+                <path class="op-area" d="M0 58 L43 52 L86 55 L129 40 L172 42 L215 28 L258 24 L300 12 L300 70 L0 70Z"/>
+                <path class="op-traco" pathLength="1" d="M0 58 L43 52 L86 55 L129 40 L172 42 L215 28 L258 24 L300 12"/>
+              </svg>
+            </div>
+          </div>
+          <div class="sx-info">
+            <span class="sx-num">Camada 05 <em>de 05</em></span>
+            <span class="sx-pilha" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>
+            <h3>Rotina da conta sob controle</h3>
+            <p>Reputação, perguntas, estoque no Full e prazos acompanhados de perto, com painel de vendas e margem
+            atualizado. A loja escala sem consumir o seu dia.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1339,7 +1842,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="eyebrow">Como funciona</span>
       <h2>Do primeiro contato à escala, <b>em quatro etapas.</b></h2>
     </div>
-    <div class="grid g4 reveal">
+    <div class="metodo-row">
+    <div class="grid g2 reveal">
       <div class="card"><span class="pill">Etapa 01</span><h3>Análise gratuita</h3>
         <p>Você preenche o formulário, olhamos a conta da sua loja e a concorrência e respondemos em até 2h úteis.</p></div>
       <div class="card"><span class="pill">Etapa 02</span><h3>Diagnóstico e plano</h3>
@@ -1348,6 +1852,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p>Anúncios otimizados, campanhas recalibradas, integrações e automações rodando. Reunião semanal.</p></div>
       <div class="card"><span class="pill">Etapa 04</span><h3>Escala</h3>
         <p>Com a conta ajustada, aumentamos investimento onde há lucro comprovado e abrimos novos canais.</p></div>
+    </div>
+    <img class="metodo-ilustra reveal" style="--rd:.15s" src="assets/ilustracao-camadas.webp" alt="" width="1086" height="1448" loading="lazy" decoding="async">
     </div>
 
     <div class="reveal" style="margin-top:2.2rem;display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap">
@@ -2165,6 +2671,282 @@ function enviar(){
     if(e.key === 'ArrowLeft'){  e.preventDefault(); mostrar(i - 1); }
     if(e.key === 'ArrowRight'){ e.preventDefault(); mostrar(i + 1); }
   });
+})();
+
+/* ===== Para quem é: carrossel de categorias (por etapas) ========
+   Anda UMA cápsula a cada 3,5 s (transição de 400 ms) e centraliza a
+   ativa. Loop sem salto: o trilho tem 3 cópias da lista e, depois de
+   cada passo, a ativa volta para a cópia do meio sem animação (o
+   conteúdo é idêntico, então não aparece). Pausa com mouse em cima,
+   arraste/toque, teclado, aba oculta ou fora da tela. Com
+   prefers-reduced-motion não há avanço automático. */
+(() => {
+  const root = document.querySelector('[data-cats]');
+  if(!root) return;
+  const janela = root.querySelector('.cats-janela');
+  const trilho = root.querySelector('.cats-trilho');
+  const originais = [...trilho.children];
+  const N = originais.length;
+  if(N < 2) return;
+  const reduz = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const INTERVALO = 3500, DUR = reduz ? 0 : 400;
+
+  const copias = () => originais.map((li) => {
+    const c = li.cloneNode(true);
+    c.setAttribute('aria-hidden', 'true');
+    c.querySelector('button').tabIndex = -1;
+    return c;
+  });
+  trilho.prepend(...copias());
+  trilho.append(...copias());
+  const itens = [...trilho.children];
+  root.classList.add('js');
+
+  let ativo = N, x = 0, normT = null, autoT = null, visivel = true;
+  const pausas = new Set();
+  const real = (i) => ((i % N) + N) % N + N;          // índice equivalente na cópia do meio
+
+  const centro = (i) => janela.clientWidth / 2 - (itens[i].offsetLeft + itens[i].offsetWidth / 2);
+  const posicionar = (px, animar) => {
+    x = px;
+    if(!animar) root.classList.add('sem-trans');
+    trilho.style.transform = `translate3d(${px}px,0,0)`;
+    if(!animar){ void trilho.offsetWidth; root.classList.remove('sem-trans'); }
+  };
+  const marcar = () => itens.forEach((li, k) => {
+    li.classList.toggle('ativa', k === ativo);
+    if(k >= N && k < 2 * N){
+      const b = li.querySelector('button');
+      if(k === ativo) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+    }
+  });
+  const normalizar = () => {
+    clearTimeout(normT);
+    if(ativo >= N && ativo < 2 * N) return;
+    root.classList.add('sem-trans');
+    ativo = real(ativo);
+    marcar();
+    posicionar(centro(ativo), false);
+  };
+  const ir = (i, animar = true) => {
+    ativo = Math.max(0, Math.min(itens.length - 1, i));
+    const anima = animar && DUR > 0;
+    marcar();
+    posicionar(centro(ativo), anima);
+    clearTimeout(normT);
+    normT = setTimeout(normalizar, anima ? DUR + 40 : 0);
+  };
+  const mover = (passo) => { normalizar(); ir(ativo + passo); };
+
+  // avanço automático: reinicia a contagem de 3,5 s a cada interação
+  const agendar = () => {
+    clearTimeout(autoT);
+    if(reduz || pausas.size || !visivel || document.hidden) return;
+    autoT = setTimeout(() => { mover(1); agendar(); }, INTERVALO);
+  };
+  const pausa = (motivo, on) => { if(on) pausas.add(motivo); else pausas.delete(motivo); agendar(); };
+
+  root.querySelectorAll('.cats-seta').forEach((b) => b.addEventListener('click', () => {
+    mover(+b.dataset.dir); agendar();
+  }));
+
+  // mouse em cima pausa (só mouse: no toque o "hover" não sai sozinho)
+  root.addEventListener('pointerenter', (e) => { if(e.pointerType === 'mouse') pausa('hover', true); });
+  root.addEventListener('pointerleave', (e) => { if(e.pointerType === 'mouse') pausa('hover', false); });
+
+  // teclado: pausa enquanto o foco (visível) estiver no carrossel
+  root.addEventListener('focusin', (e) => { if(e.target.matches(':focus-visible')) pausa('foco', true); });
+  root.addEventListener('focusout', (e) => { if(!root.contains(e.relatedTarget)) pausa('foco', false); });
+  root.addEventListener('keydown', (e) => {
+    if(!e.target.closest('.cats-janela')) return;
+    const passo = {ArrowRight: 1, ArrowLeft: -1}[e.key];
+    let destino = null;
+    if(passo){ mover(passo); destino = ativo; }
+    else if(e.key === 'Home' || e.key === 'End'){ normalizar(); ir(e.key === 'Home' ? N : 2 * N - 1); destino = ativo; }
+    if(destino === null) return;
+    e.preventDefault();
+    if(e.target.matches('.cat button')) itens[real(destino)].querySelector('button').focus({preventScroll: true});
+  });
+  janela.addEventListener('scroll', () => { janela.scrollLeft = 0; });   // foco não rola a janela
+
+  // clique numa cápsula: vira a ativa e é centralizada
+  let arrastou = false;
+  itens.forEach((li, k) => li.querySelector('button').addEventListener('click', () => {
+    if(arrastou) return;
+    if(k !== ativo) ir(k);
+    agendar();
+  }));
+
+  // arrastar (mouse) e deslizar (toque)
+  let ini = null;
+  janela.addEventListener('pointerdown', (e) => {
+    if(e.pointerType === 'mouse' && e.button !== 0) return;
+    ini = {id: e.pointerId, x0: e.clientX, base: 0, moveu: false};
+    pausa('arraste', true);
+  });
+  janela.addEventListener('pointermove', (e) => {
+    if(!ini || e.pointerId !== ini.id) return;
+    const dx = e.clientX - ini.x0;
+    if(!ini.moveu){
+      if(Math.abs(dx) < 6) return;
+      ini.moveu = true;
+      normalizar();
+      // parte de onde o trilho está agora (pode estar no meio de uma transição)
+      ini.base = new DOMMatrixReadOnly(getComputedStyle(trilho).transform).m41;
+      ini.x0 = e.clientX;
+      janela.setPointerCapture(e.pointerId);
+      janela.classList.add('arrastando');
+      root.classList.add('sem-trans');
+    }
+    x = ini.base + dx;
+    trilho.style.transform = `translate3d(${x}px,0,0)`;
+  });
+  const soltar = (e) => {
+    if(!ini || e.pointerId !== ini.id) return;
+    const moveu = ini.moveu;
+    ini = null;
+    janela.classList.remove('arrastando');
+    root.classList.remove('sem-trans');
+    if(moveu){
+      // cápsula mais próxima do centro vira a ativa
+      const meio = janela.clientWidth / 2 - x;
+      let melhor = ativo, dist = Infinity;
+      itens.forEach((li, k) => {
+        const d = Math.abs(li.offsetLeft + li.offsetWidth / 2 - meio);
+        if(d < dist){ dist = d; melhor = k; }
+      });
+      ir(melhor);
+      arrastou = true;
+      setTimeout(() => { arrastou = false; }, 0);   // ignora o clique que vem logo após soltar
+    }
+    pausa('arraste', false);
+  };
+  janela.addEventListener('pointerup', soltar);
+  janela.addEventListener('pointercancel', soltar);
+  janela.addEventListener('dragstart', (e) => e.preventDefault());
+
+  // só anda com a faixa na tela e a aba do navegador visível
+  if('IntersectionObserver' in window){
+    new IntersectionObserver((ents) => ents.forEach((en) => { visivel = en.isIntersecting; agendar(); }))
+      .observe(root);
+  }
+  document.addEventListener('visibilitychange', agendar);
+
+  // recentraliza quando a largura muda ou as fontes terminam de carregar
+  const recentrar = () => posicionar(centro(ativo), false);
+  window.addEventListener('resize', recentrar);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(recentrar);
+
+  ir(N, false);
+  agendar();
+})();
+
+/* ===== Sistema: abas das 5 camadas =============================
+   Clique/toque ou setas do teclado trocam a aba. A troca reinicia a
+   animação do painel (classe .play), os contadores (data-n) e a
+   digitação (data-digita). Nada roda antes da seção aparecer na tela,
+   e as animações pausam quando ela sai. Sem rotação automática. */
+(() => {
+  const sx = document.querySelector('[data-sx]');
+  if(!sx) return;
+  const nav = sx.querySelector('.sx-nav');
+  const abas = [...sx.querySelectorAll('[role="tab"]')];
+  const paineis = abas.map((a) => document.getElementById(a.getAttribute('aria-controls')));
+  const reduz = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let timers = [], quadros = [], atual = 0, visto = false;
+
+  const parar = () => {
+    timers.forEach(clearTimeout); quadros.forEach(cancelAnimationFrame);
+    timers = []; quadros = [];
+  };
+  // 11.2 -> "11,2"; negativos com sinal de menos tipográfico
+  const fmt = (el, v) => {
+    const dec = +(el.dataset.dec || 0);
+    const neg = v < 0 && Math.abs(v) >= .5 * Math.pow(10, -dec);
+    return (neg ? '−' : (el.dataset.pre || '')) + Math.abs(v).toFixed(dec).replace('.', ',') + (el.dataset.suf || '');
+  };
+  const finais = (p) => {
+    p.querySelectorAll('[data-n]').forEach((el) => { el.textContent = fmt(el, parseFloat(el.dataset.n)); });
+    p.querySelectorAll('[data-digita]').forEach((el) => { if(el.dataset.texto) el.textContent = el.dataset.texto; });
+  };
+  const zerar = (p) => {
+    p.querySelectorAll('[data-n]').forEach((el) => { el.textContent = fmt(el, 0); });
+    p.querySelectorAll('[data-digita]').forEach((el) => {
+      if(!el.dataset.texto) el.dataset.texto = el.textContent;
+      el.textContent = '';
+    });
+  };
+  const contar = (el) => {
+    const fim = parseFloat(el.dataset.n), dur = +(el.dataset.dur || 900);
+    timers.push(setTimeout(() => {
+      const t0 = performance.now();
+      const passo = (t) => {
+        const k = Math.min(1, (t - t0) / dur);
+        el.textContent = fmt(el, fim * (1 - Math.pow(1 - k, 3)));
+        if(k < 1) quadros.push(requestAnimationFrame(passo));
+      };
+      quadros.push(requestAnimationFrame(passo));
+    }, +(el.dataset.delay || 0)));
+  };
+  const digitar = (el) => {
+    const txt = el.dataset.texto || '';
+    const intervalo = Math.max(16, 1500 / Math.max(1, txt.length));
+    let i = 0;
+    const tick = () => {
+      el.textContent = txt.slice(0, ++i);
+      if(i < txt.length) timers.push(setTimeout(tick, intervalo));
+    };
+    timers.push(setTimeout(tick, 200));
+  };
+  const tocar = (p) => {
+    if(reduz){ finais(p); return; }
+    p.classList.remove('play'); void p.offsetWidth; p.classList.add('play');
+    zerar(p);
+    p.querySelectorAll('[data-n]').forEach(contar);
+    p.querySelectorAll('[data-digita]').forEach(digitar);
+  };
+  const ativar = (i, foco) => {
+    parar();
+    finais(paineis[atual]);
+    atual = i;
+    abas.forEach((a, k) => {
+      const on = k === i;
+      a.classList.toggle('ativo', on);
+      a.setAttribute('aria-selected', on ? 'true' : 'false');
+      a.tabIndex = on ? 0 : -1;
+    });
+    paineis.forEach((p, k) => { p.classList.toggle('ativo', k === i); if(k !== i) p.classList.remove('play'); });
+    if(foco) abas[i].focus({preventScroll: true});
+    // no celular as abas rolam na horizontal: centraliza a aba escolhida
+    if(nav.scrollWidth > nav.clientWidth + 2){
+      nav.scrollTo({left: abas[i].offsetLeft - (nav.clientWidth - abas[i].offsetWidth) / 2,
+                    behavior: reduz ? 'auto' : 'smooth'});
+    }
+    if(visto) tocar(paineis[i]);
+  };
+  const comecar = () => { if(visto) return; visto = true; sx.classList.remove('espera'); tocar(paineis[atual]); };
+
+  abas.forEach((a, i) => a.addEventListener('click', () => { comecar(); ativar(i); }));
+  nav.addEventListener('keydown', (e) => {
+    const passo = {ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1}[e.key];
+    let n = null;
+    if(passo) n = (atual + passo + abas.length) % abas.length;
+    else if(e.key === 'Home') n = 0;
+    else if(e.key === 'End') n = abas.length - 1;
+    if(n === null) return;
+    e.preventDefault(); comecar(); ativar(n, true);
+  });
+
+  if(!reduz && 'IntersectionObserver' in window){
+    // primeiro painel já no estado inicial (barras zeradas, pausadas) até aparecer
+    sx.classList.add('espera'); paineis[0].classList.add('play'); zerar(paineis[0]);
+    new IntersectionObserver((ents) => ents.forEach((en) => {
+      sx.classList.toggle('fora', !en.isIntersecting);
+      if(en.isIntersecting) comecar();
+    }), {threshold: .25}).observe(sx);
+  } else {
+    visto = true;
+  }
 })();
 
 /* ===== Vídeo do depoimento ======================================
