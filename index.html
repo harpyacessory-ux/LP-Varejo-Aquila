@@ -547,6 +547,27 @@ section.light .ilustra{filter:drop-shadow(0 26px 40px rgba(14,26,69,.18))}
 .lock{display:flex;gap:.75rem;align-items:center;padding:.85rem 1rem;border-radius:12px;
   border:1px solid rgba(46,123,232,.4);background:rgba(46,123,232,.1);font-size:.9rem;margin:1.3rem 0}
 
+/* Consultoria para Iniciantes: continuação da área de preços,
+   reaproveita .bf-card/.price/.checks; só ajusta tamanho e detalhes. */
+.cons{margin-top:clamp(2.6rem,5vw,3.8rem)}
+.cons-head{margin-bottom:clamp(1.4rem,3vw,2rem)}
+.cons-head h2{font-size:clamp(1.5rem,3.2vw,2.25rem);max-width:30ch;margin-inline:auto}
+.cons-grad{font-weight:800;background:linear-gradient(95deg,#6FA8F5 0%,#A57CF2 50%,#FF9B4A 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.cons-card{max-width:620px;margin-inline:auto;padding:clamp(1.4rem,3.2vw,2.3rem)}
+.cons-nome{margin:0;color:var(--muted);font-size:.9rem}
+.cons-card .price-big{font-size:clamp(2.7rem,8vw,3.8rem)}
+.cons-checks{margin:1.4rem 0;display:grid;gap:.6rem}
+.cons-dif{display:flex;gap:.75rem;align-items:flex-start;padding:.85rem 1rem;border-radius:12px;margin:0 0 1.3rem;
+  border:1px solid rgba(46,123,232,.4);background:rgba(46,123,232,.1);font-size:.88rem;color:var(--muted)}
+.cons-dif svg{flex:none;margin-top:.1rem;fill:none;stroke:var(--electric-soft);stroke-width:2;stroke-linecap:round}
+.cons-dif p{margin:0;line-height:1.55}
+.cons-dif strong{display:block;color:#fff;margin-bottom:.2rem}
+.cons-btn{display:flex;align-items:center;justify-content:center;gap:.55rem}
+.cons-btn svg{flex:none;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s ease}
+.cons-btn:hover svg{transform:translateX(3px)}
+@media(prefers-reduced-motion:reduce){.cons-btn svg{transition:none}}
+
 /* ===== 12. FAQ ================================================== */
 .faq{border-bottom:1px solid var(--line)}
 .faq summary{list-style:none;padding:1.25rem 3rem 1.25rem 0;position:relative;
@@ -723,8 +744,28 @@ section.light .faq summary::after{color:#1B3FA8}
 /* ===== 14c. CANTOS ARREDONDADOS NAS TROCAS DE FUNDO ============= */
 :root{--r-sec:clamp(26px,4.2vw,52px)}
 section.light,section.bf,section.band{border-radius:var(--r-sec)}
+/* Junções das seções finais: nos cantos arredondados aparece a cor da seção
+   MAIS ESCURA entre as duas (e não o azul do fundo da página). A seção escura
+   fica reta na junção e estende uma faixa da própria cor por trás dos cantos
+   da vizinha clara. */
+/* sem as bordas finas retas (aparecem por cima dos cantos curvos da seção branca vizinha) */
+#oferta{border-radius:0;border:0}
+section.band{border:0}
+footer{border-top:0}
+#oferta::after{content:"";position:absolute;z-index:-1;left:0;right:0;pointer-events:none;
+  top:calc(-1 * var(--r-sec));bottom:calc(-1 * var(--r-sec));background:var(--bf-black)}
+section.band{border-top-left-radius:0;border-top-right-radius:0}
+section.band::after{content:"";position:absolute;z-index:-1;left:0;right:0;pointer-events:none;
+  top:calc(-1 * var(--r-sec));height:var(--r-sec);
+  background:linear-gradient(120deg,rgba(27,63,168,.55),rgba(46,123,232,.22))}
+footer{position:relative}
+footer::before{content:"";position:absolute;z-index:-1;left:0;right:0;pointer-events:none;
+  top:calc(-1 * var(--r-sec));height:var(--r-sec);background:rgba(5,8,26,.6)}
 .channels{border-radius:var(--r-sec) var(--r-sec) 0 0}
-#apresentacao{border-radius:0 0 var(--r-sec) var(--r-sec);margin-top:-1px}
+/* sem a faixa dos canais: a seção do vídeo volta a ter cantos e filete próprios */
+/* Para quem é + Sistema: duas seções brancas coladas, unidas só pelo filete colorido (sem cantos na junção) */
+#paraquem{border-bottom-left-radius:0;border-bottom-right-radius:0}
+#sistema{border-top-left-radius:0;border-top-right-radius:0}
 section.light+section.light{border-top:0}
 .marquee:first-of-type{border-radius:var(--r-sec) var(--r-sec) 0 0;border-bottom:0}
 
@@ -740,10 +781,13 @@ section.light+section.light{border-top:0}
 .channels b.az{background:var(--amz-dark);color:var(--amz-orange)}
 
 /* linha de cor no topo de cada bloco claro */
-section.light::before,.channels::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;
-  border-radius:var(--r-sec) var(--r-sec) 0 0;
-  background:linear-gradient(90deg,var(--ml-yellow) 0%,var(--shopee) 42%,var(--amz-orange) 72%,var(--ml-blue) 100%)}
-#apresentacao::before{display:none}
+/* filete colorido no topo das seções brancas: desenhado como uma borda
+   superior que acompanha o arredondamento da seção (mesmo raio) */
+section.light::before,.channels::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  border-radius:inherit;padding-top:4px;
+  background:linear-gradient(90deg,var(--ml-yellow) 0%,var(--shopee) 42%,var(--amz-orange) 72%,var(--ml-blue) 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
 
 /* brilho suave das cores no fundo claro */
 section.light{background-image:
@@ -1474,13 +1518,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </section>
 
-<!-- faixa branca dos canais -->
-<div class="channels">
-  <div class="wrap">
-    <em>Assessoria especializada em</em><b class="ml">Mercado Livre</b><b class="sp">Shopee</b><b class="az">Amazon</b>
-  </div>
-</div>
-
 <!-- ============ 2. APRESENTAÇÃO EM VÍDEO (fundo branco) ============ -->
 <section id="apresentacao" class="light">
   <div class="wrap">
@@ -2102,9 +2139,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <button class="btn btn-block" data-form data-cta="oferta">Quero minha análise gratuita</button>
         <p class="micro">Válida até 30/11/2026 · Sem compromisso · Resposta em até 2h úteis</p>
-        <p class="micro" style="margin-top:.8rem">Ainda não vende em nenhum marketplace? Temos a <strong>Consultoria para começar</strong>:
-        R$ 500/mês, com especialistas no WhatsApp e 3 reuniões por mês, do cadastro às primeiras vendas.
-        <button type="button" data-form data-cta="consultoria" style="background:none;border:0;padding:0;color:inherit;font:inherit;text-decoration:underline;cursor:pointer">Quero começar</button></p>
       </div>
 
       <!-- o formulário vive aqui e é movido para o modal quando um CTA é clicado -->
@@ -2174,6 +2208,44 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li><svg width="14" height="14" aria-hidden="true"><use href="#ck"/></svg>Sem compromisso</li>
           </ul>
         </form>
+      </div>
+    </div>
+
+    <!-- CONSULTORIA PARA INICIANTES — oferta complementar à assessoria.
+         O botão usa o MESMO mecanismo do restante da página
+         (data-form data-cta="consultoria" → abreForm): abre o formulário no
+         modal e o envio marca "Interesse: Consultoria" na mensagem. -->
+    <div class="cons">
+      <div class="head mid cons-head reveal">
+        <h2>Ainda não vende nos marketplaces? Temos <span class="cons-grad">o caminho</span> para você <span class="cons-grad">começar.</span></h2>
+        <p class="lead">Aprenda a estruturar sua operação com orientação especializada, mantendo autonomia para gerenciar seu próprio negócio.</p>
+      </div>
+
+      <div class="bf-card cons-card reveal" style="--rd:.1s">
+        <div class="bf-flag">BLACK FRIDAY</div>
+        <p class="cons-nome">Consultoria para Iniciantes</p>
+        <div class="price"><s class="n">R$ 750/mês</s><span class="off">33% OFF</span></div>
+        <div class="price-big n">R$ 500<small>/mês</small></div>
+
+        <ul class="checks cons-checks">
+          <li><svg width="18" height="18" aria-hidden="true"><use href="#ck"/></svg>Aprenda como funcionam Mercado Livre, Shopee e Amazon</li>
+          <li><svg width="18" height="18" aria-hidden="true"><use href="#ck"/></svg>Orientação para configurar sua conta e criar seus primeiros anúncios</li>
+          <li><svg width="18" height="18" aria-hidden="true"><use href="#ck"/></svg>Acompanhamento mensal com especialistas</li>
+          <li><svg width="18" height="18" aria-hidden="true"><use href="#ck"/></svg>3 reuniões de orientação por mês</li>
+          <li><svg width="18" height="18" aria-hidden="true"><use href="#ck"/></svg>Suporte para dúvidas pelo WhatsApp</li>
+          <li><svg width="18" height="18" aria-hidden="true"><use href="#ck"/></svg>Você mantém autonomia e controle total da operação</li>
+          <li><svg width="18" height="18" aria-hidden="true"><use href="#ck"/></svg>Sem fidelidade e sem contrato longo</li>
+        </ul>
+
+        <div class="cons-dif">
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+          <p><strong>Nós orientamos. Você aprende, executa e gerencia.</strong>
+          A consultoria não inclui gestão operacional direta da conta. Nossa equipe oferece orientação e acompanhamento
+          para desenvolver a autonomia do empreendedor.</p>
+        </div>
+
+        <button class="btn btn-block cons-btn" type="button" data-form data-cta="consultoria">Quero começar a vender
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
     </div>
 
