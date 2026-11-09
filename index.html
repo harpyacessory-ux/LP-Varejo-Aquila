@@ -412,15 +412,15 @@ section.light .ilustra{filter:drop-shadow(0 26px 40px rgba(14,26,69,.18))}
 .ntf-amz{top:37%;left:-19%;--s:.86;--d:.55s;z-index:1}
 .ntf-sp{bottom:3%;right:-12%;--s:1.04;--d:.85s}
 
-/* tablet: texto em cima, mascote e cards lado a lado embaixo */
+/* tablet: texto em cima, depois o mascote e, abaixo dele, os 2 cards lado a lado */
 @media(min-width:701px) and (max-width:959px){
-  .hero-side{display:grid;grid-template-columns:1fr 1fr;align-items:center}
-  .hero-stats{grid-template-columns:1fr}
+  .hero-side{display:grid;grid-template-columns:1fr;align-items:center}
+  .hero-art{width:min(100%,440px);margin-inline:auto}
 }
-/* mobile: mascote em cima, texto, e os cards depois dos botões */
+/* mobile: texto primeiro, depois o mascote e, abaixo dele, os cards */
 @media(max-width:700px){
   .hero-side{display:contents}
-  .hero-art{order:-1;margin-bottom:.5rem}
+  .hero-art{margin-top:.6rem;margin-bottom:.5rem}
   .hero-stats{gap:.7rem}
   .stat-card{padding:.95rem;border-radius:16px}
   .stat-ico{width:36px;height:36px}
@@ -802,8 +802,8 @@ section.light .card::after{content:"";position:absolute;top:0;left:0;right:0;hei
    No mobile ele entra no fluxo, alinhado a direita; a partir de 960px passa a
    flutuar no canto, subindo um pouco dentro do padding da secao. */
 .pq-top{position:relative}
-.pq-foto{display:block;height:clamp(200px,44vw,270px);width:auto;
-  margin:.4rem -1rem -.6rem auto;pointer-events:none}
+.pq-foto{display:block;height:clamp(300px,82vw,440px);width:auto;max-width:100%;object-fit:contain;
+  margin:.4rem auto -.6rem;pointer-events:none}
 @media(min-width:960px){
   .pq-top{--sobe:clamp(0px,4.2vw,64px);min-height:calc(clamp(380px,38vw,520px) - var(--sobe))}
   .pq-top .head{max-width:min(52%,56ch)}
@@ -2323,8 +2323,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span>Aquila Marketing Digital · 2026 · São Vicente — SP</span>
     </div>
     <div style="display:flex;gap:1.2rem;flex-wrap:wrap">
-      <a href="https://instagram.com/nicolastassooficial" target="_blank" rel="noopener">@nicolastassooficial</a>
-      <a href="https://nicolastasso.site" target="_blank" rel="noopener">nicolastasso.site</a>
+      <a href="https://www.instagram.com/aquila_digitalmarketing/" target="_blank" rel="noopener">@aquila_digitalmarketing</a>
       <a href="#" id="waFooter">WhatsApp</a>
       <a href="#privacidade" id="abrePriv">Política de privacidade e LGPD</a>
     </div>
