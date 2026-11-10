@@ -2434,9 +2434,11 @@ let parceiro = '';
 
 /* ===== WhatsApp ================================================ */
 const linkWhats = t => 'https://wa.me/'+CONFIG.whatsapp+'?text='+encodeURIComponent(t);
-['waFloat','waFooter'].forEach(id=>{
+// O botão flutuante e o link do rodapé não vão direto para o WhatsApp:
+// abrem o formulário (obrigatório), para o lead ser registrado no GTM/CRM.
+[['waFloat','whatsapp-flutuante'],['waFooter','whatsapp-rodape']].forEach(([id,origem])=>{
   const el = document.getElementById(id);
-  if(el){ el.href = linkWhats(CONFIG.msgPadrao + (parceiro ? ' (Indicação: '+parceiro+')' : '')); el.target='_blank'; el.rel='noopener'; }
+  if(el) el.addEventListener('click',e=>{ e.preventDefault(); abreForm(origem); });
 });
 
 /* ===== Rastreio (Meta Pixel / GA4 / dataLayer) ================= */
