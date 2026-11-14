@@ -2184,8 +2184,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="field"><label for="desafio">Maior desafio hoje <span class="opt">(opcional)</span></label>
             <textarea id="desafio" name="desafio" rows="2" placeholder="Ex.: ACOS alto, anúncio sem ranquear, margem apertada"></textarea></div>
 
-          <div class="hp" aria-hidden="true"><label for="site_empresa">Não preencha</label>
-            <input id="site_empresa" name="site_empresa" type="text" tabindex="-1" autocomplete="off"></div>
+          <!-- isca anti-robô: nome sem sentido de propósito, para o preenchimento automático do navegador não mexer nela -->
+          <div class="hp" aria-hidden="true"><label for="campo_hp">Não preencha</label>
+            <input id="campo_hp" name="campo_hp" type="text" tabindex="-1" autocomplete="off" data-lpignore="true" data-1p-ignore data-bwignore data-form-type="other"></div>
 
           <label class="aceite" for="humano"><input id="humano" type="checkbox" required>
             <span class="box" aria-hidden="true"><svg width="13" height="13"><use href="#ck"/></svg></span>
@@ -2486,30 +2487,38 @@ modal.addEventListener('click',e=>{ if(e.target===modal) fechaForm(); });
 /* ===== Verificação anti-robô (Cloudflare Turnstile) ===========
    Invisível: só aparece se a Cloudflare desconfiar. É montada quando a
    pessoa começa a preencher e refeita quando o formulário muda de lugar
-   (o iframe recarrega em branco ao mudar de lugar na página). Se não
-   carregar, o lead segue mesmo assim pelo WhatsApp: nunca trava. */
-const TS = { id:null, token:'', falhou:false, esperando:false, timer:0 };
+   (o iframe recarrega em branco ao mudar de lugar na página). Ela só
+   segura o envio para o CRM: o WhatsApp abre no clique, sem esperar por
+   ela. Se ainda não terminou, o lead vai para o CRM assim que terminar. */
+const TS = { id:null, token:'', pendente:null };
 function tsMontar(){
   if(!window.turnstile || TS.id !== null) return;
-  TS.token = ''; TS.falhou = false;
+  TS.token = '';
   try{
     TS.id = turnstile.render('#tsBox',{
       sitekey:'0x4AAAAAAFb1BPLP56497eyv', language:'pt-br', theme:'dark', size:'flexible',
       appearance:'interaction-only',
-      callback:t=>{ TS.token = t; document.getElementById('tsAviso').style.display='none'; if(TS.esperando) enviar(); },
+      callback:t=>{ TS.token = t; document.getElementById('tsAviso').style.display='none'; tsEnviarPendente(); },
       'expired-callback':()=>{ TS.token = ''; },
-      'before-interactive-callback':()=>{ if(TS.esperando){ clearTimeout(TS.timer); botao(false); document.getElementById('tsAviso').style.display='block'; } },
-      'error-callback':()=>{ TS.falhou = true; if(TS.esperando) enviar(); }
+      'before-interactive-callback':()=>{ if(TS.pendente) document.getElementById('tsAviso').style.display='block'; },
+      'error-callback':()=>true          // a própria Cloudflare tenta de novo sozinha
     });
-  }catch(e){ TS.falhou = true; }
+  }catch(e){}
 }
 function tsDesmontar(){
   if(TS.id !== null){ try{ turnstile.remove(TS.id); }catch(e){} }
   TS.id = null; TS.token = '';
 }
-function moverForm(destino){ destino.appendChild(form); tsDesmontar(); }
+// manda para o CRM o lead que esperava a verificação; ela vale uma vez só
+function tsEnviarPendente(){
+  if(!TS.pendente || !TS.token) return;
+  const mandar = TS.pendente; TS.pendente = null;
+  mandar(TS.token);
+  tsDesmontar();
+}
+function moverForm(destino){ destino.appendChild(form); tsDesmontar(); if(TS.pendente) tsMontar(); }
 form.addEventListener('focusin',()=>{ if(TS.id === null) tsMontar(); });
-document.addEventListener('ts-ok',()=>{ if(TS.esperando || form.contains(document.activeElement)) tsMontar(); });
+document.addEventListener('ts-ok',()=>{ if(TS.pendente || form.contains(document.activeElement)) tsMontar(); });
 
 /* ===== Envio do formulário ===================================== */
 function marca(c,ok){ const f=c.closest('.field'); if(f) f.classList.toggle('invalid',!ok); return ok; }
@@ -2534,8 +2543,6 @@ function botao(carregando, texto){
 
 form.addEventListener('submit',function(e){
   e.preventDefault();
-  if(document.getElementById('site_empresa').value !== '') return;   // honeypot
-  if(TS.esperando) return;
 
   const nome=document.getElementById('nome'), zap=document.getElementById('zap'),
         negocio=document.getElementById('negocio'), humano=document.getElementById('humano'),
@@ -2553,24 +2560,17 @@ form.addEventListener('submit',function(e){
   ok = humano.checked && ok;
   if(!ok){ const p = form.querySelector('.invalid input') || (humano.checked?null:humano); if(p) p.focus(); return; }
 
-  // verificação pronta (o normal: roda enquanto a pessoa preenche) ou com erro: envia já
-  if(TS.token || TS.falhou){ enviar(); return; }
-  // ainda verificando (ou o script da Cloudflare ainda carregando): espera um pouco,
-  // sem a pessoa precisar clicar de novo; depois disso segue sem a verificação
-  TS.esperando = true;
-  botao(true,'Verificando…');
-  if(TS.id === null) tsMontar();
-  TS.timer = setTimeout(()=>{ if(TS.esperando) enviar(); }, 8000);
+  // O WhatsApp abre já, ainda dentro do clique: o navegador bloqueia a janela
+  // aberta depois de qualquer espera (no iPhone, depois de 1 segundo).
+  enviar();
 });
 
 function enviar(){
-  TS.esperando = false; clearTimeout(TS.timer);
   const nome=document.getElementById('nome'), zap=document.getElementById('zap'),
         negocio=document.getElementById('negocio'), desafio=document.getElementById('desafio');
   const onde = escolhido('onde'), fat = escolhido('fat');
   const mail = document.getElementById('email').value.trim().toLowerCase();
   const dig = zap.value.replace(/\D/g,'');
-  const captcha = TS.token;
 
   const linhas = ['Olá! Quero minha análise gratuita da Aquila.','',
     'Nome: '+nome.value.trim(), 'WhatsApp: '+zap.value.trim(),
@@ -2584,49 +2584,52 @@ function enviar(){
   if(document.getElementById('origem_cta').value === 'consultoria') linhas.push('Interesse: Consultoria para começar (R$ 500/mês)');
   if(parceiro) linhas.push('Indicação: '+parceiro);
 
-  rastreia('Lead',{faturamento:fat,canal:onde,origem:document.getElementById('origem_cta').value});
-
-  // Envia o lead para o CRM sem esperar a resposta; keepalive garante o envio
-  // mesmo com o WhatsApp abrindo logo em seguida. Sem a verificação o CRM
-  // recusaria: aí o lead chega pela mensagem do WhatsApp.
-  if(captcha){
-    const extras = ['Faturamento: '+fat, 'Canal: '+onde];
-    if(desafio.value.trim()) extras.push('Maior desafio: '+desafio.value.trim());
-    extras.push('Botão: '+(document.getElementById('origem_cta').value || '-'));
-    if(utms.utm_content) extras.push('utm_content: '+utms.utm_content);
-    if(utms.utm_term) extras.push('utm_term: '+utms.utm_term);
-    extras.push('Campanha: Black Friday Aquila');
-    fetch('https://spyeugqfbfxhpmqmwxjv.supabase.co/functions/v1/site-lead',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      keepalive:true,
-      body:JSON.stringify({
-        name:nome.value.trim(), phone:dig, email:mail,
-        company:negocio.value.trim(), message:extras.join('\n'),
-        page:location.href,
-        utm_source:utms.utm_source||'', utm_medium:utms.utm_medium||'', utm_campaign:utms.utm_campaign||'',
-        utm_content:utms.utm_content||'', utm_term:utms.utm_term||'',
-        gclid:clique.gclid||'', gbraid:clique.gbraid||'', wbraid:clique.wbraid||'', fbclid:clique.fbclid||'', fbc:clique.fbc||'',
-        parceiro:parceiro||'',
-        website:'',                      // isca anti-robô do CRM: sempre vazio
-        turnstile:captcha                // verificação da Cloudflare (conferida no CRM)
-      })
-    }).catch(()=>{});
-  }
-
+  // 1º o WhatsApp, ainda dentro do clique (depois de uma espera o navegador bloqueia)
   const link = linkWhats(linhas.join('\n'));
   const alt = document.getElementById('waAlt');
   alt.href = link;
-  const aba = window.open(link,'_blank','noopener');
-  // depois da espera o navegador pode bloquear a janela: fica o link para tocar
-  alt.style.display = aba ? 'none' : 'block';
-
+  window.open(link,'_blank','noopener');
+  // com noopener o navegador não conta se a janela abriu: o link fica à mão
+  alt.style.display = 'block';
   botao(false,'Pronto! Continue no WhatsApp');
-  tsDesmontar();                       // a verificação vale uma vez só
   setTimeout(()=>{
-    botao(false); alt.style.display='none'; form.reset();
+    botao(false); form.reset();
     UTM.forEach(k=>{const c=document.getElementById(k); if(c) c.value=utms[k];});
   },8000);
+
+  // Isca anti-robô preenchida: o WhatsApp abre igual (robô não conversa no
+  // WhatsApp), mas não conta como lead no anúncio nem vai para o CRM.
+  if(document.getElementById('campo_hp').value !== '') return;
+
+  rastreia('Lead',{faturamento:fat,canal:onde,origem:document.getElementById('origem_cta').value});
+
+  // Envia o lead para o CRM sem esperar a resposta; keepalive garante o envio
+  // mesmo com a página indo para segundo plano. O CRM só aceita com a
+  // verificação da Cloudflare: se ela ainda não terminou, vai assim que
+  // terminar; se nunca terminar, o lead chega pela mensagem do WhatsApp.
+  const extras = ['Faturamento: '+fat, 'Canal: '+onde];
+  if(desafio.value.trim()) extras.push('Maior desafio: '+desafio.value.trim());
+  extras.push('Botão: '+(document.getElementById('origem_cta').value || '-'));
+  if(utms.utm_content) extras.push('utm_content: '+utms.utm_content);
+  if(utms.utm_term) extras.push('utm_term: '+utms.utm_term);
+  extras.push('Campanha: Black Friday Aquila');
+  const dados = {
+    name:nome.value.trim(), phone:dig, email:mail,
+    company:negocio.value.trim(), message:extras.join('\n'),
+    page:location.href,
+    utm_source:utms.utm_source||'', utm_medium:utms.utm_medium||'', utm_campaign:utms.utm_campaign||'',
+    utm_content:utms.utm_content||'', utm_term:utms.utm_term||'',
+    gclid:clique.gclid||'', gbraid:clique.gbraid||'', wbraid:clique.wbraid||'', fbclid:clique.fbclid||'', fbc:clique.fbc||'',
+    parceiro:parceiro||'',
+    website:''                         // isca anti-robô do CRM: sempre vazio
+  };
+  TS.pendente = token => fetch('https://spyeugqfbfxhpmqmwxjv.supabase.co/functions/v1/site-lead',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    keepalive:true,
+    body:JSON.stringify(Object.assign({}, dados, {turnstile:token}))   // verificação da Cloudflare (conferida no CRM)
+  }).catch(()=>{});
+  if(TS.token) tsEnviarPendente(); else tsMontar();
 }
 
 /* ===== Vídeo de apresentação ====================================
